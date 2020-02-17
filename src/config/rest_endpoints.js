@@ -1,10 +1,10 @@
 const PROTOCOL = 'http';
 
-// const SERVER_IP = '192.168.1.225';
-// const PORT = '7070';
+// const SERVER_IP = '192.168.100.14';
+const PORT = '4000';
 
 const SERVER_IP = 'localhost';
-const PORT = '8080';
+// const PORT = '8080';
 
 export const SERVER_PATH = `${PROTOCOL}://${SERVER_IP}:${PORT}`;
 
@@ -19,8 +19,8 @@ export const UPDATE_USER = `${ACCOUNTS_BASE_URL}/update`;
 export const UPDATE_PASSWORD = `${ACCOUNTS_BASE_URL}/ChangePassword`;
 export const RESET_PASSWORD = `${ACCOUNTS_BASE_URL}/ResetPassword`;
 
-export const AUTH_BASE_URL = `${SERVER_PATH}/oauth`;
-export const USER_AUTHENITCATION = `${AUTH_BASE_URL}/token`;
+export const AUTH_BASE_URL = `${SERVER_PATH}/auth`;
+export const USER_AUTHENITCATION = `${AUTH_BASE_URL}/signin`;
 export const USER_LOGOUT = `${AUTH_BASE_URL}/logout`;
 
 export const ROLES_BASE_URL = `${ROOT_URL}/roles`;
