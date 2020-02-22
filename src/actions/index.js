@@ -86,6 +86,7 @@ export function clearForm(fields, defaultValues = {}) {
 
 export function login(loginDetails) {
     return function (dispatch) {
+        axios.defaults.withCredentials = true;
         axios({
             method: 'post',
             url: USER_AUTHENITCATION,
