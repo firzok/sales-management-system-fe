@@ -221,8 +221,8 @@ class SideMenu extends Component {
             ItemText = object['name'];
         }
         else {
-            itemIcon = <div style={{ width: '20px' }}><i className={`${object['fa_icon']} side-menu_icon`}> </i></div>;
-            ItemText = <span className="ml-2">{object['name']}</span>;
+            itemIcon = <div style={ { width: '20px' } }><i className={ `${object['fa_icon']} side-menu_icon` }> </i></div>;
+            ItemText = <span className="ml-2">{ object['name'] }</span>;
         }
 
         var isActive = (active == object['url']);
@@ -231,10 +231,10 @@ class SideMenu extends Component {
         }
 
         return (
-            <li key={`${object['name']}${_key}`} className="nav-item">
-                <Link to={object['url']} className={isActive ? `nav-link active` : `nav-link`}>
-                    {itemIcon}
-                    {ItemText}
+            <li key={ `${object['name']}${_key}` } className="nav-item">
+                <Link to={ object['url'] } className={ isActive ? `nav-link active` : `nav-link` }>
+                    { itemIcon }
+                    { ItemText }
                 </Link>
             </li>
         );
@@ -314,12 +314,12 @@ class SideMenu extends Component {
             var _keys = Object.keys(dictionary);
             // _keys = _keys.sort();
             let isGroup = true;
-            var __html = <li key={Name} className={`nav-item nav-item-submenu ${openClass}`}>
-                <Link to={`#`} className={`nav-link ${activeClass}`}>
-                    <div style={{ width: '20px' }}><i className={`${FI} side-menu_icon`} aria-hidden="true"> </i></div>
-                    <span className={textCapitalize ? "text-capitalize sidemenu-text ml-2" : "sidemenu-text ml-2"}> {Name} </span>
+            var __html = <li key={ Name } className={ `nav-item nav-item-submenu ${openClass}` }>
+                <Link to={ `#` } className={ `nav-link ${activeClass}` }>
+                    <div style={ { width: '20px' } }><i className={ `${FI} side-menu_icon` } aria-hidden="true"> </i></div>
+                    <span className={ textCapitalize ? "text-capitalize sidemenu-text ml-2" : "sidemenu-text ml-2" }> { Name } </span>
                 </Link>
-                <ul className="nav nav-group-sub text-capitalize" data-submenu-title={Name}>
+                <ul className="nav nav-group-sub text-capitalize" data-submenu-title={ Name }>
                     {
                         _keys.map((key, counter) => {
                             return this.__render(dictionary[key], key, whoIsOpen, whoIsActive, isGroup)
@@ -387,16 +387,16 @@ class SideMenu extends Component {
                     <div className="media">
 
                         <div className="media-body">
-                            <div className="text-theme media-title font-weight-semibold">{this.props.activeUser.name}</div>
+                            <div className="text-theme media-title font-weight-semibold">{ this.props.activeUser.name }</div>
                             <div className="text-theme font-size-xs opacity-50">
-                                {this.props.activeUser.role}
+                                { this.props.activeUser.role }
                             </div>
                         </div>
 
                         <div className="ml-3 align-self-center">
                             <a href="#" className="text-theme" title="Profile Setting"><i className="icon-cog3"></i></a>
                             <a href="#" className="text-theme ml-3" title="Lock Screen"><i className="icon-user-lock"></i></a>
-                            <a href={LOAD_LOGOUT} className="text-theme ml-3" title="Logout"><i className="icon-switch2"></i></a>
+                            <a href={ LOAD_LOGOUT } className="text-theme ml-3" title="Logout"><i className="icon-switch2"></i></a>
                         </div>
                     </div>
                 </div>
@@ -427,11 +427,11 @@ class SideMenu extends Component {
         return (
             <div className="sidebar sidebar-light sidebar-main sidebar-fixed sidebar-expand-md noprint">
 
-                {this.__render_mobile_navigator()}
+                { this.__render_mobile_navigator() }
 
                 <div className="sidebar-content side-menu-zIndex">
 
-                    {/* {this.__render_user_card()} */}
+                    {/* {this.__render_user_card()} */ }
 
                     <div className="card card-sidebar-mobile">
                         <ul className="nav nav-sidebar" data-nav-type="accordion">
@@ -440,7 +440,7 @@ class SideMenu extends Component {
                                 <i className="icon-menu" title="Navigation"></i>
                             </li>
 
-                            {__html}
+                            { __html }
                         </ul>
                     </div>
                 </div>

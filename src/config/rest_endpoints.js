@@ -10,6 +10,19 @@ export const SERVER_PATH = `${PROTOCOL}://${SERVER_IP}:${PORT}`;
 
 export const ROOT_URL = `${SERVER_PATH}/api`;
 
+// ====================================================================================================
+
+export const PRODUCT_TYPES = `${ROOT_URL}/product-types`;
+
+
+
+
+
+
+
+// ====================================================================================================
+
+
 export const USER_BASE_URL = `${ROOT_URL}/accounts/user`;
 
 export const USERS_URL = `${USER_BASE_URL}s`;
@@ -74,12 +87,7 @@ export const PUBLIC_HOLIDAYS = `${ROOT_URL}/publicholidays`;
 
 export const SETTINGS = `${ROOT_URL}/settings`;
 
-export const INVOICINGS = `${ROOT_URL}/invoicings`;
-export const SEND_INVOICE_EMAIL = `${INVOICINGS}/send-mail`;
 
-export const IMPORT = `${ROOT_URL}/import`;
-export const EXPORT = `${ROOT_URL}/export`;
-export const EXPORT_LEAVES_BALANCES = `${EXPORT}/leaves-balances`;
 
 export const REPORTS_BASE_URL = `${ROOT_URL}/reports`;
 export const GENDER_DISTRIBUTION = `${REPORTS_BASE_URL}/gender-break-down`;

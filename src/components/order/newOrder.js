@@ -1,21 +1,46 @@
 import Container from '../common/application_container';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import axios from 'axios';
 import Button from 'react-bootstrap-button-loader';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, NumericInput } from 'reactstrap';
 import CurrencyInput from 'react-currency-input';
+import { PRODUCT_TYPES } from '../../config/rest_endpoints';
 
 
 function NewOrder(props) {
     const [dropdownProductTypeOpen, setDropdownProductTypeOpen] = useState(false);
     const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
     const [productDisabled, setProductDisabled] = useState(true);
-
     const [quantity, setQuantity] = useState(1);
+    const [productTypeList, setProductTypeList] = useState([]);
+    const [selectedProductType, setSelectedProductType] = useState('');
+
+    useEffect(() => {
+        getProductTypes();
+    });
+
+
+    function getProductTypes() {
+        if (productTypeList.length == 0) {
+            axios.get(PRODUCT_TYPES)
+                .then(
+                    res => {
+                        setProductTypeList(res.data);
+                    });
+        }
+    }
+
+    function getProducts() {
+
+    }
 
 
 
+
+    function selectProductType(selectedProductType) {
+
+    }
 
     const toggleProductType = () => setDropdownProductTypeOpen(prevState => !prevState);
     const toggleProduct = () => setDropdownProductOpen(prevState => !prevState);
@@ -59,7 +84,7 @@ function NewOrder(props) {
                         <div className="col-md-4">
                             <Button title="Add New Customer"
                                 className="btn btn-theme btn-labeled"
-                            // onClick={ this.onUpdatePassword.bind(this) }
+                            // onClick={ () => getProductTypes() }
                             // loading={ this.state.isPasswordChanging }
                             >
                                 Load Existing
@@ -90,9 +115,13 @@ function NewOrder(props) {
                                         Select Product Type
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem>Type 1</DropdownItem>
-                                        <DropdownItem>type 2</DropdownItem>
-                                        <DropdownItem>Type 3</DropdownItem>
+                                        { productTypeList.map((type) =>
+                                            <DropdownItem key={ type.product_catalogue_id }
+                                                onClick={ () => selectProductType(type) }
+                                            >
+                                                { type.product_type }
+                                            </DropdownItem>
+                                        ) }
                                     </DropdownMenu>
                                 </Dropdown>
                             </div>

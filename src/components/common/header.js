@@ -56,14 +56,14 @@ class Header extends Component {
     }
 
     getNotifications() {
-        this.setState({ loadingNotifications: true });
-        axios.get(CURRENT_ANNOUNCEMENTS).then(res => {
-            var notifications = res.data.data;
-            var { total } = res.data;
-            this.setState({ notifications, total, loadingNotifications: false });
-        }).catch(error => {
-            this.setState({ loadingNotifications: false });
-        })
+        // this.setState({ loadingNotifications: true });
+        // axios.get(CURRENT_ANNOUNCEMENTS).then(res => {
+        //     var notifications = res.data.data;
+        //     var { total } = res.data;
+        //     this.setState({ notifications, total, loadingNotifications: false });
+        // }).catch(error => {
+        //     this.setState({ loadingNotifications: false });
+        // })
     }
 
     makeQuoteData(data) {
@@ -88,10 +88,10 @@ class Header extends Component {
     }
 
     getQuote() {
-        axios.get(QUOTE_GENERATOR).then(res => {
-            var quote = this.makeQuoteData(res.data);
-            this.setState({ quote });
-        })
+        // axios.get(QUOTE_GENERATOR).then(res => {
+        //     var quote = this.makeQuoteData(res.data);
+        //     this.setState({ quote });
+        // })
     }
 
     componentWillUnmount() {
@@ -145,22 +145,22 @@ class Header extends Component {
                     cursor: 'default'
                 }
 
-                var picture = <button className="btn rounded-round btn-icon" style={style}>
-                    <span className="letter-icon text-uppercase text-white">{initials}</span>
+                var picture = <button className="btn rounded-round btn-icon" style={ style }>
+                    <span className="letter-icon text-uppercase text-white">{ initials }</span>
                 </button>;
                 if (profilePicture !== null && profilePicture !== '') {
-                    picture = <img src={profilePicture} onError={(e) => { e.target.onerror = null; e.target.src = defaultProfilePicture }} className="rounded-circle" width="36" height="36" alt="" />
+                    picture = <img src={ profilePicture } onError={ (e) => { e.target.onerror = null; e.target.src = defaultProfilePicture } } className="rounded-circle" width="36" height="36" alt="" />
                 }
 
                 return (
-                    <li key={idx} className="media cursor-pointer" onClick={() => { this.props.history.push({ pathname: ANNOUNCEMENTS_URL }) }} >
+                    <li key={ idx } className="media cursor-pointer" onClick={ () => { this.props.history.push({ pathname: ANNOUNCEMENTS_URL }) } } >
                         <div className="mr-2">
-                            {picture}
+                            { picture }
                         </div>
 
                         <div className="media-body br-all">
-                            <strong className="text-capitalize">{name}</strong> added announcement: "{description}"
-                            <div><i className="fas fa-bullhorn text-danger-400"></i><span className="text-muted font-size-sm ml-1">{notification.time_ago}</span></div>
+                            <strong className="text-capitalize">{ name }</strong> added announcement: "{ description }"
+                            <div><i className="fas fa-bullhorn text-danger-400"></i><span className="text-muted font-size-sm ml-1">{ notification.time_ago }</span></div>
                         </div>
                     </li>
                 )
@@ -187,11 +187,11 @@ class Header extends Component {
                 backgroundColor: colors[initials]
             }
 
-            picture = <button className="btn rounded-round btn-icon btn-sm" style={style}>
-                <span className="letter-icon text-uppercase text-white">{initials}</span>
+            picture = <button className="btn rounded-round btn-icon btn-sm" style={ style }>
+                <span className="letter-icon text-uppercase text-white">{ initials }</span>
             </button>;
             if (profilePicture !== null && profilePicture !== '') {
-                picture = <img src={profilePicture} onError={(e) => { e.target.onerror = null; e.target.src = defaultProfilePicture }} className="rounded-circle" alt="" />
+                picture = <img src={ profilePicture } onError={ (e) => { e.target.onerror = null; e.target.src = defaultProfilePicture } } className="rounded-circle" alt="" />
             }
             name = user["firstname"];
         }
@@ -211,10 +211,10 @@ class Header extends Component {
             if (this.state.quote !== "") {
                 quote = <div className="media">
                     <div className="media-body">
-                        "{this.state.quote.content}"
+                        "{ this.state.quote.content }"
                                 <div className="row mt-2">
                             <div className="col-12">
-                                <div className="text-muted text-capitalize float-right">~{this.state.quote.author}</div>
+                                <div className="text-muted text-capitalize float-right">~{ this.state.quote.author }</div>
                             </div>
                         </div>
                     </div>
@@ -236,10 +236,10 @@ class Header extends Component {
 
         return (
             // <!-- Main navbar -->
-            <div className="navbar navbar-expand-md navbar-dark fixed-top bgc-theme noprint" style={navbar_theme}>
+            <div className="navbar navbar-expand-md navbar-dark fixed-top bgc-theme noprint" style={ navbar_theme }>
                 <div className="navbar-brand wmin-200 c-nav-brand">
                     <a href="/" className="d-inline-block">
-                        <img src={path} alt="" />
+                        <img src={ path } alt="" />
                     </a>
                 </div>
 
@@ -274,7 +274,7 @@ class Header extends Component {
                                 </div>
 
                                 <div className="dropdown-content-body dropdown-scrollable">
-                                    {quote}
+                                    { quote }
                                 </div>
                             </div>
                         </li>
@@ -283,41 +283,41 @@ class Header extends Component {
                                 <i className="icon-bell3"></i>
                                 <span className="d-md-none ml-2">Announcements</span>
                                 {
-                                    this.state.total > 0 ? <span className="badge badge-pill bg-warning-400 ml-auto ml-md-0">{this.state.total}</span> : ""
+                                    this.state.total > 0 ? <span className="badge badge-pill bg-warning-400 ml-auto ml-md-0">{ this.state.total }</span> : ""
                                 }
                             </a>
 
                             <div className="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                 <div className="dropdown-content-header">
                                     <span className="font-weight-semibold">Announcements</span>
-                                    {/* <a href="#" className="text-default"><i className="icon-sync"></i></a> */}
+                                    {/* <a href="#" className="text-default"><i className="icon-sync"></i></a> */ }
                                 </div>
 
                                 <div className="dropdown-content-body dropdown-scrollable">
                                     <ul className="media-list">
-                                        {this.renderNotifications()}
+                                        { this.renderNotifications() }
                                     </ul>
                                 </div>
 
                                 <div className="dropdown-content-footer justify-content-center">
-                                    <span onClick={() => { this.props.history.push({ pathname: ANNOUNCEMENTS_URL }) }} className="text-grey cursor-pointer">See All</span>
+                                    <span onClick={ () => { this.props.history.push({ pathname: ANNOUNCEMENTS_URL }) } } className="text-grey cursor-pointer">See All</span>
                                 </div>
                             </div>
                         </li>
 
                         <li className="nav-item dropdown dropdown-user text-capitalize">
                             <a href="#" className="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                                {picture}
-                                <span>{name}</span>
+                                { picture }
+                                <span>{ name }</span>
                             </a>
 
                             <div className="dropdown-menu dropdown-menu-right">
-                                <a className="dropdown-item" onClick={this.viewProfile.bind(this)}><i className="fas fa-user side-menu_icon"></i> View Profile</a>
-                                <a className="dropdown-item" onClick={this.changePassword.bind(this)}><i className="fas fa-user-shield side-menu_icon"></i> Change Password</a>
-                                <a className="dropdown-item" onClick={this.changeProfilePicture.bind(this)}><i className="fas fa-id-card-alt side-menu_icon"></i> Change Profile Picture</a>
+                                <a className="dropdown-item" onClick={ this.viewProfile.bind(this) }><i className="fas fa-user side-menu_icon"></i> View Profile</a>
+                                <a className="dropdown-item" onClick={ this.changePassword.bind(this) }><i className="fas fa-user-shield side-menu_icon"></i> Change Password</a>
+                                <a className="dropdown-item" onClick={ this.changeProfilePicture.bind(this) }><i className="fas fa-id-card-alt side-menu_icon"></i> Change Profile Picture</a>
                                 <div className="dropdown-divider"></div>
-                                {/* <a className="dropdown-item" onClick={this.customization.bind(this)}><i className="icon-cog"></i> Customization</a> */}
-                                <a className="dropdown-item" onClick={this.logout.bind(this)}><i className="icon-switch2"></i> Logout</a>
+                                {/* <a className="dropdown-item" onClick={this.customization.bind(this)}><i className="icon-cog"></i> Customization</a> */ }
+                                <a className="dropdown-item" onClick={ this.logout.bind(this) }><i className="icon-switch2"></i> Logout</a>
 
                             </div>
                         </li>
