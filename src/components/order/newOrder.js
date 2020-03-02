@@ -151,7 +151,6 @@ function NewOrder(props) {
 
         if (customerName != "" && customerNumber != "" && orderProducts.length != 0) {
 
-            debugger;
             console.log(customerName)
             console.log(customerNumber)
             console.log(orderDate)
@@ -166,13 +165,12 @@ function NewOrder(props) {
                 placement_date: convertDate(orderDate),
                 delivery_date: convertDate(deliveryDate),
                 advance_payment: advancePayment,
-                products: orderProducts
+                products: JSON.stringify(orderProducts)
             }
-            console.log(newOrderData)
             axios({
                 method: 'post',
                 url: NEW_ORDER,
-                data: newOrderData,
+                data: stringify(newOrderData),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json'
@@ -228,7 +226,7 @@ function NewOrder(props) {
                                     <label className="font-weight-semibold">Order Date <span className="c-failed" title="Required">*</span></label>
                                     <DatePicker
                                         className="form-control"
-                                        dateFormat="yyyy-MM-dd"
+                                        dateFormat="MMMM d, yyyy"
                                         selected={ orderDate }
                                         onChange={ date => setOrderDate(date) }
                                         todayButton="Today"
@@ -239,7 +237,7 @@ function NewOrder(props) {
                                         <label className="font-weight-semibold">Delivery Date <span className="c-failed" title="Required">*</span></label>
                                         <DatePicker
                                             className="form-control"
-                                            dateFormat="yyyy-MM-dd"
+                                            dateFormat="MMMM d, yyyy"
                                             selected={ deliveryDate }
                                             onChange={ date => setDeliveryDate(date) }
                                             todayButton="Today"
