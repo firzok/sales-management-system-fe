@@ -1,15 +1,16 @@
 import Container from '../common/application_container';
 import React, { useState, useEffect } from 'react';
-import { connect } from "react-redux";
 import axios from 'axios';
 import Button from 'react-bootstrap-button-loader';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, CardSubtitle, CardTitle, CardBody, Card } from 'reactstrap';
 import CurrencyInput from 'react-currency-input';
-import { PRODUCT_TYPES, PRODUCTS } from '../../config/rest_endpoints';
+import { PRODUCT_TYPES, PRODUCTS, NEW_ORDER } from '../../config/rest_endpoints';
 import { stringify } from 'querystring';
 import DatePicker from "react-datepicker";
 import { addDays } from 'date-fns';
 import { OrderProductHeader, OrderProduct } from './orderProduct'
+import PhoneInput from 'react-phone-input-2'
+import { convertDate } from '../helper'
 
 function NewOrder(props) {
 
@@ -24,6 +25,8 @@ function NewOrder(props) {
     }
 
     const [advancePayment, setAdvancePayment] = useState(0);
+    const [customerName, setCustomerName] = useState("");
+    const [customerNumber, setCustomerNumber] = useState("");
     const [deliveryDate, setDeliveryDate] = useState(addDays(new Date(), 5));
     const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
     const [dropdownProductTypeOpen, setDropdownProductTypeOpen] = useState(false);
@@ -36,6 +39,7 @@ function NewOrder(props) {
     const [selectedProduct, setSelectedProduct] = useState(defaultProduct);
     const [selectedProductType, setSelectedProductType] = useState(defaultProductType);
     const [unitPrice, setUnitPrice] = useState(0);
+
 
     useEffect(() => {
         getProductTypes();
@@ -116,17 +120,72 @@ function NewOrder(props) {
         < div className="card">
             <div className="card-body">
 
-                <OrderProductHeader headers={["Type", "Name", "Quantity", "Unit Price", "Sub Total"]} />
+                <OrderProductHeader headers={ ["Type", "Name", "Quantity", "Unit Price", "Sub Total"] } />
 
-                <OrderProduct orderProducts={orderProducts} />
+                <OrderProduct orderProducts={ orderProducts } />
             </div>
         </div>
 
 
-
+    var balanceAmount = 0;
     const costReducer = (accumulator, currentValue) => accumulator + (currentValue.quantity * currentValue.unit_price);
     if (orderProducts.length > 0) {
-        var total = orderProducts.reduce(costReducer, 0);
+        balanceAmount = orderProducts.reduce(costReducer, 0);
+    }
+
+    var tax = ((7 * balanceAmount) / 100);
+
+    function onAdvancePaymentChange(event, value, maskedValue) {
+        if (maskedValue > (tax + balanceAmount)) {
+            setAdvancePayment((tax + balanceAmount))
+
+        }
+        else {
+            setAdvancePayment(maskedValue);
+        }
+
+    }
+
+    function placeOrder() {
+
+
+        if (customerName != "" && customerNumber != "" && orderProducts.length != 0) {
+
+            debugger;
+            console.log(customerName)
+            console.log(customerNumber)
+            console.log(orderDate)
+            console.log(deliveryDate)
+            console.log(orderProducts)
+            console.log(advancePayment)
+
+
+            var newOrderData = {
+                customer_phone_number: customerNumber,
+                customer_name: customerName,
+                placement_date: convertDate(orderDate),
+                delivery_date: convertDate(deliveryDate),
+                advance_payment: advancePayment,
+                products: orderProducts
+            }
+            console.log(newOrderData)
+            axios({
+                method: 'post',
+                url: NEW_ORDER,
+                data: newOrderData,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(
+                    res => {
+                        debugger;
+                    });
+
+
+
+        }
     }
 
     return (
@@ -140,7 +199,7 @@ function NewOrder(props) {
 
                         <div className="card-body">
 
-                            <h4 class="card-title">Customer</h4>
+                            <h4 className="card-title">Customer</h4>
 
                             <div className="row">
                                 <div className="col-md-4">
@@ -151,24 +210,15 @@ function NewOrder(props) {
                                             type="text"
                                             className="form-control"
                                             placeholder="Enter Customer Name"
-                                        // value={ this.state.OldPassword }
-                                        // onChange={ this.handleChange.bind(this) }
-                                        // onKeyPress={ this.handleKeyPress.bind(this) }
+                                            value={ customerName }
+                                            onChange={ (event) => setCustomerName(event.target.value) }
                                         />
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="font-weight-semibold">Phone Number <span className="c-failed" title="Required">*</span></label>
-                                        <input
-                                            name="CustomerPhoneNumber"
-                                            type="tel"
-                                            className="form-control"
-                                            placeholder="Enter Customer Phone Number"
-                                        // value={ this.state.OldPassword }
-                                        // onChange={ this.handleChange.bind(this) }
-                                        // onKeyPress={ this.handleKeyPress.bind(this) }
-                                        />
+                                        <PhoneInput className="form-control" name="CustomerPhoneNumber" placeholder="971 00 000 0000" value={ customerNumber } onChange={ (phone) => setCustomerNumber(phone) } />
                                     </div>
                                 </div>
                             </div>
@@ -179,8 +229,8 @@ function NewOrder(props) {
                                     <DatePicker
                                         className="form-control"
                                         dateFormat="yyyy-MM-dd"
-                                        selected={orderDate}
-                                        onChange={date => setOrderDate(date)}
+                                        selected={ orderDate }
+                                        onChange={ date => setOrderDate(date) }
                                         todayButton="Today"
                                     />
                                 </div>
@@ -190,34 +240,34 @@ function NewOrder(props) {
                                         <DatePicker
                                             className="form-control"
                                             dateFormat="yyyy-MM-dd"
-                                            selected={deliveryDate}
-                                            onChange={date => setDeliveryDate(date)}
+                                            selected={ deliveryDate }
+                                            onChange={ date => setDeliveryDate(date) }
                                             todayButton="Today"
-                                            minDate={orderDate}
+                                            minDate={ orderDate }
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <h4 class="card-title">Order Details</h4>
+                            <h4 className="card-title">Order Details</h4>
 
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="font-weight-semibold">Product Type <span className="c-failed" title="Required">*</span></label>
 
-                                        <Dropdown isOpen={dropdownProductTypeOpen} toggle={toggleProductType} >
+                                        <Dropdown isOpen={ dropdownProductTypeOpen } toggle={ toggleProductType } >
                                             <DropdownToggle caret className="btn btn-theme btn-labeled">
-                                                {selectedProductType.name}
+                                                { selectedProductType.name }
                                             </DropdownToggle>
                                             <DropdownMenu>
-                                                {productTypeList.map((type) =>
-                                                    <DropdownItem key={type.id}
-                                                        onClick={() => selectProductType(type)}
+                                                { productTypeList.map((type) =>
+                                                    <DropdownItem key={ type.id }
+                                                        onClick={ () => selectProductType(type) }
                                                     >
-                                                        {type.name}
+                                                        { type.name }
                                                     </DropdownItem>
-                                                )}
+                                                ) }
                                             </DropdownMenu>
                                         </Dropdown>
                                     </div>
@@ -227,18 +277,18 @@ function NewOrder(props) {
                                     <div className="form-group">
                                         <label className="font-weight-semibold">Product <span className="c-failed" title="Required">*</span></label>
 
-                                        <Dropdown isOpen={dropdownProductOpen} toggle={toggleProduct}>
-                                            <DropdownToggle caret className="btn-theme btn-labeled" disabled={productDisabled}>
-                                                {selectedProduct.name}
+                                        <Dropdown isOpen={ dropdownProductOpen } toggle={ toggleProduct }>
+                                            <DropdownToggle caret className="btn-theme btn-labeled" disabled={ productDisabled }>
+                                                { selectedProduct.name }
                                             </DropdownToggle>
                                             <DropdownMenu>
-                                                {productList.map((product) =>
-                                                    <DropdownItem key={product.id}
-                                                        onClick={() => setSelectedProduct(product)}
+                                                { productList.map((product) =>
+                                                    <DropdownItem key={ product.id }
+                                                        onClick={ () => setSelectedProduct(product) }
                                                     >
-                                                        {product.name}
+                                                        { product.name }
                                                     </DropdownItem>
-                                                )}
+                                                ) }
                                             </DropdownMenu>
                                         </Dropdown>
                                     </div>
@@ -250,14 +300,14 @@ function NewOrder(props) {
                                     <div className="form-group">
                                         <label className="font-weight-semibold">Quantity <span className="c-failed" title="Required">*</span></label>
 
-                                        <input type="Number" className="form-control" min={1} value={quantity} onChange={event => setQuantity(event.target.value)} />
+                                        <input type="Number" className="form-control" min={ 1 } value={ quantity } onChange={ event => setQuantity(event.target.value) } />
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="font-weight-semibold">Price <span className="c-failed" title="Required">*</span></label>
 
-                                        <CurrencyInput className="form-control" suffix=" AED" precision="0" value={unitPrice} onChangeEvent={(event, value, maskedValue) => setUnitPrice(maskedValue)} />
+                                        <CurrencyInput className="form-control" suffix=" AED" precision="0" value={ unitPrice } onChangeEvent={ (event, value, maskedValue) => setUnitPrice(maskedValue) } />
                                     </div>
                                 </div>
                             </div>
@@ -266,7 +316,7 @@ function NewOrder(props) {
                                 <div className="col-md-2">
                                     <Button title="Add Product"
                                         className="btn btn-theme btn-labeled"
-                                        onClick={() => addProduct()}
+                                        onClick={ () => addProduct() }
                                         disabled={
                                             selectedProductType.name == defaultProductType.name || selectedProduct.name == defaultProduct.name
                                         }
@@ -279,7 +329,7 @@ function NewOrder(props) {
 
                     </div>
 
-                    {orderProducts.length > 0 ?
+                    { orderProducts.length > 0 ?
                         orderProductsHTML :
                         ""
                     }
@@ -292,45 +342,45 @@ function NewOrder(props) {
                         <div className="card-body order-total-padding">
 
                             <h4 className="card-title"
-                                style={{ marginBottom: "40px" }}
+                                style={ { marginBottom: "40px" } }
                             >Order Summary</h4>
 
-                            <div className="row justify-content-between align-items-center" style={{ marginBottom: "30px" }}>
+                            <div className="row justify-content-between align-items-center" style={ { marginBottom: "20px" } }>
                                 <div className="col-md-4">
                                     <label className="font-weight-semibold">Advance Payment: </label>
                                 </div>
                                 <div className="col-md-4 text-right">
-                                    <CurrencyInput className="form-control" suffix=" AED" precision="0" value={advancePayment} onChangeEvent={(event, value, maskedValue) => setAdvancePayment(maskedValue)} />
+                                    <CurrencyInput className="form-control" suffix=" AED" precision="0" value={ advancePayment } onChangeEvent={ (event, value, maskedValue) => onAdvancePaymentChange(event, value, maskedValue) } />
 
                                 </div>
                             </div>
 
-                            <div className="row justify-content-between" style={{ marginBottom: "10px" }}>
+                            <div className="row justify-content-between" style={ { marginBottom: "10px" } }>
                                 <div className="col-md-4">
-                                    <label className="font-weight-semibold">Amount before Tax: </label>
+                                    <label className="font-weight-semibold">Balance Amount: </label>
                                 </div>
                                 <div className="col-md-4 text-right">
-                                    <label className="font-weight-semibold">500 AED</label>
+                                    <label className="font-weight-semibold">{ formatter.format(balanceAmount) } AED</label>
                                 </div>
                             </div>
 
-                            <div className="row justify-content-between" style={{ marginBottom: "10px" }}>
+                            <div className="row justify-content-between" style={ { marginBottom: "10px" } }>
                                 <div className="col-md-4">
-                                    <label className="font-weight-semibold">Amount after Tax: </label>
+                                    <label className="font-weight-semibold">Tax: </label>
                                 </div>
                                 <div className="col-md-4 text-right">
-                                    <label className="font-weight-semibold">500 AED</label>
+                                    <label className="font-weight-semibold">{ formatter.format(tax) } AED</label>
                                 </div>
                             </div>
 
-                            <hr style={{ marginTop: "45px", marginBottom: "45px", marginLeft: "10px", marginRight: "10px" }} />
+                            <hr style={ { marginTop: "20px", marginBottom: "20px", marginLeft: "10px", marginRight: "10px" } } />
 
                             <div className="row justify-content-between">
                                 <div className="col-md-4">
-                                    <label className="font-weight-black font-s-18">Total Balance: </label>
+                                    <label className="font-weight-black font-s-18">Total: </label>
                                 </div>
                                 <div className="col-md-4 text-right">
-                                    <label className="font-weight-black font-s-18">{formatter.format(5000)} AED</label>
+                                    <label className="font-weight-black font-s-18">{ formatter.format(balanceAmount + tax - advancePayment) } AED</label>
                                 </div>
                             </div>
 
@@ -341,11 +391,11 @@ function NewOrder(props) {
                                         className="btn btn-theme btn-labeled"
                                         size="lg"
                                         block
-                                        style={{ marginTop: "50px", marginBottom: "40px" }}
-                                    // onClick={() => addProduct()}
-                                    // disabled={
-                                    //     selectedProductType.name == defaultProductType.name || selectedProduct.name == defaultProduct.name
-                                    // }
+                                        style={ { marginTop: "50px", marginBottom: "40px" } }
+                                        onClick={ () => placeOrder() }
+                                        disabled={
+                                            orderProducts.length == 0 || customerName == "" || customerNumber == ""
+                                        }
                                     >
                                         Confirm Order
                                     </Button>
