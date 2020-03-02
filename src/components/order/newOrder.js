@@ -43,58 +43,6 @@ function NewOrder(props) {
         getProductTypes();
     }, []);
 
-    var orderProductsHTML = "";
-    useEffect(() => {
-        debugger;
-        orderProductsHTML = < div className="card">
-            <div className="card-body">
-
-                <div className="row">
-                    <div className="col-md-2">
-                        <label className="font-weight-semibold">Type</label>
-                    </div>
-                    <div className="col-md-2">
-                        <label className="font-weight-semibold">Name</label>
-                    </div>
-                    <div className="col-md-2">
-                        <label className="font-weight-semibold">Quantity</label>
-                    </div>
-                    <div className="col-md-2">
-                        <label className="font-weight-semibold">Unit Price</label>
-                    </div>
-                    <div className="col-md-2">
-                        <label className="font-weight-semibold">Sub Total</label>
-                    </div>
-                </div>
-
-                <div>
-                    { orderProducts.map((product) =>
-
-                        <div key={ product.product_name_id } className="row">
-                            <div className="col-md-2">
-                                <label className="font-weight-semibold">{ product.product_type_name }</label>
-                            </div>
-                            <div className="col-md-2">
-                                <label className="font-weight-semibold">{ product.product_name }</label>
-                            </div>
-                            <div className="col-md-2">
-                                <label className="font-weight-semibold">{ product.quantity }</label>
-                            </div>
-                            <div className="col-md-2">
-                                <label className="font-weight-semibold">{ formatter.format(product.unit_price) } AED</label>
-                            </div>
-                            <div className="col-md-2">
-                                <label className="font-weight-semibold">{ formatter.format(product.quantity * product.unit_price) } AED</label>
-                            </div>
-                        </div>
-
-                    ) }
-                </div>
-            </div>
-        </div>
-    }, [orderProducts])
-
-
     function getProductTypes() {
         if (productTypeList.length == 0) {
             axios.get(PRODUCT_TYPES)
@@ -136,6 +84,8 @@ function NewOrder(props) {
 
         if (selectedProductType.name != defaultProductType.name && selectedProduct.name != defaultProduct.name) {
 
+            setOrderProducts([])
+
             var newProduct = {
                 // product_type_id: selectedProductType.id,
                 product_type_name: selectedProductType.name,
@@ -144,7 +94,6 @@ function NewOrder(props) {
                 quantity: parseInt(quantity),
                 unit_price: unitPrice
             }
-            debugger
             var products = orderProducts;
             if (products.length > 0) {
                 products.unshift(newProduct)
@@ -164,6 +113,56 @@ function NewOrder(props) {
 
     const toggleProductType = () => setDropdownProductTypeOpen(prevState => !prevState);
     const toggleProduct = () => setDropdownProductOpen(prevState => !prevState);
+
+    var orderProductsHTML = < div className="card">
+            <div className="card-body">
+
+                <div className="row">
+                    <div className="col-md-2">
+                        <label className="font-weight-semibold">Type</label>
+                    </div>
+                    <div className="col-md-2">
+                        <label className="font-weight-semibold">Name</label>
+                    </div>
+                    <div className="col-md-2">
+                        <label className="font-weight-semibold">Quantity</label>
+                    </div>
+                    <div className="col-md-2">
+                        <label className="font-weight-semibold">Unit Price</label>
+                    </div>
+                    <div className="col-md-2">
+                        <label className="font-weight-semibold">Sub Total</label>
+                    </div>
+                </div>
+
+                <div>
+                    { orderProducts.map((product, index) =>{
+
+                        console.log("Order Product");
+
+                         return <div key={ index } className="row">
+                            <div className="col-md-2">
+                                <label className="font-weight-semibold">{ product.product_type_name }</label>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="font-weight-semibold">{ product.product_name }</label>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="font-weight-semibold">{ product.quantity }</label>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="font-weight-semibold">{ formatter.format(product.unit_price) } AED</label>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="font-weight-semibold">{ formatter.format(product.quantity * product.unit_price) } AED</label>
+                            </div>
+                        </div>
+                        }
+
+                    ) }
+                </div>
+            </div>
+        </div>
 
     return (
         <Container header="New Order Form">
