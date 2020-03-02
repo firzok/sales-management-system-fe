@@ -1299,3 +1299,8 @@ ul .nav-group-sub .nav-item .nav-link{
         display:none;
     }
  }
+
+.order-total-padding{
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+}
