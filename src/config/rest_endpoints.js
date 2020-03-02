@@ -13,6 +13,7 @@ export const ROOT_URL = `${SERVER_PATH}/api`;
 // ====================================================================================================
 
 export const PRODUCT_TYPES = `${ROOT_URL}/product-types`;
+export const PRODUCTS = `${ROOT_URL}/products`;
 
 
 
