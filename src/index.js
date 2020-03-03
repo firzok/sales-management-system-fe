@@ -9,6 +9,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import AllRoutes from './components/router/AllRoutes';
 import reducers from './reducers';
+import './fontawesome';
 
 export const store = createStore(
     (reducers),
@@ -18,7 +19,7 @@ export const store = createStore(
 );
 
 ReactDOM.render(
-    <Provider store={ store }>
+    <Provider store={store}>
         <AllRoutes />
     </Provider>
     , document.getElementById('root'));

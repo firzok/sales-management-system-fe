@@ -5,7 +5,8 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import { naver } from './side_menu_mapper'
 import { LOAD_LOGOUT } from '../router/routeConstants';
-import { localPermissions } from '../../config/static_lists';
+import { localPermissions, defaultPermissionsList } from '../../config/static_lists';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 var $ = window.$;
 
@@ -34,7 +35,6 @@ class SideMenu extends Component {
 
         // rendering user card on side menu
         this.__render_mobile_navigator = this.__render_mobile_navigator.bind(this);
-        this.__render_user_card = this.__render_user_card.bind(this);
     }
 
     componentDidMount() {
@@ -144,58 +144,59 @@ class SideMenu extends Component {
      * 
      */
     __build_render_dictionary() {
-        if (!_.isEmpty(this.props.activeUser)) {
+        // if (!_.isEmpty(this.props.activeUser)) {
 
-            // rearranging permission according to the groups
+        // rearranging permission according to the groups
 
-            // building an empty init dictionary with render:False in all keys
-            var final_renderer = {};
-            var render_key = this.state.render_key;
+        // building an empty init dictionary with render:False in all keys
+        var final_renderer = {};
+        var render_key = this.state.render_key;
 
-            for (var key in naver) {
-                final_renderer[key] = { [render_key]: false, [this.state.fa_icon]: naver[key]['fa_icon'] }
-            }
+        for (var key in naver) {
+            final_renderer[key] = { [render_key]: false, [this.state.fa_icon]: naver[key]['fa_icon'] }
+        }
+        debugger
+        // var serverPermissions = this.props.activeUser['permissions'].split(",");
+        var serverPermissions = defaultPermissionsList.split(",");
+        var permission = this.getPermissions(serverPermissions);
 
-            var serverPermissions = this.props.activeUser['permissions'].split(",");
-            var permission = this.getPermissions(serverPermissions);
+        if (permission.length != 0) {
+            for (var i = 0; i < permission.length; i++) {
+                var elem = permission[i].split('/');
+                var parent = '/' + elem[1];
+                var getDetails = naver[parent];
 
-            if (permission.length != 0) {
-                for (var i = 0; i < permission.length; i++) {
-                    var elem = permission[i].split('/');
-                    var parent = '/' + elem[1];
-                    var getDetails = naver[parent];
+                // if that permission is renderable
+                if (getDetails) {
+                    var getChildren = Object.keys(getDetails);
+                    var count = getChildren.length;
 
-                    // if that permission is renderable
-                    if (getDetails) {
-                        var getChildren = Object.keys(getDetails);
-                        var count = getChildren.length;
-
-                        if (count == 2) {
-                            var temp = Object.keys(naver[parent]);
-                            if (temp[0] != "fa_icon") {
-                                final_renderer[parent][temp[0]] = naver[parent][temp[0]]
-                            }
-                            else {
-                                final_renderer[parent][temp[1]] = naver[parent][temp[1]]
-                            }
-                            final_renderer[parent][render_key] = true
+                    if (count == 2) {
+                        var temp = Object.keys(naver[parent]);
+                        if (temp[0] != "fa_icon") {
+                            final_renderer[parent][temp[0]] = naver[parent][temp[0]]
                         }
                         else {
-                            var child_name = "/";
-                            if (elem[2])
-                                child_name = '/' + elem[2];
-                            var child_details = naver[parent][child_name]
-                            // if that sub permission is renderable
-                            if (child_details) {
-                                final_renderer[parent][child_name] = child_details
-                                final_renderer[parent][render_key] = true
-                            }
+                            final_renderer[parent][temp[1]] = naver[parent][temp[1]]
+                        }
+                        final_renderer[parent][render_key] = true
+                    }
+                    else {
+                        var child_name = "/";
+                        if (elem[2])
+                            child_name = '/' + elem[2];
+                        var child_details = naver[parent][child_name]
+                        // if that sub permission is renderable
+                        if (child_details) {
+                            final_renderer[parent][child_name] = child_details
+                            final_renderer[parent][render_key] = true
                         }
                     }
                 }
-                return final_renderer;
             }
+            return final_renderer;
         }
+        // }
     }
 
     /**
@@ -221,8 +222,8 @@ class SideMenu extends Component {
             ItemText = object['name'];
         }
         else {
-            itemIcon = <div style={ { width: '20px' } }><i className={ `${object['fa_icon']} side-menu_icon` }> </i></div>;
-            ItemText = <span className="ml-2">{ object['name'] }</span>;
+            itemIcon = <div style={{ width: '20px' }}><FontAwesomeIcon icon={object['fa_icon']} className={`side-menu_icon`} /></div>;
+            ItemText = <span className="ml-2">{object['name']}</span>;
         }
 
         var isActive = (active == object['url']);
@@ -231,10 +232,10 @@ class SideMenu extends Component {
         }
 
         return (
-            <li key={ `${object['name']}${_key}` } className="nav-item">
-                <Link to={ object['url'] } className={ isActive ? `nav-link active` : `nav-link` }>
-                    { itemIcon }
-                    { ItemText }
+            <li key={`${object['name']}${_key}`} className="nav-item">
+                <Link to={object['url']} className={isActive ? `nav-link active` : `nav-link`}>
+                    {itemIcon}
+                    {ItemText}
                 </Link>
             </li>
         );
@@ -314,12 +315,12 @@ class SideMenu extends Component {
             var _keys = Object.keys(dictionary);
             // _keys = _keys.sort();
             let isGroup = true;
-            var __html = <li key={ Name } className={ `nav-item nav-item-submenu ${openClass}` }>
-                <Link to={ `#` } className={ `nav-link ${activeClass}` }>
-                    <div style={ { width: '20px' } }><i className={ `${FI} side-menu_icon` } aria-hidden="true"> </i></div>
-                    <span className={ textCapitalize ? "text-capitalize sidemenu-text ml-2" : "sidemenu-text ml-2" }> { Name } </span>
+            var __html = <li key={Name} className={`nav-item nav-item-submenu ${openClass}`}>
+                <Link to={`#`} className={`nav-link ${activeClass}`}>
+                    <div style={{ width: '20px' }}><i className={`${FI} side-menu_icon`} aria-hidden="true"> </i></div>
+                    <span className={textCapitalize ? "text-capitalize sidemenu-text ml-2" : "sidemenu-text ml-2"}> {Name} </span>
                 </Link>
-                <ul className="nav nav-group-sub text-capitalize" data-submenu-title={ Name }>
+                <ul className="nav nav-group-sub text-capitalize" data-submenu-title={Name}>
                     {
                         _keys.map((key, counter) => {
                             return this.__render(dictionary[key], key, whoIsOpen, whoIsActive, isGroup)
@@ -378,33 +379,6 @@ class SideMenu extends Component {
     }
 
     /**
-     *  Rendering the User card and their corresponding actions on side menu
-     */
-    __render_user_card() {
-        return (
-            <div className="sidebar-user">
-                <div className="card-body">
-                    <div className="media">
-
-                        <div className="media-body">
-                            <div className="text-theme media-title font-weight-semibold">{ this.props.activeUser.name }</div>
-                            <div className="text-theme font-size-xs opacity-50">
-                                { this.props.activeUser.role }
-                            </div>
-                        </div>
-
-                        <div className="ml-3 align-self-center">
-                            <a href="#" className="text-theme" title="Profile Setting"><i className="icon-cog3"></i></a>
-                            <a href="#" className="text-theme ml-3" title="Lock Screen"><i className="icon-user-lock"></i></a>
-                            <a href={ LOAD_LOGOUT } className="text-theme ml-3" title="Logout"><i className="icon-switch2"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    /**
      *  Main render Function
      * --------------------------------------------------------------------------------
      * 
@@ -427,11 +401,9 @@ class SideMenu extends Component {
         return (
             <div className="sidebar sidebar-light sidebar-main sidebar-fixed sidebar-expand-md noprint">
 
-                { this.__render_mobile_navigator() }
+                {this.__render_mobile_navigator()}
 
                 <div className="sidebar-content side-menu-zIndex">
-
-                    {/* {this.__render_user_card()} */ }
 
                     <div className="card card-sidebar-mobile">
                         <ul className="nav nav-sidebar" data-nav-type="accordion">
@@ -440,7 +412,7 @@ class SideMenu extends Component {
                                 <i className="icon-menu" title="Navigation"></i>
                             </li>
 
-                            { __html }
+                            {__html}
                         </ul>
                     </div>
                 </div>

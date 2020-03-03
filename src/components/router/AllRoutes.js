@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ProtectedRoute from './protectedRoute';
 
 import {
-    LOAD_LOGIN, LOAD_LOGOUT, CHANGE_PASSWORD, VIEW_PROFILE, LOAD_APP, NEW_ORDER
+    LOAD_LOGIN, LOAD_LOGOUT, CHANGE_PASSWORD, VIEW_PROFILE, LOAD_APP, NEW_ORDER, ALL_ORDERS
 } from './routeConstants';
 
 import Login from '../authentication/login';
@@ -13,6 +13,8 @@ import ChangePassword from '../settings/change_password';
 import ViewEmployeeProfile from '../employees/view_employee_profile';
 import App from '../../App';
 import NewOrder from '../order/newOrder';
+import AllOrders from '../order/allOrder';
+
 
 
 class AllRoutes extends Component {
@@ -20,12 +22,13 @@ class AllRoutes extends Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route path={ LOAD_LOGIN } component={ Login } />
-                    <Route exact path={ LOAD_LOGOUT } component={ Logout } />
-                    <Route exact path={ CHANGE_PASSWORD } component={ ChangePassword } />
-                    <Route exact path={ VIEW_PROFILE } component={ ViewEmployeeProfile } />
-                    <Route exact path={ LOAD_APP } component={ App } />
-                    <Route exact path={ NEW_ORDER } component={ NewOrder } />
+                    <Route path={LOAD_LOGIN} component={Login} />
+                    <Route exact path={LOAD_LOGOUT} component={Logout} />
+                    <Route exact path={CHANGE_PASSWORD} component={ChangePassword} />
+                    <Route exact path={VIEW_PROFILE} component={ViewEmployeeProfile} />
+                    <Route exact path={LOAD_APP} component={App} />
+                    <Route exact path={NEW_ORDER} component={NewOrder} />
+                    <Route exact path={ALL_ORDERS} component={AllOrders} />
 
 
                 </Switch>
