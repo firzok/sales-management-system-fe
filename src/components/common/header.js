@@ -47,12 +47,6 @@ class Header extends Component {
             }
         });
 
-        this.getQuote();
-        this.getNotifications();
-        this.timeout = setInterval(() => {
-            this.setState({ loadingNotifications: false });
-            this.getNotifications();
-        }, 5000);
     }
 
     getNotifications() {
@@ -87,19 +81,12 @@ class Header extends Component {
         return quote;
     }
 
-    getQuote() {
-        // axios.get(QUOTE_GENERATOR).then(res => {
-        //     var quote = this.makeQuoteData(res.data);
-        //     this.setState({ quote });
-        // })
-    }
-
     componentWillUnmount() {
         clearInterval(this.timeout);
     }
 
     logout() {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         this.props.history.push(LOAD_LOGIN);
     }
 
@@ -118,7 +105,7 @@ class Header extends Component {
     viewProfile() {
         this.props.history.push({
             pathname: `${VIEW_PROFILE}`,
-            empID: `${this.props.activeUser["empID"]}`,
+            empID: `${this.props.activeUser.user["empID"]}`,
             self: true
         });
     }
@@ -176,13 +163,14 @@ class Header extends Component {
     }
 
     render() {
-        var user = this.props.activeUser;
+        var user = this.props.activeUser.user;
         var picture = '';
         var name = "...";
         if (Object.keys(user).length) {
             var profilePicture = user["profile_picture"];
             var defaultProfilePicture = process.env.PUBLIC_URL + "/assets/images/avatar.png";
-            const initials = user.firstname === "" || user.firstname === null ? "---" : user.firstname.charAt(0).toLowerCase();
+            // const initials = user.firstname === "" || user.firstname === null ? "---" : user.firstname.charAt(0).toLowerCase();
+            const initials = 'a'
             const style = {
                 backgroundColor: colors[initials]
             }

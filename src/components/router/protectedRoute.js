@@ -6,7 +6,8 @@ import { ERROR_404, LOAD_LOGIN } from './routeConstants';
 import { GetPath, isValidJSON } from '../../assets/js/helper'
 
 import { connect } from "react-redux";
-import { fetchUser, getLeaveTypes } from '../../actions';
+import { fetchUser } from '../../actions';
+import localPermissions, { defaultPermissionsList } from '../../config/static_lists';
 // import CustomLoader from '../common/loader';
 
 class ProtectedRoute extends Component {
@@ -18,16 +19,16 @@ class ProtectedRoute extends Component {
         }
 
         this.isAuthorizedRoute = this.isAuthorizedRoute.bind(this);
-        this.CheckForToken = this.CheckForToken.bind(this);
+        this.CheckForToken = this.isUserLoggedIn.bind(this);
     }
 
     UNSAFE_componentWillMount() {
-        if (_.isEmpty(this.props.activeUser)) {
-            if (isValidJSON(localStorage.getItem('user'))) {
-                var user = JSON.parse(localStorage.getItem('user'));
+        if (_.isEmpty(this.props.activeUser.user)) {
+            if (isValidJSON(sessionStorage.getItem('user'))) {
+                var user = JSON.parse(sessionStorage.getItem('user'));
                 if (user && typeof (user) !== 'string') {
                     if ("empID") {
-                        this.props.fetchUser(user['empID']);
+                        this.props.fetchUser(user);
                     }
                 }
             }
@@ -38,10 +39,12 @@ class ProtectedRoute extends Component {
      * check the current routing url against authorized urls of users
      */
     isAuthorizedRoute() {
+        debugger
         var path = GetPath(this.props.path);
         var user_permission = [];
-        if (this.props.activeUser['permissions']) {
-            user_permission = this.props.activeUser['permissions'].split(",");
+        user_permission = localPermissions;
+        if (this.props.activeUser.user['permissions']) {
+            user_permission = this.props.activeUser.user['permissions']
         }
         // var user_permission = [...this.state.permission];
         var idx = user_permission.indexOf(path);
@@ -68,12 +71,11 @@ class ProtectedRoute extends Component {
     /**
      * check that user is logged in or not
      */
-    CheckForToken() {
-        if (isValidJSON(localStorage.getItem('user'))) {
-            var user = JSON.parse(localStorage.getItem('user'));
+    isUserLoggedIn() {
+        if (isValidJSON(sessionStorage.getItem('user'))) {
+            var user = JSON.parse(sessionStorage.getItem('user'));
             if (user && typeof (user) !== 'string') {
-                if ("empID" in user && "access_token" in user) {
-                    this.props.getLeaveTypes();
+                if ("empID" in user && "jwt_token" in user) {
                     return true;
                 }
             }
@@ -93,12 +95,13 @@ class ProtectedRoute extends Component {
         //     <CustomLoader width={ 200 } height={ 200 } customstyles={ {} } />
         // </div>
         /* if user is logged in */
-        if (this.CheckForToken()) {
+        if (this.isUserLoggedIn()) {
 
             /* first fetch the user details from server */
-            if (!_.isEmpty(this.props.activeUser)) {
-                if ('message' in this.props.activeUser) {
-                    localStorage.removeItem('user');
+            if (!_.isEmpty(this.props.activeUser.user)) {
+                debugger
+                if ('message' in this.props.activeUser.user) {
+                    sessionStorage.removeItem('user');
                     __html =
                         <Route
                             { ...props }
@@ -131,7 +134,7 @@ class ProtectedRoute extends Component {
             }
         }
         else {
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
             if (this.isLoginPath()) {
                 __html =
                     <Route
@@ -156,4 +159,4 @@ function mapStateToProps({ activeUser }) {
     return { activeUser }
 }
 
-export default connect(mapStateToProps, { fetchUser, getLeaveTypes })(ProtectedRoute);
+export default connect(mapStateToProps, { fetchUser })(ProtectedRoute);

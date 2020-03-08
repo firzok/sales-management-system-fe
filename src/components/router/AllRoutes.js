@@ -20,12 +20,12 @@ class AllRoutes extends Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route path={ LOAD_LOGIN } component={ Login } />
-                    <Route exact path={ LOAD_LOGOUT } component={ Logout } />
-                    <Route exact path={ CHANGE_PASSWORD } component={ ChangePassword } />
-                    <Route exact path={ VIEW_PROFILE } component={ ViewEmployeeProfile } />
-                    <Route exact path={ LOAD_APP } component={ App } />
-                    <Route exact path={ NEW_ORDER } component={ NewOrder } />
+                    <ProtectedRoute path={ LOAD_LOGIN } component={ Login } />
+                    <ProtectedRoute exact path={ LOAD_LOGOUT } component={ Logout } />
+                    <ProtectedRoute exact path={ CHANGE_PASSWORD } component={ ChangePassword } />
+                    <ProtectedRoute exact path={ VIEW_PROFILE } component={ ViewEmployeeProfile } />
+                    <ProtectedRoute exact path={ LOAD_APP } component={ App } />
+                    <ProtectedRoute exact path={ NEW_ORDER } component={ NewOrder } />
 
 
                 </Switch>

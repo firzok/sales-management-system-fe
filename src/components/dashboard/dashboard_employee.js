@@ -158,14 +158,14 @@ class DashboardEmployee extends Component {
     }
 
     getChartsData() {
-        axios.get(YEARLY_LEAVES_HISTORY_REPORT, { headers: { year: this.state.selectedYear, empID: this.props.activeUser['empID'] } }).then(res => {
+        axios.get(YEARLY_LEAVES_HISTORY_REPORT, { headers: { year: this.state.selectedYear, empID: this.props.activeUser.user['empID'] } }).then(res => {
             var leavesHistoryData = this.makeChartData(res.data);
             this.setState({ leavesHistoryData });
         });
     }
 
     getStatsData() {
-        axios.get(GET_EMPLOYEE_RECENT_STATUS, { "headers": { "empID": this.props.activeUser.empID } }).then(res => {
+        axios.get(GET_EMPLOYEE_RECENT_STATUS, { "headers": { "empID": this.props.activeUser.user.empID } }).then(res => {
             var { leavesBalance, leavesPending, leavesTotal, lastLeaveRecord, leaves } = res.data;
             var leaveTypes = leaves;
             var statsData = this.makeStatsData(leaveTypes, leavesBalance, leavesTotal);
@@ -227,7 +227,7 @@ class DashboardEmployee extends Component {
         // var year = new Date().getFullYear().toString();
         // headers["start_date"] = `${year}-01-01`;
         // headers["end_date"] = `${year}-12-31`;
-        headers["empID"] = this.props.activeUser['empID'];
+        headers["empID"] = this.props.activeUser.user['empID'];
         headers["self"] = true;
         this.setState({ isGettingData: true });
         axios.get(`${LEAVE_RECORDS_BASE_URL}?skip=${this.state.skip}&size=${this.state.size}`, { "headers": headers }, []).then(res => {

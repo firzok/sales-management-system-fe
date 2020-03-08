@@ -9,8 +9,8 @@ export const NOTIFICATION = "notification";
 export const LEAVE_TYPES = "leave_types";
 
 axios.interceptors.request.use(request => {
-    if (isValidJSON(localStorage.getItem('user'))) {
-        var user = JSON.parse(localStorage.getItem('user'));
+    if (isValidJSON(sessionStorage.getItem('user'))) {
+        var user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
             request['headers']['Authorization'] = `${user['token_type']} ${user['access_token']}`;
         }
@@ -63,27 +63,6 @@ export function makeListFromSingleObj(responseData) {
     return list;
 }
 
-/**
- * clear the value of all field from fields dictionary and 
- * if there is a default value exist in defaultValues dictionary then assign that value
- * to that field
- * 
- * @param {*} fields            dictionary of field(s)
- * @param {*} defaultValues     dictionary containing default value of field(s)
- */
-export function clearForm(fields, defaultValues = {}) {
-    for (var idx in fields) {
-        var field = fields[idx];
-        if (field.name in defaultValues) {
-            field.value = defaultValues[field.name];
-        }
-        else {
-            field.value = ''
-        }
-    }
-    return fields
-}
-
 export function login(loginDetails) {
     return function (dispatch) {
         axios.defaults.withCredentials = true;
@@ -97,6 +76,7 @@ export function login(loginDetails) {
             }
         })
             .then(res => {
+                console.log("In login action response")
                 dispatch({
                     type: ACTIVE_USER,
                     payload: res
@@ -114,12 +94,14 @@ export function login(loginDetails) {
     }
 }
 
-export function fetchUser(userid) {
+export function fetchUser(user) {
     axios.defaults.timeout = 80000;
     return function (dispatch) {
+        debugger
         axios({
             method: 'get',
-            url: `${USER_BASE_URL}/${userid}`
+            url: `${USER_BASE_URL}/${user.empID}`,
+            headers: { 'Authorization': `Bearer ${user.jwt_token}` }
         })
             .then(res => {
                 dispatch({
@@ -133,30 +115,6 @@ export function fetchUser(userid) {
                 }
                 dispatch({
                     type: ACTIVE_USER,
-                    payload: c_error
-                })
-            });
-    }
-}
-
-export function getLeaveTypes() {
-    return function (dispatch) {
-        axios({
-            method: 'get',
-            url: `${LEAVE_TYPES_LIST}`
-        })
-            .then(res => {
-                dispatch({
-                    type: LEAVE_TYPES,
-                    payload: res
-                })
-            }).catch(error => {
-                var c_error = error.response;
-                if (c_error === undefined) {
-                    c_error = { "data": { "message": "Network Error" } };
-                }
-                dispatch({
-                    type: LEAVE_TYPES,
                     payload: c_error
                 })
             });

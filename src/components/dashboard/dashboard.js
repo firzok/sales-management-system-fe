@@ -25,7 +25,7 @@ class Dashboard extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        var __user = JSON.parse(localStorage.getItem('user'));
+        var __user = JSON.parse(sessionStorage.getItem('user'));
         if (__user) {
             this.setState({ modalIsOpen: __user['Disclaimer'] })
         }
@@ -40,12 +40,12 @@ class Dashboard extends Component {
     }
 
     closeModal() {
-        var __user = JSON.parse(localStorage.getItem('user'));
+        var __user = JSON.parse(sessionStorage.getItem('user'));
         if (__user) {
             __user['Disclaimer'] = false
         }
 
-        localStorage.setItem("user", JSON.stringify(__user));
+        sessionStorage.setItem("user", JSON.stringify(__user));
 
         this.setState({ selectedEmployee: null, modalIsOpen: false });
     }
@@ -60,7 +60,7 @@ class Dashboard extends Component {
             Dashboard = <DashboardAdmin />;
         }
         else {
-            Dashboard = <DashboardEmployee activeUser={ this.props.activeUser } />;
+            Dashboard = <DashboardEmployee activeUser={ this.props.activeUser.user } />;
         }
 
         var Disclaimer = <Modal

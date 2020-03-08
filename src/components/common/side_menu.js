@@ -144,7 +144,7 @@ class SideMenu extends Component {
      * 
      */
     __build_render_dictionary() {
-        if (!_.isEmpty(this.props.activeUser)) {
+        if (!_.isEmpty(this.props.activeUser.user)) {
 
             // rearranging permission according to the groups
 
@@ -155,8 +155,8 @@ class SideMenu extends Component {
             for (var key in naver) {
                 final_renderer[key] = { [render_key]: false, [this.state.fa_icon]: naver[key]['fa_icon'] }
             }
-
-            var serverPermissions = this.props.activeUser['permissions'].split(",");
+            debugger
+            var serverPermissions = this.props.activeUser.user.permissions
             var permission = this.getPermissions(serverPermissions);
 
             if (permission.length != 0) {
@@ -387,9 +387,9 @@ class SideMenu extends Component {
                     <div className="media">
 
                         <div className="media-body">
-                            <div className="text-theme media-title font-weight-semibold">{ this.props.activeUser.name }</div>
+                            <div className="text-theme media-title font-weight-semibold">{ this.props.activeUser.user.first_name }</div>
                             <div className="text-theme font-size-xs opacity-50">
-                                { this.props.activeUser.role }
+                                { this.props.activeUser.user.role }
                             </div>
                         </div>
 

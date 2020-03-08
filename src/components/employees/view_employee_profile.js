@@ -551,8 +551,8 @@ class EmployeeProfile extends Component {
 
     UpdateTabsRendering() {
         // show the salary tab if admin is login
-        var role = this.props.activeUser.roles;
-        var userID = this.props.activeUser.empID;
+        var role = this.props.activeUser.user.roles;
+        var userID = this.props.activeUser.user.empID;
 
         // if (role.toLowerCase() === 'admin' || userID === this.state.employee_id) {
         var tabs = this.state.tabs;

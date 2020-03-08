@@ -72,7 +72,7 @@ class Login extends Component {
     }
 
     checkForLoggedUser() {
-        return (localStorage.getItem('user') !== null) ? true : false;
+        return (sessionStorage.getItem('user') !== null) ? true : false;
     }
 
     animationEndError() {
@@ -80,6 +80,7 @@ class Login extends Component {
     }
 
     UNSAFE_componentWillMount() {
+        debugger
         var response = this.props.activeUser;
         if (response['message']) {
             if (response['message'] === "Network Error") {
@@ -114,15 +115,8 @@ class Login extends Component {
                 elm.addEventListener('animationend', this.animationEndError.bind(this));
             }
             else {
-                var user = {
-                    "username": response['username'],
-                    "empID": response['id'],
-                    "access_token": response['access_token'],
-                    "token_type": response['token_type'],
-                    "role": response['roles'],
-                    "Disclaimer": true
-                }
-                localStorage.setItem("user", JSON.stringify(user));
+                var user = response.user
+                sessionStorage.setItem("user", JSON.stringify(user));
                 this.setState({ username: '', password: '', startAnimationSpinner: false });
                 this.props.history.push("/");
             }

@@ -4,7 +4,7 @@ import { LOAD_LOGIN } from '../router/routeConstants';
 
 class Logout extends Component {
     UNSAFE_componentWillMount() {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         this.props.history.push(LOAD_LOGIN);
     }
 
