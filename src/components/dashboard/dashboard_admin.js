@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
-import { TODAY_LEAVE_RECORDS, LEAVE_RECORDS_BASE_URL } from '../../config/rest_endpoints';
 import axios from 'axios';
 import Card from '../common/card';
 // import LeaveCard from './leave_card';
@@ -28,13 +27,8 @@ class DashboardAdmin extends Component {
             leaveStatus: { value: "pending", label: "Pending", render: true },
         }
 
-        this.onSubmit = this.onSubmit.bind(this);
         this.makeRedirection = this.makeRedirection.bind(this);
         this.makeRedirectionToEmployee = this.makeRedirectionToEmployee.bind(this);
-    }
-
-    UNSAFE_componentWillMount() {
-        this.getDashboardData();
     }
 
     componentDidMount() {
@@ -46,36 +40,6 @@ class DashboardAdmin extends Component {
 
     componentWillUnmount() {
         clearInterval(this.timeout);
-    }
-
-    getDashboardData() {
-        axios.get(`${TODAY_LEAVE_RECORDS}`).then(res => {
-            var { data, leaves, totalLeaves, totalStrength, totalEmployees, totalApproved, totalNotApproved, totalPending } = res.data;
-            if (!(deepCompare(this.state.data, data))) {
-                this.toggleCalendarUpdate();
-                this.setState({ data, leaves, totalLeaves, totalStrength, totalEmployees, totalApproved, totalNotApproved, totalPending });
-            }
-        });
-    }
-
-    onSubmit(record, comments, isApprove) {
-        var empID = record["empID"];
-        var sno = record["leaveRecord"]["sno"];
-
-        var data = {
-            comments: comments,
-            status: isApprove ? "approved" : "notapproved"
-        }
-
-        axios.put(`${LEAVE_RECORDS_BASE_URL}?sno=${sno}&empID=${empID}`, data).then(res => {
-            this.getDashboardData();
-        }).catch(error => {
-            var message = "Error occurred while mainupulating leave!";
-            if ('response' in error) {
-                message = error.response.data.Message ? error.response.data.Message : error.response.data.message;
-                Notifications.notify(message, "Error", "error");
-            }
-        })
     }
 
     makeRedirection(__label, __status) {

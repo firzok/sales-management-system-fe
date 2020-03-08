@@ -39,7 +39,6 @@ class ProtectedRoute extends Component {
      * check the current routing url against authorized urls of users
      */
     isAuthorizedRoute() {
-        debugger
         var path = GetPath(this.props.path);
         var user_permission = [];
         user_permission = localPermissions;
@@ -99,7 +98,6 @@ class ProtectedRoute extends Component {
 
             /* first fetch the user details from server */
             if (!_.isEmpty(this.props.activeUser.user)) {
-                debugger
                 if ('message' in this.props.activeUser.user) {
                     sessionStorage.removeItem('user');
                     __html =

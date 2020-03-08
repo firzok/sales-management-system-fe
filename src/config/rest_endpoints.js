@@ -69,13 +69,6 @@ export const LEAVE_TYPES_YEARLY_BASE_URL = `${ROOT_URL}/leavesyearlies`;
 export const PUBLIC_LEAVE_BASE_URL = `${ROOT_URL}/publicholidays`;
 export const COPY_PUBLIC_HOLIDAYS = `${PUBLIC_LEAVE_BASE_URL}/copy`;
 
-export const LEAVE_RECORDS_BASE_URL = `${ROOT_URL}/leaverecords`;
-export const GET_EMPLOYEE_RECENT_STATUS = `${LEAVE_RECORDS_BASE_URL}/employee-last-record`;
-export const TODAY_LEAVE_RECORDS = `${LEAVE_RECORDS_BASE_URL}/today`;
-export const TIME_OF_BALANCES = `${LEAVE_RECORDS_BASE_URL}/employees-report`;
-export const EMPLOYEE_REPORT_BASE_URL = `${LEAVE_RECORDS_BASE_URL}/employee`;
-export const YEARLY_LEAVES_HISTORY_REPORT = `${EMPLOYEE_REPORT_BASE_URL}/yearly`;
-
 export const ATTENDANCES_BASE_URL = `${ROOT_URL}/attendances`;
 export const EMPLOYEE_ATTENDANCE = `${ATTENDANCES_BASE_URL}/employee`;
 export const EMPLOYEE_ATTENDANCE_WEEKLY_REPORT = `${EMPLOYEE_ATTENDANCE}/weekly-hours`;

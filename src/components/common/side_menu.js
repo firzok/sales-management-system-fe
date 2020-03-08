@@ -154,7 +154,6 @@ class SideMenu extends Component {
             for (var key in naver) {
                 final_renderer[key] = { [render_key]: false, [this.state.fa_icon]: naver[key]['fa_icon'] }
             }
-            debugger
             var serverPermissions = this.props.activeUser.user.permissions
             var permission = this.getPermissions(serverPermissions);
 

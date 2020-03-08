@@ -80,7 +80,6 @@ class Login extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        debugger
         var response = this.props.activeUser;
         if (response['message']) {
             if (response['message'] === "Network Error") {

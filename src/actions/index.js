@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { USER_AUTHENITCATION, USER_BASE_URL, LEAVE_TYPES_LIST } from '../config/rest_endpoints'
+import { USER_AUTHENITCATION, USER_BASE_URL } from '../config/rest_endpoints'
 import { getPascalCase, isValidJSON } from '../assets/js/helper';
 
 export const LOGIN = "login";
