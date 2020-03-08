@@ -54,7 +54,7 @@ class SideMenu extends Component {
 
         // Configure collapsible functionality
         $('.' + navClass).each(function () {
-            $(this).find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > ' + '.' + navLinkClass).not('.disabled').on('click', function (e) {
+            $(this).find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > .' + navLinkClass).not('.disabled').on('click', function (e) {
                 e.preventDefault();
 
                 // Simplify stuff
@@ -70,7 +70,7 @@ class SideMenu extends Component {
                 }
 
                 // Accordion
-                if ($target.parents('.' + navClass).data('nav-type') == 'accordion') {
+                if ($target.parents('.' + navClass).data('nav-type') === 'accordion') {
                     $target.parent('.' + navItemClass).not($navSidebarMini).siblings(':has(.' + navSubmenuClass + ')').removeClass(navItemOpenClass).children('.' + navSubmenuClass).slideUp(navSlidingSpeed);
                 }
             });
@@ -82,7 +82,7 @@ class SideMenu extends Component {
         });
 
         // Scrollspy navigation
-        $('.nav-scrollspy').find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > ' + '.' + navLinkClass).off('click');
+        $('.nav-scrollspy').find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > .' + navLinkClass).off('click');
 
         // Prevent dropdown from closing on click
         $(document).on('click', '.dropdown-content', function (e) {

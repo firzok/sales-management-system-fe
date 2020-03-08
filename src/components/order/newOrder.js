@@ -2,7 +2,7 @@ import Container from '../common/application_container';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap-button-loader';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, CardSubtitle, CardTitle, CardBody, Card } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card } from 'reactstrap';
 import CurrencyInput from 'react-currency-input';
 import { PRODUCT_TYPES, PRODUCTS, NEW_ORDER } from '../../config/rest_endpoints';
 import { stringify } from 'querystring';
@@ -93,7 +93,7 @@ function NewOrder(props) {
 
     function addProduct() {
 
-        if (selectedProductType.name != defaultProductType.name && selectedProduct.name != defaultProduct.name) {
+        if (selectedProductType.name !== defaultProductType.name && selectedProduct.name !== defaultProduct.name) {
 
             setOrderProducts([])
 
@@ -158,7 +158,7 @@ function NewOrder(props) {
     function placeOrder() {
 
 
-        if (customerName != "" && customerNumber != "" && orderProducts.length != 0) {
+        if (customerName !== "" && customerNumber !== "" && orderProducts.length !== 0) {
 
             console.log(customerName)
             console.log(customerNumber)
@@ -324,7 +324,7 @@ function NewOrder(props) {
                                         className="btn btn-theme btn-labeled"
                                         onClick={ () => addProduct() }
                                         disabled={
-                                            selectedProductType.name == defaultProductType.name || selectedProduct.name == defaultProduct.name
+                                            selectedProductType.name === defaultProductType.name || selectedProduct.name === defaultProduct.name
                                         }
                                     >
                                         Add Product
@@ -400,7 +400,7 @@ function NewOrder(props) {
                                         style={ { marginTop: "50px", marginBottom: "40px" } }
                                         onClick={ () => placeOrder() }
                                         disabled={
-                                            orderProducts.length == 0 || customerName == "" || customerNumber == ""
+                                            orderProducts.length === 0 || customerName === "" || customerNumber === ""
                                         }
                                     >
                                         Confirm Order
