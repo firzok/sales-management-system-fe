@@ -12,7 +12,7 @@ axios.interceptors.request.use(request => {
     if (isValidJSON(sessionStorage.getItem('user'))) {
         var user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
-            request['headers']['Authorization'] = `${user['token_type']} ${user['access_token']}`;
+            request['headers']['Authorization'] = `Bearer ${user.jwt_token}`;
         }
         return request
     }
@@ -96,12 +96,11 @@ export function login(loginDetails) {
 
 export function fetchUser(user) {
     axios.defaults.timeout = 80000;
+    axios.defaults.withCredentials = true;
     return function (dispatch) {
-        debugger
         axios({
             method: 'get',
-            url: `${USER_BASE_URL}/${user.empID}`,
-            headers: { 'Authorization': `Bearer ${user.jwt_token}` }
+            url: `${USER_BASE_URL}/${user.empID}`
         })
             .then(res => {
                 dispatch({
