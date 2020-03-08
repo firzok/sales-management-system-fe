@@ -223,7 +223,7 @@ export const colors = {
 
 export const company = "iai";
 
-export const defaultPermissionsList = "/,/dashboard,/auth/login,/auth/logout,/settings/change-password,/settings/view-profile,/settings/change-profile-picture,/error404,/leaves/view-leaves,/announcements";
+export const defaultPermissionsList = "/,/dashboard,/new-order,/all-orders,/auth/login,/auth/logout,/settings/change-password,/settings/view-profile,/error404,/leaves/view-leaves";
 
 export const localPermissions = [
   "/auth/login",
@@ -233,73 +233,21 @@ export const localPermissions = [
   "/dashboard-domainhead",
   "/dashboard-admin",
 
+  "/new-order",
+  "/all-orders",
+
   "/employees",
   "/employees/add-employee",
   "/employees/edit-employee",
-  "/employees/view-probation-employee",
-  "/employees/view-inactive",
-  "/employees/update-team",
-  "/employees/adjustments",
 
   "/administrative-rights",
   "/administrative-rights/add-administrative-right",
   "/administrative-rights/edit-administrative-right",
 
-  "/activity-logs",
-  "/activity-logs/timeline",
-
-  "/leaves/apply-leave",
-  "/leaves/view-leaves",
-  "/leaves/pending-leaves",
-  "/leaves/view-leave-types",
-  "/leaves/add-leave-type",
-  "/leaves/edit-leave-type",
-
-  "/designation/add-designation",
-  "/designation/edit-designation",
-
-  "/activity-logs",
-  "/activity-logs/timeline",
-
-  "/reports/time-of-balances",
-  "/reports/detailed-balances",
-  "/reports/employees-distribution",
-  "/reports/head-count",
-  "/reports/get-additions-terminations",
-  "/reports/salary-history",
-  "/reports/pc-wise-pending-count",
-  "/reports/employees-leaves-balance",
-  "/reports/carry-forward-leaves-balances",
-
-  "/ai-reports/leaves",
-  "/ai-reports/attendance",
-
-  "/trend-analysis/leaves",
-  "/trend-analysis/attendance",
-
-  "/attendance/mark-attendance",
-  "/attendance/approve-attendance",
-
-  "/invoicing",
-
   "/configurations",
 
   "/settings/change-password",
-  "/settings/view-profile",
-  "/settings/change-profile-picture",
-
-  "/imports",
-
-  "/announcements",
-
-  "/error404",
-
-  "/custom-fields/nationalities",
-  "/custom-fields/countries",
-  "/custom-fields/cities",
-  "/custom-fields/currencies",
-  "/custom-fields/public-holidays",
-  "/custom-fields/designation"
+  "/error404"
 ]
 
 export default localPermissions;

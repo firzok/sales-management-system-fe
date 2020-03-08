@@ -3,6 +3,7 @@ export const LOAD_LOGIN = `${AUTH_BASE_URL}/login`;
 export const LOAD_LOGOUT = `${AUTH_BASE_URL}/logout`;
 
 export const NEW_ORDER = `/new-order`;
+export const ALL_ORDERS = `/all-orders`;
 
 export const SETTINGS_BASE_URL = "/settings";
 export const CHANGE_PASSWORD = `${SETTINGS_BASE_URL}/change-password`;

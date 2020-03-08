@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ProtectedRoute from './protectedRoute';
 
 import {
-    LOAD_LOGIN, LOAD_LOGOUT, CHANGE_PASSWORD, VIEW_PROFILE, LOAD_APP, NEW_ORDER
+    LOAD_LOGIN, LOAD_LOGOUT, CHANGE_PASSWORD, VIEW_PROFILE, LOAD_APP, NEW_ORDER, ALL_ORDERS
 } from './routeConstants';
 
 import Login from '../authentication/login';
@@ -13,6 +13,8 @@ import ChangePassword from '../settings/change_password';
 import ViewEmployeeProfile from '../employees/view_employee_profile';
 import App from '../../App';
 import NewOrder from '../order/newOrder';
+import AllOrders from '../order/allOrder';
+
 
 
 class AllRoutes extends Component {
@@ -26,7 +28,6 @@ class AllRoutes extends Component {
                     <ProtectedRoute exact path={ VIEW_PROFILE } component={ ViewEmployeeProfile } />
                     <ProtectedRoute exact path={ LOAD_APP } component={ App } />
                     <ProtectedRoute exact path={ NEW_ORDER } component={ NewOrder } />
-
 
                 </Switch>
             </BrowserRouter>

@@ -5,7 +5,8 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import { naver } from './side_menu_mapper'
 import { LOAD_LOGOUT } from '../router/routeConstants';
-import { localPermissions } from '../../config/static_lists';
+import { localPermissions, defaultPermissionsList } from '../../config/static_lists';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 var $ = window.$;
 
@@ -34,7 +35,6 @@ class SideMenu extends Component {
 
         // rendering user card on side menu
         this.__render_mobile_navigator = this.__render_mobile_navigator.bind(this);
-        this.__render_user_card = this.__render_user_card.bind(this);
     }
 
     componentDidMount() {
@@ -145,7 +145,6 @@ class SideMenu extends Component {
      */
     __build_render_dictionary() {
         if (!_.isEmpty(this.props.activeUser.user)) {
-
             // rearranging permission according to the groups
 
             // building an empty init dictionary with render:False in all keys
@@ -181,21 +180,26 @@ class SideMenu extends Component {
                             final_renderer[parent][render_key] = true
                         }
                         else {
-                            var child_name = "/";
-                            if (elem[2])
-                                child_name = '/' + elem[2];
-                            var child_details = naver[parent][child_name]
-                            // if that sub permission is renderable
-                            if (child_details) {
-                                final_renderer[parent][child_name] = child_details
-                                final_renderer[parent][render_key] = true
-                            }
+                            final_renderer[parent][temp[1]] = naver[parent][temp[1]]
+                        }
+                        final_renderer[parent][render_key] = true
+                    }
+                    else {
+                        var child_name = "/";
+                        if (elem[2])
+                            child_name = '/' + elem[2];
+                        var child_details = naver[parent][child_name]
+                        // if that sub permission is renderable
+                        if (child_details) {
+                            final_renderer[parent][child_name] = child_details
+                            final_renderer[parent][render_key] = true
                         }
                     }
                 }
-                return final_renderer;
             }
+            return final_renderer;
         }
+        // }
     }
 
     /**
@@ -221,7 +225,7 @@ class SideMenu extends Component {
             ItemText = object['name'];
         }
         else {
-            itemIcon = <div style={ { width: '20px' } }><i className={ `${object['fa_icon']} side-menu_icon` }> </i></div>;
+            itemIcon = <div style={ { width: '20px' } }><FontAwesomeIcon icon={ object['fa_icon'] } className={ `side-menu_icon` } /></div>;
             ItemText = <span className="ml-2">{ object['name'] }</span>;
         }
 
@@ -430,8 +434,6 @@ class SideMenu extends Component {
                 { this.__render_mobile_navigator() }
 
                 <div className="sidebar-content side-menu-zIndex">
-
-                    {/* {this.__render_user_card()} */ }
 
                     <div className="card card-sidebar-mobile">
                         <ul className="nav nav-sidebar" data-nav-type="accordion">
