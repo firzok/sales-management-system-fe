@@ -34,7 +34,6 @@ class DashboardAdmin extends Component {
     componentDidMount() {
         this.timeout = setInterval(() => {
             this.setState({ loadEmployees: false });
-            this.getDashboardData();
         }, 5000);
     }
 

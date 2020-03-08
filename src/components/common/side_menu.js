@@ -5,7 +5,7 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import { naver } from './side_menu_mapper'
 import { LOAD_LOGOUT } from '../router/routeConstants';
-import { localPermissions, defaultPermissionsList } from '../../config/static_lists';
+import { localPermissions } from '../../config/static_lists';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 var $ = window.$;

@@ -55,7 +55,8 @@ export var naver = {
             "name": "New Order",
             "url": NEW_ORDER,
             "fa_icon": ['fas', 'cart-plus']
-        }
+        },
+        "fa_icon": ['fas', 'cart-plus']
     },
     [ALL_ORDERS]: {
         "/": {
@@ -63,6 +64,7 @@ export var naver = {
             "name": "All Orders",
             "url": ALL_ORDERS,
             "fa_icon": ['fas', 'search']
-        }
+        },
+        "fa_icon": ['fas', 'search']
     }
 }
