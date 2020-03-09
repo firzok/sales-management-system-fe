@@ -28,7 +28,7 @@ class AllRoutes extends Component {
                     <ProtectedRoute exact path={ VIEW_PROFILE } component={ ViewEmployeeProfile } />
                     <ProtectedRoute exact path={ LOAD_APP } component={ App } />
                     <ProtectedRoute exact path={ NEW_ORDER } component={ NewOrder } />
-
+                    <ProtectedRoute exact path={ ALL_ORDERS } component={ AllOrders } />
                 </Switch>
             </BrowserRouter>
         )
