@@ -4,7 +4,7 @@ import axios from 'axios';
 import Button from 'react-bootstrap-button-loader';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card } from 'reactstrap';
 import CurrencyInput from 'react-currency-input';
-import { PRODUCT_TYPES, PRODUCTS, NEW_ORDER } from '../../config/rest_endpoints';
+import { PRODUCT_TYPES, PRODUCTS_WITH_TYPE_ID, NEW_ORDER } from '../../config/rest_endpoints';
 import { stringify } from 'querystring';
 import DatePicker from "react-datepicker";
 import { addDays } from 'date-fns';
@@ -67,14 +67,17 @@ function NewOrder(props) {
 
     function getProducts(type) {
         setProductDisabled(true);
+        var user = JSON.parse(sessionStorage.getItem('user'));
         axios({
             method: 'post',
-            url: PRODUCTS,
+            url: PRODUCTS_WITH_TYPE_ID,
             data: stringify({ id: type.id }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json'
-            }
+                'Accept': 'application/json',
+                Authorization: `Bearer ${user.jwt_token}`
+            },
+            withCredentials: true
         })
             .then(
                 res => {
