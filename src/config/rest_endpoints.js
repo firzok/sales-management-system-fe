@@ -15,6 +15,7 @@ export const ROOT_URL = `${SERVER_PATH}/api`;
 export const PRODUCT_TYPES = `${ROOT_URL}/product-types`;
 export const PRODUCTS_WITH_TYPE_ID = `${ROOT_URL}/products-with-type-id`;
 export const NEW_ORDER = `${ROOT_URL}/new-order`;
+export const ALL_ORDERS = `${ROOT_URL}/all-orders`;
 
 
 

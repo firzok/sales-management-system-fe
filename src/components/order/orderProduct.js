@@ -7,28 +7,28 @@ export function OrderProduct(props) {
 
     return (
         <div>
-            {props.orderProducts.map((product, index) => {
+            { props.orderProducts.map((product, index) => {
 
-                return <div key={index} className="row">
+                return <div key={ index } className="row">
                     <div className="col-md-2">
-                        <label className="font-weight-semibold">{product.product_type_name}</label>
+                        <label className="font-weight-semibold">{ product.product_type_name }</label>
                     </div>
                     <div className="col-md-2">
-                        <label className="font-weight-semibold">{product.product_name}</label>
+                        <label className="font-weight-semibold">{ product.product_name }</label>
                     </div>
                     <div className="col-md-2">
-                        <label className="font-weight-semibold">{product.quantity}</label>
+                        <label className="font-weight-semibold">{ product.quantity }</label>
                     </div>
                     <div className="col-md-2">
-                        <label className="font-weight-semibold">{formatter.format(product.unit_price)} AED</label>
+                        <label className="font-weight-semibold">{ formatter.format(product.unit_price) } AED</label>
                     </div>
                     <div className="col-md-2">
-                        <label className="font-weight-semibold">{formatter.format(product.quantity * product.unit_price)} AED</label>
+                        <label className="font-weight-semibold">{ formatter.format(product.quantity * product.unit_price) } AED</label>
                     </div>
                 </div>
             }
 
-            )}
+            ) }
         </div>)
 
 
@@ -38,13 +38,13 @@ export function OrderProductHeader(props) {
 
     return (
         <div className="row">
-            {props.headers.map((header, index) =>
+            { props.headers.map((header, index) =>
 
-                <div key={index} className="col-md-2">
-                    <label className="font-weight-semibold">{header}</label>
+                <div key={ index } className="col-md-2">
+                    <label className="font-weight-bold">{ header }</label>
                 </div>
 
-            )}
+            ) }
         </div>
     )
 
