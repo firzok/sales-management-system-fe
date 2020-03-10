@@ -38,27 +38,12 @@ function AllOrders(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function viewEmployee(selectedEmployeeID) {
-        console.log("View Employee")
-        console.log(selectedEmployeeID)
-    }
-
-    function editEmployee(selectedEmployeeID) {
-        console.log("Edit Employee")
-        console.log(selectedEmployeeID)
-    }
-
-    function changeStatus(newStatus, employee) {
-        console.log("Status changed")
-    }
-
-
     const headerFields = [
         {
             id: 0,
             type: "action",
             align: "text-center",
-            name: "ACTIONS"
+            name: "EDIT DATE"
         },
         {
             id: 1,
@@ -101,106 +86,6 @@ function AllOrders(props) {
             align: "text-left",
             name: "ADVANCE PAYMENT"
         }
-    ];
-
-    const employeeData = [
-        {
-            emp_id: 1,
-            status: "Main",
-            name: "Tony Stark",
-            profile_picture: null,
-            dob: "April 4, 1965",
-            played_by: "Robert Downey, Jr."
-
-        },
-        {
-            emp_id: 2,
-            status: "Villain",
-            name: "Justin Hammer",
-            profile_picture: null,
-            dob: "November 5, 1968",
-            played_by: "Sam Rockwell"
-
-        },
-        {
-            emp_id: 3,
-            status: "Villain",
-            name: "Whiplash",
-            profile_picture: null,
-            dob: "September 16, 1952",
-            played_by: "Mickey Rourke"
-
-        },
-        {
-            emp_id: 4,
-            status: "Support",
-            name: "Happy Hogan",
-            profile_picture: null,
-            dob: "October 19, 1966",
-            played_by: "Jon Favreau"
-
-        },
-        {
-            emp_id: 5,
-            status: "Main",
-            name: "Thor",
-            profile_picture: null,
-            dob: "August 11, 1983",
-            played_by: "Chris Hemsworth"
-
-        },
-        {
-            emp_id: 6,
-            status: "Main",
-            name: "Captain America",
-            profile_picture: null,
-            dob: "June 13, 1981",
-            played_by: "Chris Evans"
-
-        },
-        {
-            emp_id: 7,
-            status: "Support",
-            name: "Howard Stark",
-            profile_picture: null,
-            dob: "June 2, 1978",
-            played_by: "Dominic Cooper"
-
-        },
-        {
-            emp_id: 8,
-            status: "Support",
-            name: "Pepper Potts",
-            profile_picture: null,
-            dob: "September 27, 1972",
-            played_by: "Gwyneth Paltrow"
-
-        },
-        {
-            emp_id: 9,
-            status: "Main",
-            name: "Natasha Romanoff",
-            profile_picture: null,
-            dob: "November 22, 1984",
-            played_by: "Scarlett Johansson"
-
-        },
-        {
-            emp_id: 10,
-            status: "Main",
-            name: "Bruce Banner",
-            profile_picture: null,
-            dob: "November 22, 1967",
-            played_by: "Mark Ruffalo"
-
-        },
-    ];
-
-    const EmployeeStatus = [
-        { value: "probation", label: "Probation" },
-        { value: "current", label: "Permanent" },
-        { value: "resign", label: "Resign" },
-        { value: "layoff", label: "LayOff" },
     ];
 
     const pages = [
@@ -249,7 +134,7 @@ function AllOrders(props) {
 
         // Column 1 ACTIONS
         const actions = [
-            { icon: ['far', 'edit'], className: "text-info-600 cursor-pointer", callBack: () => console.log("WE GOOD") }
+            { icon: ['far', 'edit'], className: "text-info-800 cursor-pointer", callBack: () => console.log("WE GOOD") }
         ]
         row.push(actions)
 
