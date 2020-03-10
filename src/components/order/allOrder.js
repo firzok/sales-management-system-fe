@@ -249,8 +249,7 @@ function AllOrders(props) {
 
         // Column 1 ACTIONS
         const actions = [
-            { icon: "HELLO", callBack: () => viewEmployee(employeeData[i].emp_id) },
-            { icon: "fas fa-edit text-info-600 cursor-pointer", callBack: () => editEmployee(employeeData[i].emp_id) }
+            { icon: ['far', 'edit'], className: "text-info-600 cursor-pointer", callBack: () => console.log("WE GOOD") }
         ]
         row.push(actions)
 
