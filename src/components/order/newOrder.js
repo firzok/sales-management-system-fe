@@ -1,7 +1,6 @@
 import Container from '../common/application_container';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Button from 'react-bootstrap-button-loader';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card } from 'reactstrap';
 import CurrencyInput from 'react-currency-input';
 import { PRODUCT_TYPES, PRODUCTS_WITH_TYPE_ID, NEW_ORDER } from '../../config/rest_endpoints';
@@ -11,6 +10,7 @@ import { addDays } from 'date-fns';
 import { OrderProductHeader, OrderProduct } from './orderProduct'
 import PhoneInput from 'react-phone-input-2'
 import { convertDate } from '../helper'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
 
 function NewOrder(props) {
 
@@ -39,7 +39,20 @@ function NewOrder(props) {
     const [selectedProduct, setSelectedProduct] = useState(defaultProduct);
     const [selectedProductType, setSelectedProductType] = useState(defaultProductType);
     const [unitPrice, setUnitPrice] = useState(0);
+    const [openModal, setOpenModal] = useState(false);
+    const [orderSuccess, setOrderSuccess] = useState(false);
 
+    function toggleModal() {
+        setOpenModal(!openModal);
+    }
+
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
 
     useEffect(() => {
         getProductTypes();
@@ -158,6 +171,35 @@ function NewOrder(props) {
 
     }
 
+    function resetForm() {
+        setAdvancePayment(0);
+        setCustomerName("");
+        setCustomerNumber("");
+        setDeliveryDate(addDays(new Date(), 5));
+        setDropdownProductOpen(false);
+        setDropdownProductTypeOpen(false);
+        setOrderDate(new Date());
+        setOrderProducts([]);
+        setProductDisabled(true);
+        setProductList([]);
+        setProductTypeList([]);
+        setQuantity(1);
+        setSelectedProduct(defaultProduct);
+        setSelectedProductType(defaultProductType);
+        setUnitPrice(0);
+
+    }
+
+    var modalHtml =
+        <Modal
+            isOpen={ openModal }
+            toggle={ toggleModal }
+        // className={ }
+        >
+            <ModalHeader toggle={ toggleModal }>Order Confirmation</ModalHeader>
+            <ModalBody>{ orderSuccess ? "Order successfully added." : "Unable to process order." }    </ModalBody>
+        </Modal >
+
     function placeOrder() {
 
 
@@ -190,7 +232,16 @@ function NewOrder(props) {
             })
                 .then(
                     res => {
-                        debugger;
+                        if (res.status === 200) {
+                            if (res.data.success === true) {
+                                setOrderSuccess(true)
+                                resetForm()
+                            } else {
+                                setOrderSuccess(false)
+                                console.log(res.data.message)
+                            }
+                            setOpenModal(true)
+                        }
                     });
 
 
@@ -200,8 +251,8 @@ function NewOrder(props) {
 
     return (
 
-
         <Container header="New Order Form">
+            { modalHtml }
             <div className="row">
                 <div className="col-md-8">
                     <div className="card">
@@ -338,6 +389,7 @@ function NewOrder(props) {
 
                     </div>
 
+
                     { orderProducts.length > 0 ?
                         orderProductsHTML :
                         ""
@@ -422,6 +474,7 @@ function NewOrder(props) {
             </div>
 
         </Container >
+
     )
 
 }
