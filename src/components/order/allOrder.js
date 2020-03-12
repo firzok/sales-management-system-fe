@@ -139,14 +139,14 @@ function AllOrders(props) {
         row.push(actions)
 
         // Column 2 ORDER#
-        row.push(productList[i].id ? productList[i].id : "N/A")
+        row.push(productList[i].id ? String(productList[i].id) : "N/A")
 
         // Column 3 EMPLOYEE 
-        const employeeAvatar = { topText: productList[i].first_name + " " + productList[i].last_name, bottomText: productList[i].employee_id, picture: null };
+        const employeeAvatar = { topText: String(productList[i].first_name + " " + productList[i].last_name), bottomText: String(productList[i].employee_id), picture: null };
         row.push(employeeAvatar);
 
         // Column 4 CUSTOMER
-        const customerAvatar = { topText: productList[i].customer_name, bottomText: productList[i].customer_phone_number, picture: null };
+        const customerAvatar = { topText: String(productList[i].customer_name), bottomText: String(productList[i].customer_phone_number), picture: null };
         row.push(customerAvatar)
 
         // Column 5 ORDER DATE
@@ -156,7 +156,8 @@ function AllOrders(props) {
         row.push((productList[i].delivery_date === "" || productList[i].delivery_date === null) ? 'N/A' : moment(productList[i].delivery_date).format("DD-MM-YYYY"));
 
         // Column 7 ADVANCE PAYMENT
-        row.push(productList[i].advance_payment);
+        var formatter = new Intl.NumberFormat('en-US');
+        row.push(String(formatter.format(productList[i].advance_payment) + " AED"));
 
         _data.push(row);
     }
