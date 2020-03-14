@@ -212,7 +212,7 @@ function AllOrders(props) {
         row.push(actions)
 
         // Column 2 ORDER#
-        row.push(orderList[i].id ? String(orderList[i].id) : "N/A")
+        row.push(orderList[i].id ? orderList[i].id : "N/A")
 
         // Column 3 EMPLOYEE 
         const employeeAvatar = { topText: String(orderList[i].first_name + " " + orderList[i].last_name), bottomText: String(orderList[i].employee_id), picture: null };
@@ -288,12 +288,8 @@ function AllOrders(props) {
                             :
                             ""
                     }
-
                 </div></div>
         </Container>
-
-
     )
-
 }
 export default AllOrders;
