@@ -95,7 +95,6 @@ function AllOrders(props) {
     }
 
     function openEditOrderModal(order) {
-        debugger
         setOrderDate(new Date(order.placement_date))
         setDeliveryDate(new Date(order.delivery_date))
         setOrderId(order.id)
@@ -235,7 +234,6 @@ function AllOrders(props) {
 
         _data.push(row);
     }
-    console.log(deliveryDate)
     var modalHtml = <Modal
         isOpen={ openModal }
         toggle={ toggleModal }
