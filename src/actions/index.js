@@ -76,11 +76,15 @@ export function login(loginDetails) {
             }
         })
             .then(res => {
-                console.log("In login action response")
-                dispatch({
-                    type: ACTIVE_USER,
-                    payload: res
-                })
+                if (res.status === 200) {
+                    dispatch({
+                        type: ACTIVE_USER,
+                        payload: res
+                    })
+
+                } else {
+                    console.log("Network Error")
+                }
             }).catch(error => {
                 var c_error = error.response;
                 if (c_error === undefined) {
@@ -103,10 +107,15 @@ export function fetchUser(user) {
             url: `${USER_BASE_URL}/${user.empID}`
         })
             .then(res => {
-                dispatch({
-                    type: ACTIVE_USER,
-                    payload: res
-                })
+                if (res.status === 200) {
+                    dispatch({
+                        type: ACTIVE_USER,
+                        payload: res
+                    })
+                } else {
+                    console.log("Network Error")
+                }
+
             }).catch(error => {
                 var c_error = error.response;
                 if (c_error === undefined) {

@@ -10,7 +10,7 @@ import { addDays } from 'date-fns';
 import { OrderProductHeader, OrderProduct } from './orderProduct'
 import PhoneInput from 'react-phone-input-2'
 import { convertDate } from '../helper'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 function NewOrder(props) {
 
@@ -72,7 +72,15 @@ function NewOrder(props) {
             axios.get(PRODUCT_TYPES, yourConfig)
                 .then(
                     res => {
-                        setProductTypeList(res.data);
+                        if (res.status === 200) {
+                            if (res.data.success === true) {
+                                setProductTypeList(res.data.rows);
+                            } else {
+                                alert("Unable to process request.")
+                            }
+                        } else {
+                            console.log("Network Error")
+                        }
                     });
         }
 
@@ -94,8 +102,16 @@ function NewOrder(props) {
         })
             .then(
                 res => {
-                    setProductList(res.data);
-                    setProductDisabled(false);
+                    if (res.status === 200) {
+                        if (res.data.success === true) {
+                            setProductList(res.data.rows);
+                            setProductDisabled(false);
+                        } else {
+                            alert("Unable to process request.")
+                        }
+                    } else {
+                        console.log("Network Error")
+                    }
                 });
 
     }
@@ -202,16 +218,7 @@ function NewOrder(props) {
 
     function placeOrder() {
 
-
         if (customerName !== "" && customerNumber !== "" && orderProducts.length !== 0) {
-
-            console.log(customerName)
-            console.log(customerNumber)
-            console.log(orderDate)
-            console.log(deliveryDate)
-            console.log(orderProducts)
-            console.log(advancePayment)
-
 
             var newOrderData = {
                 customer_phone_number: customerNumber,
@@ -243,8 +250,6 @@ function NewOrder(props) {
                             setOpenModal(true)
                         }
                     });
-
-
 
         }
     }
