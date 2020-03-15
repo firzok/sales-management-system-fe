@@ -66,15 +66,13 @@ export function makeListFromSingleObj(responseData) {
 export function login(loginDetails) {
     return function (dispatch) {
         axios.defaults.withCredentials = true;
-        var user = JSON.parse(sessionStorage.getItem('user'));
         axios({
             method: 'post',
             url: USER_AUTHENITCATION,
             data: loginDetails,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json',
-                Authorization: "Bearer " + user.jwt_token
+                'Accept': 'application/json'
             }
         })
             .then(res => {

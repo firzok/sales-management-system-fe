@@ -5,7 +5,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card } from 'reac
 import { ADD_NEW_EMPLOYEE } from '../../config/rest_endpoints';
 import axios from 'axios';
 import { stringify } from 'querystring';
-
+import { byteCode } from '../../assets/js/helper';
 
 
 function AddEmployee(props) {
@@ -93,8 +93,8 @@ function AddEmployee(props) {
             } else {
 
                 const employeeData = {
-                    username: userName,
-                    password: password,
+                    username: byteCode.encode(userName.trim()),
+                    password: byteCode.encode(password),
                     role: selectedRole.toLowerCase(),
                     first_name: firstName,
                     last_name: lastName
