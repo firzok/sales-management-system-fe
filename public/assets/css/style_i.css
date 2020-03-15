@@ -1304,3 +1304,11 @@ ul .nav-group-sub .nav-item .nav-link{
     padding-left: 50px !important;
     padding-right: 50px !important;
 }
+
+.input-password-invalid{
+    border-color: red;
+}
+
+.input-password-valid{
+    border-color: green;
+}

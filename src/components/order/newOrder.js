@@ -46,18 +46,9 @@ function NewOrder(props) {
         setOpenModal(!openModal);
     }
 
-    const handleOpen = () => {
-        setOpenModal(true);
-    };
-
-    const handleClose = () => {
-        setOpenModal(false);
-    };
-
     useEffect(() => {
         getProductTypes();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     function getProductTypes() {
         if (productTypeList.length === 0) {
@@ -89,6 +80,8 @@ function NewOrder(props) {
     function getProducts(type) {
         setProductDisabled(true);
         var user = JSON.parse(sessionStorage.getItem('user'));
+        axios.defaults.withCredentials = true;
+
         axios({
             method: 'post',
             url: PRODUCTS_WITH_TYPE_ID,
@@ -228,13 +221,17 @@ function NewOrder(props) {
                 advance_payment: advancePayment,
                 products: JSON.stringify(orderProducts)
             }
+            var user = JSON.parse(sessionStorage.getItem('user'));
+            axios.defaults.withCredentials = true;
+
             axios({
                 method: 'post',
                 url: NEW_ORDER,
                 data: stringify(newOrderData),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    Authorization: "Bearer " + user.jwt_token
                 }
             })
                 .then(

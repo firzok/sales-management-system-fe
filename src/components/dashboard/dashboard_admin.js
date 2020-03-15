@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Card from '../common/card';
 // import LeaveCard from './leave_card';
-import { VIEW_LEAVE_HISTORY, EMPLOYEES_BASE_URL } from '../router/routeConstants';
+import { EMPLOYEES_BASE_URL } from '../router/routeConstants';
 import { deepCompare, formatNumber } from '../../assets/js/helper';
 import { Notifications } from '../common/notification';
 import Select from 'react-select';
@@ -27,8 +27,6 @@ class DashboardAdmin extends Component {
             leaveStatus: { value: "pending", label: "Pending", render: true },
         }
 
-        this.makeRedirection = this.makeRedirection.bind(this);
-        this.makeRedirectionToEmployee = this.makeRedirectionToEmployee.bind(this);
     }
 
     componentDidMount() {
@@ -41,37 +39,6 @@ class DashboardAdmin extends Component {
         clearInterval(this.timeout);
     }
 
-    makeRedirection(__label, __status) {
-        var __leaveStatus = null
-        if (__label && __status) {
-            __leaveStatus = { label: __label, render: true, value: __status }
-            if (__status.toLowerCase() === "pending" || __status.toLowerCase() === "notapproved") {
-                this.props.history.push({
-                    pathname: VIEW_LEAVE_HISTORY,
-                    isSelectedLeave: true,
-                    selectedLeaveStatus: __leaveStatus,
-                    appliedDateFilter: new Date(),
-                });
-            }
-            else {
-                this.props.history.push({
-                    pathname: VIEW_LEAVE_HISTORY,
-                    isSelectedLeave: true,
-                    selectedLeaveStatus: __leaveStatus,
-                    startDateFilter: new Date(),
-                    endDateFilter: new Date(),
-                });
-            }
-        }
-        else {
-            this.props.history.push({
-                pathname: VIEW_LEAVE_HISTORY,
-                isSelectedLeave: true,
-                selectedLeaveStatus: __leaveStatus,
-                appliedDateFilter: new Date(),
-            });
-        }
-    }
 
     makeRedirectionToEmployee() {
         this.props.history.push({
@@ -136,7 +103,7 @@ class DashboardAdmin extends Component {
                 return (
                     <div className="alert alert-info alert-styled-left alert-arrow-left">
                         No records found.
-					</div>
+                    </div>
                 )
             }
         }
@@ -144,7 +111,7 @@ class DashboardAdmin extends Component {
             return (
                 <div className="alert alert-info alert-styled-left alert-arrow-left">
                     No records found.
-				</div>
+                </div>
             )
         }
     }

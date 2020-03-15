@@ -1,5 +1,5 @@
 import {
-    LOAD_APP, EMPLOYEES_BASE_URL, ADD_EMPLOYEE, UPDATE_TEAM, CONFIGURATIONS, ADJUSTMENTS, NEW_ORDER, ALL_ORDERS
+    LOAD_APP, EMPLOYEES_BASE_URL, ADD_EMPLOYEE, RESET_EMPLOYEE_PASSWORD, NEW_ORDER, ALL_ORDERS
 } from "../router/routeConstants";
 
 export var naver = {
@@ -12,42 +12,6 @@ export var naver = {
         },
         "fa_icon": ['fas', 'home']
 
-    },
-    [EMPLOYEES_BASE_URL]: {
-        "/": {
-            "id": "M_EMPLOYEES_BASE_URL",
-            "name": "View Employees",
-            "url": EMPLOYEES_BASE_URL,
-            "fa_icon": "fas fa-users"
-        },
-        "/add-employee": {
-            "id": "M_ADD_EMPLOYEE",
-            "name": "Add Employee",
-            "url": ADD_EMPLOYEE,
-            "fa_icon": "fas fa-users"
-        },
-        "/update-team": {
-            "id": "M_UPDATE_TEAM",
-            "name": "Update Team",
-            "url": UPDATE_TEAM,
-            "fa_icon": "fas fa-users"
-        },
-        "/adjustments": {
-            "id": "M_ADJUSTMENTS",
-            "name": "Adjustments",
-            "url": ADJUSTMENTS,
-            "fa_icon": "fas fa-sliders-v"
-        },
-        "fa_icon": "fas fa-users"
-    },
-    [CONFIGURATIONS]: {
-        "/configurations": {
-            "id": "M_CONFIGURATIONS",
-            "name": "Configurations",
-            "url": CONFIGURATIONS,
-            "fa_icon": "fas fa-cog"
-        },
-        "fa_icon": "fas fa-cog"
     },
     [NEW_ORDER]: {
         "/": {
@@ -66,5 +30,35 @@ export var naver = {
             "fa_icon": ['fas', 'search']
         },
         "fa_icon": ['fas', 'search']
+    },
+    [ADD_EMPLOYEE]: {
+        "/": {
+            "id": "M_ADD_EMPLOYEE",
+            "name": "Add Employee",
+            "url": ADD_EMPLOYEE,
+            "fa_icon": ['fas', 'cart-plus']
+        },
+        "fa_icon": ['fas', 'search']
+    },
+    [EMPLOYEES_BASE_URL]: {
+        "/": {
+            "id": "M_EMPLOYEES_BASE_URL",
+            "name": "View Employees",
+            "url": EMPLOYEES_BASE_URL,
+            "fa_icon": ['fas', 'cart-plus']
+        },
+        "/add-employee": {
+            "id": "M_ADD_EMPLOYEE",
+            "name": "Add Employee",
+            "url": ADD_EMPLOYEE,
+            "fa_icon": ['fas', 'cart-plus']
+        },
+        "/employee-password-reset": {
+            "id": "M_RESET_EMPLOYEE_PASSWORD",
+            "name": "Reset Employee Password",
+            "url": RESET_EMPLOYEE_PASSWORD,
+            "fa_icon": ['fas', 'cart-plus']
+        },
+        "fa_icon": ['fas', 'cart-plus']
     }
 }
