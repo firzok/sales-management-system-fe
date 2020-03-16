@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../common/application_container';
-
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card } from 'reactstrap';
 import OfflineTable from 'react-offline-table';
 import moment from 'moment';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import { stringify } from 'querystring';
 import { convertDate } from '../helper'
 
 function AllOrders(props) {
-
+    // State
     const [orderList, setOrderList] = useState([]);
     const [gettingData, setGettingData] = useState(false);
     const [openModal, setOpenModal] = useState(false);
@@ -20,6 +20,33 @@ function AllOrders(props) {
     const [orderDate, setOrderDate] = useState("");
     const [dateUpdated, setDateUpdated] = useState(false);
     const [orderId, setOrderId] = useState("")
+    const [dropDownEmployeeOpen, setDropDownEmployeeOpen] = useState(false)
+    const [dropDownMonthOpen, setDropDownMonthOpen] = useState(false)
+    const [dropDownYearOpen, setDropDownYearOpen] = useState(false)
+    const [selectedEmployee, setSelectedEmployee] = useState("")
+    const [selectedMonth, setSelectedMonth] = useState("")
+    const [selectedYear, setSelectedYear] = useState("")
+
+
+
+    // Function
+    function selectYear(year) {
+        setSelectedYear(year)
+    }
+
+    function selectMonth(month) {
+        setSelectedMonth(month)
+    }
+
+    function selectEmployee(employee) {
+        setSelectedEmployee(employee)
+    }
+
+    const toggleEmployeeDropdown = () => setDropDownEmployeeOpen(prevState => !prevState);
+
+    const toggleMonthDropdown = () => setDropDownMonthOpen(prevState => !prevState);
+
+    const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
 
     function getAllOrder() {
         setGettingData(true);
@@ -107,6 +134,8 @@ function AllOrders(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+    // Data
     const headerFields = [
         {
             id: 0,
@@ -195,6 +224,70 @@ function AllOrders(props) {
         z: "#8BC34A"
     };
 
+    const employeeList = [
+        {
+            name: "Firzok Nadeem",
+            id: 1
+        },
+        {
+            name: "Faateh Jarree",
+            id: 2
+        }
+    ]
+
+    const monthList = [
+        {
+            id: 1,
+            name: "January"
+        },
+        {
+            id: 2,
+            name: "February"
+        },
+        {
+            id: 3,
+            name: "March"
+        },
+        {
+            id: 4,
+            name: "April"
+        },
+        {
+            id: 5,
+            name: "May"
+        },
+        {
+            id: 6,
+            name: "June"
+        },
+        {
+            id: 7,
+            name: "July"
+        },
+        {
+            id: 8,
+            name: "August"
+        },
+        {
+            id: 9,
+            name: "September"
+        },
+        {
+            id: 10,
+            name: "October"
+        },
+        {
+            id: 11,
+            name: "November"
+        },
+        {
+            id: 12,
+            name: "December"
+        }
+    ]
+
+    const yearList = [2015, 2016, 2017, 2018, 2019, 2020]
+
     var _data = []
 
     for (var i = 0; i < orderList.length; i++) {
@@ -275,6 +368,66 @@ function AllOrders(props) {
             <div className="card">
 
                 <div className="card-body">
+
+                    <div className="row justify-content-between">
+                        <div className="col-md-3">
+
+                            <Dropdown isOpen={ dropDownEmployeeOpen } toggle={ toggleEmployeeDropdown }>
+                                <DropdownToggle caret className="btn btn-theme btn-labeled w-100 text-right">
+                                    { selectedEmployee.name }
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    { employeeList.map((employee) =>
+                                        <DropdownItem key={ employee.id }
+                                            onClick={ () => selectEmployee(employee) }
+                                        >
+                                            { employee.name }
+                                        </DropdownItem>
+                                    ) }
+                                </DropdownMenu>
+                            </Dropdown>
+
+                        </div>
+
+                        <div className="col-md-3">
+                            <Dropdown isOpen={ dropDownMonthOpen } toggle={ toggleMonthDropdown }>
+                                <DropdownToggle caret className="btn btn-theme btn-labeled w-100 text-right">
+                                    { selectedMonth.name }
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    { monthList.map((month) =>
+                                        <DropdownItem key={ month.id }
+                                            onClick={ () => selectMonth(month) }
+                                        >
+                                            { month.name }
+                                        </DropdownItem>
+                                    ) }
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
+                        <div className="col-md-3">
+                            <Dropdown isOpen={ dropDownYearOpen } toggle={ toggleYearDropdown }>
+                                <DropdownToggle caret className="btn btn-theme btn-labeled w-100 text-right">
+                                    { selectedYear }
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    { yearList.map((year) =>
+                                        <DropdownItem key={ year }
+                                            onClick={ () => selectYear(year) }
+                                        >
+                                            { year }
+                                        </DropdownItem>
+                                    ) }
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="card">
+
+                <div className="card-body">
                     {
                         _data.length > 0 ?
                             <OfflineTable
@@ -288,8 +441,9 @@ function AllOrders(props) {
                             :
                             ""
                     }
-                </div></div>
-        </Container>
+                </div>
+            </div>
+        </Container >
     )
 }
 export default AllOrders;
