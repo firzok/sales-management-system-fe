@@ -17,6 +17,7 @@ import {
 } from "../../config/rest_endpoints";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { addDays, subDays } from "date-fns";
 import { stringify } from "querystring";
 import { convertDate } from "../helper";
