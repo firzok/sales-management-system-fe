@@ -4,8 +4,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
-  Card
+  DropdownItem
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
 import moment from "moment";
@@ -18,7 +17,6 @@ import {
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addDays, subDays } from "date-fns";
 import { stringify } from "querystring";
 import { convertDate } from "../helper";
 import { colors, pages, monthList } from "../../config/static_lists";
@@ -254,6 +252,13 @@ function AllOrders(props) {
       sort: "sorting",
       align: "text-left",
       name: "ADVANCE PAYMENT"
+    },
+    {
+      id: 7,
+      type: "badge",
+      sort: "sorting",
+      align: "text-left",
+      name: "STATUS"
     }
   ];
 
@@ -311,6 +316,26 @@ function AllOrders(props) {
     // Column 7 ADVANCE PAYMENT
     var formatter = new Intl.NumberFormat("en-US");
     row.push(String(formatter.format(orderList[i].advance_payment) + " AED"));
+
+    //   Column 8 STATUS BADGE
+
+    if (orderList[i].payment_status === "Incomplete") {
+      row.push({
+        class: "badge badge-info text-capitalize",
+        data: "Incomplete"
+      });
+    } else if (orderList[i].payment_status === "Complete") {
+      row.push({
+        class: "badge badge-success text-capitalize",
+        data: "Complete"
+      });
+    } else if (orderList[i].payment_status === "Cancelled") {
+      row.push({
+        class: "badge badge-danger text-capitalize",
+        data: "Cancelled"
+      });
+    }
+    row.push();
 
     _data.push(row);
   }
