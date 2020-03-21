@@ -60,7 +60,7 @@ function AllOrders(props) {
 
   function getFilteredData() {
     const filterData = {
-      employee: selectedEmployee.id,
+      employee_id: selectedEmployee.id,
       month: selectedMonth.id,
       year: selectedYear
     };
