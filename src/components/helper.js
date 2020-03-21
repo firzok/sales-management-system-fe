@@ -3,3 +3,7 @@ export function convertDate(inputFormat) {
     var d = new Date(inputFormat)
     return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/')
 }
+
+export function range(start, end) {
+    return Array(end - start + 1).fill().map((_, idx) => start + idx)
+}

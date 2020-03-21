@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { USER_AUTHENITCATION, USER_BASE_URL } from '../config/rest_endpoints'
 import { getPascalCase, isValidJSON } from '../assets/js/helper';
-
+import { LOAD_LOGIN } from '../components/router/routeConstants';
 export const LOGIN = "login";
 export const ACTIVE_USER = "save_user";
 export const NOTIFICATION = "notification";
@@ -108,15 +108,21 @@ export function fetchUser(user) {
         })
             .then(res => {
                 if (res.status === 200) {
-                    dispatch({
-                        type: ACTIVE_USER,
-                        payload: res
-                    })
+                    if (res.data.success === true) {
+                        dispatch({
+                            type: ACTIVE_USER,
+                            payload: res
+                        })
+                    } else {
+                        sessionStorage.removeItem('user');
+                    }
+
                 } else {
                     console.log("Network Error")
                 }
 
             }).catch(error => {
+                sessionStorage.removeItem('user');
                 var c_error = error.response;
                 if (c_error === undefined) {
                     c_error = { "data": { "message": "Network Error" } };

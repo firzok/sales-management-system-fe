@@ -18,6 +18,7 @@ export const NEW_ORDER = `${ROOT_URL}/new-order`;
 export const ALL_ORDERS = `${ROOT_URL}/all-orders`;
 export const UPDATE_DELIVERY_DATE = `${ROOT_URL}/update-date`;
 export const ADD_NEW_EMPLOYEE = `${ROOT_URL}/add-employee`;
+export const GET_ALL_EMPLOYEES = `${ROOT_URL}/all-employees`;
 
 
 
