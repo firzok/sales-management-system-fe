@@ -201,6 +201,7 @@ function AllOrders(props) {
     if (isAdmin) {
       getAllEmployees();
     }
+    monthList.unshift({ id: 0, name: "All Months" });
   }, []);
 
   // Data
@@ -209,7 +210,7 @@ function AllOrders(props) {
       id: 0,
       type: "action",
       align: "text-center",
-      name: "EDIT DATE"
+      name: "ACTIONS"
     },
     {
       id: 1,
@@ -274,7 +275,12 @@ function AllOrders(props) {
     const actions = [
       {
         icon: ["far", "edit"],
-        className: "text-info-800 cursor-pointer",
+        className: "text-info-600 cursor-pointer h3 mr-2",
+        callBack: () => openEditOrderModal(currentOrder)
+      },
+      {
+        icon: ["fas", "hand-holding-usd"],
+        className: "text-info-600 cursor-pointer h3",
         callBack: () => openEditOrderModal(currentOrder)
       }
     ];
@@ -319,17 +325,17 @@ function AllOrders(props) {
 
     //   Column 8 STATUS BADGE
 
-    if (orderList[i].payment_status === "Incomplete") {
+    if (orderList[i].order_status === "Incomplete") {
       row.push({
         class: "badge badge-info text-capitalize",
         data: "Incomplete"
       });
-    } else if (orderList[i].payment_status === "Complete") {
+    } else if (orderList[i].order_status === "Complete") {
       row.push({
         class: "badge badge-success text-capitalize",
         data: "Complete"
       });
-    } else if (orderList[i].payment_status === "Cancelled") {
+    } else if (orderList[i].order_status === "Cancelled") {
       row.push({
         class: "badge badge-danger text-capitalize",
         data: "Cancelled"

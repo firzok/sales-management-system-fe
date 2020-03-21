@@ -1,18 +1,13 @@
 // import the library
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
-    faHome,
-    faCartPlus,
-    faSearch,
+  faHome,
+  faCartPlus,
+  faSearch,
+  faHandHoldingUsd
+} from "@fortawesome/free-solid-svg-icons";
 
-} from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from "@fortawesome/free-regular-svg-icons";
 
-import { faEdit } from '@fortawesome/free-regular-svg-icons';
-
-library.add(
-    faHome,
-    faCartPlus,
-    faSearch,
-    faEdit
-);
+library.add(faHome, faCartPlus, faSearch, faEdit, faHandHoldingUsd);
