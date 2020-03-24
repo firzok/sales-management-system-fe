@@ -1,9 +1,9 @@
-const PROTOCOL = 'http';
+const PROTOCOL = "http";
 
 // const SERVER_IP = '192.168.100.14';
-const PORT = '4000';
+const PORT = "4000";
 
-const SERVER_IP = 'localhost';
+const SERVER_IP = "localhost";
 // const PORT = '8080';
 
 export const SERVER_PATH = `${PROTOCOL}://${SERVER_IP}:${PORT}`;
@@ -16,18 +16,12 @@ export const PRODUCT_TYPES = `${ROOT_URL}/product-types`;
 export const PRODUCTS_WITH_TYPE_ID = `${ROOT_URL}/products-with-type-id`;
 export const NEW_ORDER = `${ROOT_URL}/new-order`;
 export const ALL_ORDERS = `${ROOT_URL}/all-orders`;
+export const ADD_ORDER_PAYMENT = `${ROOT_URL}/add-order-payment`;
 export const UPDATE_DELIVERY_DATE = `${ROOT_URL}/update-date`;
 export const ADD_NEW_EMPLOYEE = `${ROOT_URL}/add-employee`;
 export const GET_ALL_EMPLOYEES = `${ROOT_URL}/all-employees`;
 
-
-
-
-
-
-
 // ====================================================================================================
-
 
 export const USER_BASE_URL = `${ROOT_URL}/accounts/user`;
 
@@ -86,8 +80,6 @@ export const PUBLIC_HOLIDAYS = `${ROOT_URL}/publicholidays`;
 
 export const SETTINGS = `${ROOT_URL}/settings`;
 
-
-
 export const REPORTS_BASE_URL = `${ROOT_URL}/reports`;
 export const GENDER_DISTRIBUTION = `${REPORTS_BASE_URL}/gender-break-down`;
 export const CALENDAR = `${REPORTS_BASE_URL}/calendar`;
@@ -118,4 +110,4 @@ export const CURRENT_ANNOUNCEMENTS = `${ANNOUNCEMENTS}/current-announcements`;
 
 export const QUOTE_GENERATOR = `${ROOT_URL}/qoutesGenerator`;
 
-export const TIME_OF_BALANCES_REPORT = `${ROOT_URL}/TimesOffBalancesPdf/times-of-balances-pdf`
+export const TIME_OF_BALANCES_REPORT = `${ROOT_URL}/TimesOffBalancesPdf/times-of-balances-pdf`;

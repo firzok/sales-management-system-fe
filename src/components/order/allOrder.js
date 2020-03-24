@@ -12,7 +12,8 @@ import axios from "axios";
 import {
   ALL_ORDERS,
   UPDATE_DELIVERY_DATE,
-  GET_ALL_EMPLOYEES
+  GET_ALL_EMPLOYEES,
+  ADD_ORDER_PAYMENT
 } from "../../config/rest_endpoints";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import DatePicker from "react-datepicker";
@@ -21,6 +22,7 @@ import { stringify } from "querystring";
 import { convertDate } from "../helper";
 import { colors, pages, monthList } from "../../config/static_lists";
 import { range } from "../helper";
+import CurrencyInput from "react-currency-input";
 
 function AllOrders(props) {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -50,8 +52,39 @@ function AllOrders(props) {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   // Function
+
+  function receivePayment() {
+    const data = {
+      order_id: orderId,
+      paid_amount: receivedPaymentAmount
+    };
+
+    axios({
+      method: "post",
+      url: ADD_ORDER_PAYMENT,
+      data: stringify(data),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          setPaymentModalOpen(false);
+          getFilteredData();
+        }
+        showResponseModal(res.data.message);
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
 
   function showResponseModal(message) {
     setResponseMessage(message);
@@ -156,6 +189,10 @@ function AllOrders(props) {
     });
   }
 
+  function togglePaymentModal() {
+    setPaymentModalOpen(!paymentModalOpen);
+  }
+
   function toggleModal() {
     setOpenModal(!openModal);
   }
@@ -170,6 +207,12 @@ function AllOrders(props) {
     setOrderId(order.id);
 
     setOpenModal(true);
+  }
+
+  function openReceivePaymentModal(order) {
+    setOrderId(order.id);
+
+    setPaymentModalOpen(true);
   }
 
   function getAllEmployees() {
@@ -252,10 +295,17 @@ function AllOrders(props) {
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "ADVANCE PAYMENT"
+      name: "DUE AMOUNT"
     },
     {
       id: 7,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL AMOUNT"
+    },
+    {
+      id: 8,
       type: "badge",
       sort: "sorting",
       align: "text-left",
@@ -275,15 +325,17 @@ function AllOrders(props) {
     const actions = [
       {
         icon: ["far", "edit"],
-        className: "text-info-600 cursor-pointer h3 mr-2",
-        callBack: () => openEditOrderModal(currentOrder)
-      },
-      {
-        icon: ["fas", "hand-holding-usd"],
         className: "text-info-600 cursor-pointer h3",
         callBack: () => openEditOrderModal(currentOrder)
       }
     ];
+    if (orderList[i].order_status === "Incomplete") {
+      actions.push({
+        icon: ["fas", "hand-holding-usd"],
+        className: "text-info-600 cursor-pointer h3 ml-2",
+        callBack: () => openReceivePaymentModal(currentOrder)
+      });
+    }
     row.push(actions);
 
     // Column 2 ORDER#
@@ -319,11 +371,15 @@ function AllOrders(props) {
         : moment(orderList[i].delivery_date).format("DD-MM-YYYY")
     );
 
-    // Column 7 ADVANCE PAYMENT
+    // Column 7 DUE PAYMENT
     var formatter = new Intl.NumberFormat("en-US");
-    row.push(String(formatter.format(orderList[i].advance_payment) + " AED"));
+    row.push(String(formatter.format(orderList[i].due_amount) + " AED"));
 
-    //   Column 8 STATUS BADGE
+    // Column 8 TOTAL PAYMENT
+    var formatter = new Intl.NumberFormat("en-US");
+    row.push(String(formatter.format(orderList[i].billed_amount) + " AED"));
+
+    //   Column 9 STATUS BADGE
 
     if (orderList[i].order_status === "Incomplete") {
       row.push({
@@ -345,12 +401,8 @@ function AllOrders(props) {
 
     _data.push(row);
   }
-  var modalHtml = (
-    <Modal
-      isOpen={openModal}
-      toggle={toggleModal}
-      // className={ }
-    >
+  var editOrderModalHtml = (
+    <Modal isOpen={openModal} toggle={toggleModal}>
       <ModalHeader toggle={toggleModal}>Change Delivery Date</ModalHeader>
       <ModalBody>
         <div className="form-group">
@@ -394,10 +446,49 @@ function AllOrders(props) {
     </Modal>
   );
 
+  var receivePaymentModal = (
+    <Modal isOpen={paymentModalOpen} toggle={togglePaymentModal}>
+      <ModalHeader toggle={togglePaymentModal}>
+        Receive payment for order
+      </ModalHeader>
+      <ModalBody>
+        <div className="form-group">
+          <label className="font-weight-semibold">
+            New Payment{" "}
+            <span className="c-failed" title="Required">
+              *
+            </span>
+          </label>
+
+          <CurrencyInput
+            className="form-control"
+            suffix=" AED"
+            precision="0"
+            value={receivedPaymentAmount}
+            onChangeEvent={(event, value, maskedValue) =>
+              setReceivedPaymentAmount(maskedValue)
+            }
+          />
+        </div>
+      </ModalBody>
+      <ModalFooter>
+        <Button
+          title="Update"
+          className="btn btn-theme btn-labeled"
+          onClick={() => receivePayment()}
+          disabled={receivedPaymentAmount === 0}
+        >
+          Update
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <Container header="All Orders">
-      {modalHtml}
+      {editOrderModalHtml}
       {responseModalHtml}
+      {receivePaymentModal}
       <div className="card">
         <div className="card-body">
           <div className="row justify-content-between">
