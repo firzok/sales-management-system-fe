@@ -20,11 +20,23 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { stringify } from "querystring";
 import { convertDate } from "../helper";
-import { colors, pages, monthList } from "../../config/static_lists";
+import {
+  colors,
+  pages,
+  monthListWithAllMonthOption
+} from "../../config/static_lists";
 import { range } from "../helper";
 import CurrencyInput from "react-currency-input";
+import { ORDER } from "../router/routeConstants";
+import { Redirect } from "react-router-dom";
 
 function AllOrders(props) {
+  useEffect(() => {
+    if (isAdmin) {
+      getAllEmployees();
+    }
+  }, []);
+
   const user = JSON.parse(sessionStorage.getItem("user"));
 
   const isAdmin = user.role === "admin";
@@ -47,13 +59,14 @@ function AllOrders(props) {
   const [dropDownYearOpen, setDropDownYearOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(allEmployeeObj);
   const [selectedMonth, setSelectedMonth] = useState(
-    monthList[currentDate.getMonth()]
+    monthListWithAllMonthOption[currentDate.getMonth() + 1]
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   // Function
 
@@ -240,13 +253,6 @@ function AllOrders(props) {
     });
   }
 
-  useEffect(() => {
-    if (isAdmin) {
-      getAllEmployees();
-    }
-    monthList.unshift({ id: 0, name: "All Months" });
-  }, []);
-
   // Data
   const headerFields = [
     {
@@ -336,6 +342,14 @@ function AllOrders(props) {
         callBack: () => openReceivePaymentModal(currentOrder)
       });
     }
+    actions.push({
+      icon: ["fas", "info-circle"],
+      className: "text-info-600 cursor-pointer h3 ml-2",
+      callBack: () => {
+        setRedirect(true);
+        setOrderId(currentOrder.id);
+      }
+    });
     row.push(actions);
 
     // Column 2 ORDER#
@@ -483,7 +497,9 @@ function AllOrders(props) {
       </ModalFooter>
     </Modal>
   );
-
+  if (redirect) {
+    return <Redirect to={`${ORDER}`} />;
+  }
   return (
     <Container header="All Orders">
       {editOrderModalHtml}
@@ -531,7 +547,7 @@ function AllOrders(props) {
                   {selectedMonth.name}
                 </DropdownToggle>
                 <DropdownMenu right>
-                  {monthList.map(month => (
+                  {monthListWithAllMonthOption.map(month => (
                     <DropdownItem
                       key={month.id}
                       onClick={() => {
