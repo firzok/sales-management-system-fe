@@ -201,6 +201,7 @@ function NewOrder(props) {
     setSelectedProduct(defaultProduct);
     setSelectedProductType(defaultProductType);
     setUnitPrice(0);
+    setCustomerTRN("");
   }
 
   var modalHtml = (
@@ -587,7 +588,8 @@ function NewOrder(props) {
                     disabled={
                       orderProducts.length === 0 ||
                       customerName === "" ||
-                      customerNumber === ""
+                      customerNumber === "" ||
+                      customerTRN === ""
                     }
                   >
                     Confirm Order

@@ -5,9 +5,17 @@ import {
   faHome,
   faCartPlus,
   faSearch,
-  faHandHoldingUsd
+  faHandHoldingUsd,
+  faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faEdit } from "@fortawesome/free-regular-svg-icons";
 
-library.add(faHome, faCartPlus, faSearch, faEdit, faHandHoldingUsd);
+library.add(
+  faHome,
+  faCartPlus,
+  faSearch,
+  faEdit,
+  faHandHoldingUsd,
+  faInfoCircle
+);

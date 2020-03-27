@@ -4,8 +4,9 @@ export const LOAD_LOGOUT = `${AUTH_BASE_URL}/logout`;
 
 export const NEW_ORDER = `/new-order`;
 export const ALL_ORDERS = `/all-orders`;
+export const ORDER = `/order`;
 
-export const EMPLOYEES_BASE_URL = '/employees'
+export const EMPLOYEES_BASE_URL = "/employees";
 export const ADD_EMPLOYEE = `/add-employee`;
 export const RESET_EMPLOYEE_PASSWORD = `${EMPLOYEES_BASE_URL}/employee-password-reset`;
 
@@ -19,7 +20,6 @@ export const LOAD_APP = "/";
 export const DASHBOARD_EMPLOYEE = "/dashboard-employee";
 export const DASHBOARD_DOMAINHEAD = "/dashboard-domainhead";
 export const DASHBOARD_ADMIN = "/dashboard-admin";
-
 
 export const ERROR_404 = "/error404";
 
