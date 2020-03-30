@@ -9,7 +9,7 @@ import {
   faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faEdit } from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faWindowClose } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faHome,
@@ -17,5 +17,6 @@ library.add(
   faSearch,
   faEdit,
   faHandHoldingUsd,
-  faInfoCircle
+  faInfoCircle,
+  faWindowClose
 );
