@@ -88,7 +88,7 @@ function Order(props) {
           showResponseModal(res.data.message);
           getOrderDetails();
         } else {
-          alert("Unable to process request.");
+          showResponseModal(res.data.message);
         }
       } else {
         console.log("Network Error");

@@ -54,6 +54,12 @@ function NewOrder(props) {
   const [orderSuccess, setOrderSuccess] = useState(false);
 
   const [customerTRN, setCustomerTRN] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const [responseModalOpen, setResponseModalOpen] = useState(false);
+
+  function toggleResponseModal() {
+    setResponseModalOpen(!responseModalOpen);
+  }
 
   function toggleModal() {
     setOpenModal(!openModal);
@@ -78,7 +84,7 @@ function NewOrder(props) {
           if (res.data.success === true) {
             setProductTypeList(res.data.rows);
           } else {
-            alert("Unable to process request.");
+            showResponseModal(res.data.message);
           }
         } else {
           console.log("Network Error");
@@ -86,6 +92,18 @@ function NewOrder(props) {
       });
     }
   }
+
+  function showResponseModal(message) {
+    setResponseMessage(message);
+    setResponseModalOpen(true);
+  }
+
+  var responseModalHtml = (
+    <Modal isOpen={responseModalOpen} toggle={toggleResponseModal}>
+      <ModalHeader toggle={toggleResponseModal}>Response</ModalHeader>
+      <ModalBody>{responseMessage}</ModalBody>
+    </Modal>
+  );
 
   function getProducts(type) {
     setProductDisabled(true);
@@ -108,7 +126,7 @@ function NewOrder(props) {
           setProductList(res.data.rows);
           setProductDisabled(false);
         } else {
-          alert("Unable to process request.");
+          showResponseModal(res.data.message);
         }
       } else {
         console.log("Network Error");
@@ -264,6 +282,7 @@ function NewOrder(props) {
   return (
     <Container header="New Job Order Form">
       {modalHtml}
+      {responseModalHtml}
       <div className="row">
         <div className="col-md-8">
           <div className="card">
