@@ -20,7 +20,7 @@ export var naver = {
   [NEW_ORDER]: {
     "/": {
       id: "NEW_ORDER",
-      name: "New Order",
+      name: "New Job Order",
       url: NEW_ORDER,
       fa_icon: ["fas", "cart-plus"]
     },

@@ -262,7 +262,7 @@ function NewOrder(props) {
   }
 
   return (
-    <Container header="New Order Form">
+    <Container header="New Job Order Form">
       {modalHtml}
       <div className="row">
         <div className="col-md-8">
