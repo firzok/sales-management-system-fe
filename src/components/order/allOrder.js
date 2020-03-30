@@ -28,7 +28,6 @@ import {
 import { range } from "../helper";
 import CurrencyInput from "react-currency-input";
 import { ORDER } from "../router/routeConstants";
-import { Redirect } from "react-router-dom";
 
 function AllOrders(props) {
   useEffect(() => {
@@ -66,7 +65,6 @@ function AllOrders(props) {
   const [responseMessage, setResponseMessage] = useState("");
   const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
-  const [redirect, setRedirect] = useState(false);
 
   // Function
 
@@ -349,8 +347,11 @@ function AllOrders(props) {
       icon: ["fas", "info-circle"],
       className: "text-info-600 cursor-pointer h3 ml-2",
       callBack: () => {
-        setRedirect(true);
         setOrderId(currentOrder.id);
+        props.history.push({
+          pathname: `${ORDER}`,
+          state: { orderId: currentOrder.id }
+        });
       }
     });
     row.push(actions);
@@ -500,16 +501,7 @@ function AllOrders(props) {
       </ModalFooter>
     </Modal>
   );
-  if (redirect) {
-    return (
-      <Redirect
-        to={{
-          pathname: `${ORDER}`,
-          state: { orderId: orderId }
-        }}
-      />
-    );
-  }
+
   return (
     <Container header="All Orders">
       {editOrderModalHtml}
