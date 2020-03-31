@@ -214,7 +214,6 @@ function NewOrder(props) {
     setOrderProducts([]);
     setProductDisabled(true);
     setProductList([]);
-    setProductTypeList([]);
     setQuantity(1);
     setSelectedProduct(defaultProduct);
     setSelectedProductType(defaultProductType);
