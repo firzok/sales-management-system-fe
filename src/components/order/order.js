@@ -14,7 +14,8 @@ import {
   Button,
   Modal,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  UncontrolledTooltip
 } from "reactstrap";
 import moment from "moment";
 
@@ -42,6 +43,8 @@ function Order(props) {
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
   }
+
+  function printOrder() {}
 
   function getOrderDetails() {
     axios({
@@ -306,15 +309,37 @@ function Order(props) {
             <CardBody>
               <Button
                 outline
+                color="success"
+                size="lg"
+                block
+                onClick={() => printOrder()}
+                id={"receiptOrderBtn"}
+              >
+                Order Receipt
+              </Button>
+              <UncontrolledTooltip placement="bottom" target="receiptOrderBtn">
+                This will download order receipt.
+              </UncontrolledTooltip>
+            </CardBody>
+          </Card>
+        </div>
+        <div className="col-md-2 text-center">
+          <Card>
+            <CardBody>
+              <Button
+                outline
                 color="danger"
-                title="Cancel Order"
                 size="lg"
                 block
                 onClick={() => setConfirmModalShow(true)}
                 disabled={orderDetails.order_status === "Cancelled"}
+                id="cancelOrderBtn"
               >
                 Cancel Order
               </Button>
+              <UncontrolledTooltip placement="bottom" target="cancelOrderBtn">
+                This will cancel order.
+              </UncontrolledTooltip>
             </CardBody>
           </Card>
         </div>
