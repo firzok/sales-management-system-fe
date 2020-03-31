@@ -1,492 +1,350 @@
-import React, { Component, Fragment } from 'react';
-import axios from 'axios';
-import CustomLoader from '../common/loader';
-import Pagination from "react-js-pagination";
-import Card from '../common/card';
-import { pages, monthsObject } from '../../config/static_lists';
-import Select from 'react-select';
-import { makeListFromObj } from '../../actions';
-// import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { deepCompare } from '../../assets/js/helper';
+import { withRouter } from "react-router-dom";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
+import OfflineTable from "react-offline-table";
+import axios from "axios";
+import {
+  GET_ALL_EMPLOYEES,
+  EMPLOYEE_TOTALS
+} from "../../config/rest_endpoints";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import "react-datepicker/dist/react-datepicker.css";
+import { stringify } from "querystring";
+import {
+  colors,
+  pages,
+  monthListWithAllMonthOption
+} from "../../config/static_lists";
+import { range } from "../helper";
+import BeatLoader from "react-spinners/BeatLoader";
 
-var moment = window.moment;
-var TopColors = window.TopColors;
-
-const plugin = {
-    datalabels: {
-        align: function (context) {
-            var index = context.dataIndex;
-            var value = context.dataset.data[index];
-            return value < 1 ? 'end' : 'start'
-        },
-        display: function (context) {
-            return context.dataset.data[context.dataIndex] !== 0; // or >= 1 or ...
-        },
-        backgroundColor: null,
-        borderColor: null,
-        borderRadius: 4,
-        borderWidth: 1,
-        color: 'black',
-        font: {
-            size: 12,
-            weight: 500
-        },
-        offset: 5,
-        padding: 0
+function DashboardEmployee(props) {
+  useEffect(() => {
+    if (isAdmin) {
+      getAllEmployees();
     }
-}
+  }, []);
 
-class DashboardEmployee extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            leavesBalance: null,
-            leavesPending: null,
-            leavesTotal: null,
-            lastLeaveRecord: null,
-            leaveTypes: null,
-            statsData: null,
-            data: null,
-            total: 0,
-            skip: 0,
-            size: 5,
-            activePage: 1,
-            leaveTypeList: [],
-            leavesOptions: {},
-            leavesHistoryData: {},
-            yearOptions: [],
-            selectedYear: new Date().getFullYear().toString(),
-            colorsLeaveTypes: this.props.leaveTypes
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  const isAdmin = user.role === "admin";
+
+  const currentDate = new Date();
+
+  const allEmployeeObj = { id: 0, first_name: "All", last_name: "Employees" };
+
+  // State
+  const [jobOrderList, setJobOrderList] = useState([]);
+  const [employeeList, setEmployeeList] = useState([]);
+  const [gettingData, setGettingData] = useState(false);
+  const [dropDownEmployeeOpen, setDropDownEmployeeOpen] = useState(false);
+  const [dropDownMonthOpen, setDropDownMonthOpen] = useState(false);
+  const [dropDownYearOpen, setDropDownYearOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(allEmployeeObj);
+  const [selectedMonth, setSelectedMonth] = useState(
+    monthListWithAllMonthOption[currentDate.getMonth() + 1]
+  );
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [responseModalOpen, setResponseModalOpen] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  // Function
+
+  function showResponseModal(message) {
+    setResponseMessage(message);
+    setResponseModalOpen(true);
+  }
+
+  function getFilteredData() {
+    const filterData = {
+      employee_id: selectedEmployee.id,
+      month: selectedMonth.id,
+      year: selectedYear
+    };
+
+    getAllJobOrder(filterData);
+  }
+
+  function getFullName(employee) {
+    return employee.first_name + " " + employee.last_name;
+  }
+
+  function selectYear(year) {
+    setSelectedYear(year);
+  }
+
+  function selectMonth(month) {
+    setSelectedMonth(month);
+  }
+
+  function selectEmployee(employee) {
+    setSelectedEmployee(employee);
+  }
+
+  const toggleEmployeeDropdown = () =>
+    setDropDownEmployeeOpen(prevState => !prevState);
+
+  const toggleMonthDropdown = () =>
+    setDropDownMonthOpen(prevState => !prevState);
+
+  const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
+
+  function getAllJobOrder(filterData) {
+    setJobOrderList([]);
+    setGettingData(true);
+    axios({
+      method: "post",
+      url: EMPLOYEE_TOTALS,
+      data: stringify(filterData),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      setGettingData(false);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          if (res.data.rows.length > 0) {
+            setJobOrderList(res.data.rows);
+          } else {
+            showResponseModal(res.data.message);
+          }
+        } else {
+          showResponseModal(res.data.message);
         }
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
 
-        this.onLimitChange = this.onLimitChange.bind(this);
-        this.getLogsData = this.getLogsData.bind(this);
-        this.handlePageChange = this.handlePageChange.bind(this);
-        this.handleYearChange = this.handleYearChange.bind(this);
-    }
+  function toggleResponseModal() {
+    setResponseModalOpen(!responseModalOpen);
+  }
 
-    makeYearOptions() {
-        var yearOptions = [];
-        for (var i = new Date().getFullYear(); i >= 2015; i--) {
-            yearOptions.push({ value: i.toString(), label: i.toString() });
+  function getAllEmployees() {
+    setGettingData(true);
+    axios({
+      method: "get",
+      url: GET_ALL_EMPLOYEES,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      setGettingData(false);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          setEmployeeList([allEmployeeObj, ...res.data.rows]);
+        } else {
+          showResponseModal(res.data.message);
         }
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
 
-        this.setState({ yearOptions });
+  // Data
+  const headerFields = [
+    {
+      id: 0,
+      type: "text",
+      align: "text-left",
+      sort: "sorting_asc",
+      name: "EMPLOYEE NAME"
+    },
+    {
+      id: 1,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL BILLED"
+    },
+    {
+      id: 2,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL RECEIVED"
+    },
+    {
+      id: 3,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL REMAINING"
     }
+  ];
 
-    UNSAFE_componentWillMount() {
-        this.getStatsData();
-        if (this.props.showLeaveHistory) {
-            this.getLogsData();
-        }
-        if (this.props.showLeaveHistoryGraph) {
-            this.makeYearOptions();
-            this.setOptions();
-            this.getChartsData();
-        }
-    }
+  const yearList = range(2015, currentDate.getFullYear());
 
-    setOptions() {
-        var leavesOptions = {
-            title: {
-                display: false,
-            },
-            plugins: plugin,
-            tooltips: {
-                intersect: false,
-                mode: 'nearest',
-                label: 'mylabel',
-            },
-            legend: {
-                display: true,
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    stacked: false,
-                    display: true,
-                    gridLines: {
-                        display: true
-                    },
-                    scaleLabel: {
-                        display: true,
-                    },
-                    ticks: {
-                        padding: 10,
-                        fontSize: 14,
-                        maxRotation: 90
-                    }
-                }],
-                yAxes: [{
-                    stacked: false,
-                    display: true,
-                    gridLines: {
-                        display: false
-                    },
-                    scaleLabel: {
-                        display: true,
-                    },
-                    ticks: {
-                        padding: 10,
-                        beginAtZero: true,
-                    }
-                }]
-            },
-            elements: {
-                line: {
-                    tension: 0.0000001
-                },
-                point: {
-                    radius: 4,
-                    borderWidth: 12
-                }
-            },
+  var _data = [];
 
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            }
-        }
-        this.setState({ leavesOptions });
-    }
+  for (var i = 0; i < jobOrderList.length; i++) {
+    var row = [];
 
-    onLimitChange(selected) {
-        const skip = 0;
-        const size = Number(selected.value);
-        this.setState({ activePage: 1, skip, size }, () => { this.getLogsData() });
-    }
+    const currentJobOrder = jobOrderList[i];
+    // Column 1 Employee
 
-    getPascalCase(text) {
-        var result = text.replace(/([A-Z])/g, " $1");
-        var pascalText = result.charAt(0).toUpperCase() + result.slice(1);
-        return pascalText;
-    }
+    row.push(currentJobOrder.employee_name);
 
-    makeChartData(responseData, color = null) {
-        var chartData = {};
+    // Column 2 Total Billed
+    var formatter = new Intl.NumberFormat("en-US");
 
-        var labels = [];
-        var data = {};
-        var datasets = [];
+    row.push(
+      String(formatter.format(currentJobOrder.total_billed_amount)) + " AED"
+    );
 
-        for (var key in responseData) {
-            labels.push(monthsObject[key]);
-            var i = 0;
-            for (var leaveType in responseData[key]) {
-                if (!(leaveType in data)) {
-                    var name = leaveType.toLowerCase().replace(/\s+/g, '');
-                    data[leaveType] = {
-                        label: this.getPascalCase(leaveType.trim()),
-                        backgroundColor: this.state.colorsLeaveTypes[name],
-                        data: []
-                    };
-                }
-                data[leaveType].data.push(responseData[key][leaveType]);
-                i++;
-            }
-        }
+    // Column 3 Total Received
+    row.push(
+      String(formatter.format(currentJobOrder.total_received_amount)) + " AED"
+    );
 
-        for (var keyData in data) {
-            datasets.push(data[keyData]);
-        }
+    // Column 4 Total Remaining
+    row.push(
+      String(formatter.format(currentJobOrder.total_due_amount)) + " AED"
+    );
 
-        chartData = {
-            labels: labels,
-            datasets: datasets
-        }
+    _data.push(row);
+  }
 
-        return chartData;
-    }
+  var responseModalHtml = (
+    <Modal isOpen={responseModalOpen} toggle={toggleResponseModal}>
+      <ModalHeader toggle={toggleResponseModal}>Response</ModalHeader>
+      <ModalBody>{responseMessage}</ModalBody>
+    </Modal>
+  );
 
-    handlePageChange(pageNumber) {
-        const skip = (pageNumber * this.state.size) - this.state.size;
-        this.setState({ activePage: pageNumber, skip }, () => { this.getLogsData() });
-    }
+  return (
+    <Fragment>
+      {responseModalHtml}
+      <div className="card">
+        <div className="card-body">
+          <div className="row justify-content-between">
+            {isAdmin ? (
+              <div className="col-md-3">
+                <Dropdown
+                  isOpen={dropDownEmployeeOpen}
+                  toggle={toggleEmployeeDropdown}
+                >
+                  <DropdownToggle
+                    caret
+                    className="btn btn-theme btn-labeled w-100 text-right"
+                  >
+                    {getFullName(selectedEmployee)}
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    {employeeList.map(employee => (
+                      <DropdownItem
+                        key={employee.id}
+                        onClick={() => {
+                          selectEmployee(employee);
+                        }}
+                      >
+                        {getFullName(employee)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            ) : (
+              ""
+            )}
 
-    handleYearChange(selected) {
-        this.setState({ selectedYear: selected.value }, () => { this.getChartsData() });
-    }
-
-    makeStatsData(leaveTypes, leavesBalance, leavesTotal) {
-        var statsData = {};
-
-        if (leaveTypes) {
-            Object.keys(leaveTypes).map(key => {
-                var leaveType = leaveTypes[key];
-                var leaveID = leaveType["id"];
-                if (leaveID in leavesBalance) {
-                    var leaveName = leaveType["name"].trim();
-                    var exhausted = leavesTotal[leaveID] - leavesBalance[leaveID];
-                    var percentage = isNaN((leavesBalance[leaveID] * 100) / leavesTotal[leaveID]) ? 0 : ((leavesBalance[leaveID] * 100) / leavesTotal[leaveID]).toFixed(2);
-                    var total = leavesTotal[leaveID];
-                    var balance = leavesBalance[leaveID];
-
-                    statsData[leaveName] = { total, balance, exhausted, percentage }
-                }
-            });
-        }
-
-        return statsData;
-    }
-
-    renderStats() {
-        var statsData = this.state.statsData;
-        if (statsData !== null) {
-            return Object.keys(statsData).map((key, idx) => {
-                var percentage = Number(statsData[key]["percentage"]);
-                var battery = "battery-full fa-rotate-90";
-                var color = "danger";
-                if (percentage >= 100) {
-                    color = "success";
-                    battery = "battery-full fa-rotate-270";
-                }
-                else if (percentage >= 80) {
-                    color = "primary";
-                    battery = "battery-three-quarters fa-rotate-270";
-                }
-                else if (percentage >= 60) {
-                    color = "info";
-                    battery = "battery-half fa-rotate-270";
-                }
-                else if (percentage >= 40) {
-                    color = "warning";
-                    battery = "battery-quarter fa-rotate-270";
-                }
-                else if (percentage > 0) {
-                    color = "danger";
-                    battery = "battery-quarter fa-rotate-270";
-                }
-                else if (percentage === 0) {
-                    color = "danger";
-                    battery = "battery-empty fa-rotate-270";
-                }
-                else if (percentage >= -40) {
-                    color = "danger";
-                    battery = "battery-quarter fa-rotate-90";
-                }
-                else if (percentage >= -60) {
-                    color = "danger";
-                    battery = "battery-half fa-rotate-90";
-                }
-                else if (percentage >= -80) {
-                    color = "danger";
-                    battery = "battery-three-quarters fa-rotate-90";
-                }
-
-                return (
-                    <div key={ idx } className="col-md-6">
-                        <div className="card card-body">
-                            <div className="media mb-3">
-                                <div className="media-body">
-                                    <h6 className="font-weight-semibold mb-0 text-capitalize">{ key }</h6>
-                                    <span className="text-muted">Total : { statsData[key]['total'] }</span>
-                                </div>
-
-                                <div className="ml-3 align-self-center">
-                                    <i className={ `fas fa-${battery} fa-2x text-${color}-400` }></i>
-                                </div>
-                            </div>
-
-                            <div className="progress mb-2" style={ { height: '0.125rem' } }>
-                                <div className={ `progress-bar bg-${color}-400` } style={ { width: `${percentage}%` } }>
-                                </div>
-                            </div>
-                            <div>
-                                <span className="float-right">{ statsData[key]["balance"] }</span>
-                                Balance
-			                </div>
-                        </div>
-                    </div>
-                )
-            });
-        }
-    }
-
-    renderDataInRows() {
-        // render data according to filtered or not filtered data
-        return this.state.data.map((row, idx) => {
-            var colorCode = { "color": "#4caf50", "fontWeight": "bolder" };
-            var badge = <span className="badge badge-success">Approved</span>
-
-            if (row.Status === "notapproved") {
-                colorCode = { "color": "#f44336", "fontWeight": "bolder" };
-                badge = <span className="badge badge-danger">Rejected</span>
-            }
-            else if (row.Status === "pending") {
-                colorCode = { "color": "#888", "fontWeight": "bolder" };
-                badge = <span className="badge badge-info">Pending</span>
-            }
-            else if (row.Status.toLowerCase() === "withdrawn") {
-                colorCode = { "color": "#ff7043", "fontWeight": "bolder" };
-                badge = <span className="badge badge-warning">Withdrawn</span>
-            }
-            else if (row.Status.toLowerCase() === "deleted") {
-                colorCode = { "color": "#E91E63", "fontWeight": "bolder" };
-                badge = <span className="badge bg-pink">Deleted</span>
-            }
-
-            return (
-                <tr key={ idx }>
-                    <td className="text-nowrap">
-                        { badge }
-                    </td>
-                    <td className="text-nowrap text-capitalize">{ row['EmployeeName'] }</td>
-                    <td className="text-nowrap text-capitalize">{ row['DesignationName'] ? row['DesignationName'] : 'N/A' }</td>
-                    <td className="text-nowrap text-capitalize">{ row["leave_name"] ? row["leave_name"] : "N/A" }</td>
-                    <td className="text-center text-nowrap">{ moment(row['AppliedDate']).format("DD-MMM-YYYY") }</td>
-                    <td className="text-center text-nowrap">
-                        { moment(row['LeaveRecord']['start_date']).format("DD-MMM-YYYY") } ...  { moment(row['LeaveRecord']['end_date']).format("DD-MMM-YYYY") }
-                        {/* <span className="badge bg-blue badge-pill btn-theme ml-2" title="No of Days">{row['LeaveRecord']['no_of_days']}</span> */ }
-                        <span className="ml-2" style={ colorCode }> ( { row['LeaveRecord']['no_of_days'] } ) </span>
-                    </td>
-                    <td className="text-center text-nowrap text-capitalize">
-                        { row['LeaveRecord']['responded_by'] ? row['LeaveRecord']['responded_by'] : 'N/A' }
-                    </td>
-                </tr>
-            )
-        });
-    }
-
-    UNSAFE_componentWillReceiveProps(newProps) {
-        if (!deepCompare(newProps.leaveTypes, this.state.colorsLeaveTypes)) {
-            this.setState({ colorsLeaveTypes: newProps.leaveTypes });
-        }
-    }
-
-    render() {
-        var table = <CustomLoader />
-        if (this.state.data && this.state.data.length) {
-            table =
-                <div>
-                    <div className="table-responsive">
-                        <table className="table table-hover">
-                            <thead className="">
-                                <tr>
-                                    <th className="text-center" style={ { width: "30px" } }>STATUS</th>
-                                    <th>EMPLOYEE</th>
-                                    <th>DESIGNATION</th>
-                                    <th>LEAVE TYPE</th>
-                                    <th className="text-center">APPLIED DATE</th>
-                                    <th className="text-center">LEAVE DATE</th>
-                                    <th className="text-center">RESPONDED BY </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                { this.renderDataInRows() }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="row c-mt10">
-                        <div className="col-sm-12 col-md-6">
-                            <div className="records-info" role="status" aria-live="polite">
-                                { `Showing ${this.state.skip + 1} to ${this.state.skip + this.state.data.length} of ${this.state.total} records` }
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-6 pagination-parent c-mt5r">
-                            <Pagination
-                                activePage={ this.state.activePage }
-                                itemsCountPerPage={ this.state.size }
-                                totalItemsCount={ this.state.total }
-                                pageRangeDisplayed={ 5 }
-                                onChange={ this.handlePageChange }
-                                itemClass={ "page-item" }
-                                linkClass={ "page-link" }
-                                prevPageText={ "prev" }
-                                nextPageText={ "next" }
-                                innerClass={ "pagination" }
-                                activeClass={ "active" }
-                            />
-                        </div>
-                    </div>
-                </div>
-        }
-        else if (this.state.data !== null) {
-            table = <div className="alert alert-info" style={ { marginBottom: '0px' } }>
-                <strong>Info!</strong> No Data Found.
-				</div>;
-        }
-
-        var moreAction = [];
-        moreAction.push(
-            <div key="limitSelection" className="col-md-3 col-lg-2 col-xl-2 ml-auto">
-                <div title="Records Per Page">
-                    <Select
-                        value={ pages.find(option => option.value === this.state.size) }
-                        valueKey="value"
-                        labelKey="label"
-                        onChange={ this.onLimitChange }
-                        options={ pages }
-                        clearable={ false }
-                    />
-                </div>
+            <div className="col-md-3">
+              <Dropdown isOpen={dropDownMonthOpen} toggle={toggleMonthDropdown}>
+                <DropdownToggle
+                  caret
+                  className="btn btn-theme btn-labeled w-100 text-right"
+                >
+                  {selectedMonth.name}
+                </DropdownToggle>
+                <DropdownMenu right>
+                  {monthListWithAllMonthOption.map(month => (
+                    <DropdownItem
+                      key={month.id}
+                      onClick={() => {
+                        selectMonth(month);
+                      }}
+                    >
+                      {month.name}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
             </div>
-        )
-
-        var moreActionYear = [];
-        moreActionYear.push(
-            <div key="yearSelection" className="col-md-3 col-lg-2 col-xl-2 ml-auto">
-                <div title="Select Year">
-                    <Select
-                        value={ this.state.yearOptions.find(option => option.value === this.state.selectedYear) }
-                        valueKey="value"
-                        labelKey="label"
-                        onChange={ this.handleYearChange }
-                        options={ this.state.yearOptions }
-                        clearable={ false }
-                    />
-                </div>
+            <div className="col-md-3">
+              <Dropdown isOpen={dropDownYearOpen} toggle={toggleYearDropdown}>
+                <DropdownToggle
+                  caret
+                  className="btn btn-theme btn-labeled w-100 text-right"
+                >
+                  {selectedYear}
+                </DropdownToggle>
+                <DropdownMenu right>
+                  {yearList.map(year => (
+                    <DropdownItem
+                      key={year}
+                      onClick={() => {
+                        selectYear(year);
+                      }}
+                    >
+                      {year}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
             </div>
-        )
+            <div className="col-md-2">
+              <Button
+                title="Filter Data"
+                className="btn btn-theme btn-labeled"
+                onClick={() => getFilteredData()}
+              >
+                Filter Data
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        return (
-            <Fragment>
-                {
-                    (this.props.showStats) ?
-                        <div className="row">
-                            { this.renderStats() }
-                        </div>
-                        : ""
-                }
-                {
-                    (this.props.showLeaveHistory) ?
-                        <Card header="Leaves History" headerClickable={ false } moreActions={ moreAction } collapse={ true } reload={ true } onReload={ this.getLogsData } cardClass="border-left-2 border-left-indigo-400 border-right-2 border-right-indigo-400 rounded-0" headerClass="bg-white">
-                            { table }
-                        </Card>
-                        : ""
-                }
-                {
-                    (this.props.showLeaveHistoryGraph) ?
-                        <Card header="Leaves History" headerTitleClass="dash-headers" moreActions={ moreActionYear } cardClass="border-left-2 border-left-pink-400 border-right-2 border-right-pink-400 rounded-0" headerClass="bg-white">
-                            {/* <Bar
-                                height={ 450 }
-                                data={ this.state.leavesHistoryData }
-                                options={ this.state.leavesOptions }
-                            /> */}
-                        </Card>
-                        : ""
-                }
-
-            </Fragment>
-        );
-    }
-
+      {_data.length > 0 ? (
+        <div className="card">
+          <div className="card-body">
+            <OfflineTable
+              headerFields={headerFields}
+              data={_data}
+              showSno={false}
+              enableFilter={true}
+              pages={pages}
+              colors={colors}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="h-100 row align-items-center">
+          <div className="text-center col mb-5 pb-5">
+            <BeatLoader color={"#1861B8"} size={20} loading={gettingData} />
+          </div>
+        </div>
+      )}
+    </Fragment>
+  );
 }
 
-function mapStateToProps({ leaveTypes }) {
-    return { leaveTypes }
+function mapStateToProps({ activeUser }) {
+  return { activeUser };
 }
 
-export default connect(mapStateToProps)(DashboardEmployee);
-
-DashboardEmployee.defaultProps = {
-    showStats: true,
-    showLeaveHistory: true,
-    showLeaveHistoryGraph: true,
-    showCalendar: true
-}
+export default withRouter(connect(mapStateToProps)(DashboardEmployee));

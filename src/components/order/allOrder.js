@@ -28,6 +28,7 @@ import {
 import { range } from "../helper";
 import CurrencyInput from "react-currency-input";
 import { ORDER } from "../router/routeConstants";
+import BeatLoader from "react-spinners/BeatLoader";
 
 function AllOrders(props) {
   useEffect(() => {
@@ -238,7 +239,7 @@ function AllOrders(props) {
       },
       withCredentials: true
     }).then(res => {
-      setGettingData(true);
+      setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
           setEmployeeList([allEmployeeObj, ...res.data.rows]);
@@ -611,7 +612,11 @@ function AllOrders(props) {
           </div>
         </div>
       ) : (
-        ""
+        <div className="h-100 row align-items-center">
+          <div className="text-center col mb-5 pb-5">
+            <BeatLoader color={"#1861B8"} size={20} loading={gettingData} />
+          </div>
+        </div>
       )}
     </Container>
   );

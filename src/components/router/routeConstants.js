@@ -18,7 +18,6 @@ export const BASE_ROUTE = "/";
 export const LOAD_APP = "/";
 
 export const DASHBOARD_EMPLOYEE = "/dashboard-employee";
-export const DASHBOARD_DOMAINHEAD = "/dashboard-domainhead";
 export const DASHBOARD_ADMIN = "/dashboard-admin";
 
 export const ERROR_404 = "/error404";

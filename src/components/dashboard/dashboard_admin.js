@@ -8,25 +8,21 @@ import {
   DropdownItem
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
-import moment from "moment";
 import axios from "axios";
 import {
   GET_ALL_EMPLOYEES,
   EMPLOYEE_TOTALS
 } from "../../config/rest_endpoints";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import DatePicker from "react-datepicker";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import { stringify } from "querystring";
-import { convertDate } from "../helper";
 import {
   colors,
   pages,
   monthListWithAllMonthOption
 } from "../../config/static_lists";
 import { range } from "../helper";
-import CurrencyInput from "react-currency-input";
-import { ORDER } from "../router/routeConstants";
+import BeatLoader from "react-spinners/BeatLoader";
 
 function DashboardAdmin(props) {
   useEffect(() => {
@@ -47,11 +43,6 @@ function DashboardAdmin(props) {
   const [jobOrderList, setJobOrderList] = useState([]);
   const [employeeList, setEmployeeList] = useState([]);
   const [gettingData, setGettingData] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [deliveryDate, setDeliveryDate] = useState("");
-  const [orderDate, setOrderDate] = useState("");
-  const [dateUpdated, setDateUpdated] = useState(false);
-  const [orderId, setOrderId] = useState("");
   const [dropDownEmployeeOpen, setDropDownEmployeeOpen] = useState(false);
   const [dropDownMonthOpen, setDropDownMonthOpen] = useState(false);
   const [dropDownYearOpen, setDropDownYearOpen] = useState(false);
@@ -62,8 +53,6 @@ function DashboardAdmin(props) {
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
-  const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   // Function
 
@@ -137,14 +126,6 @@ function DashboardAdmin(props) {
     });
   }
 
-  function togglePaymentModal() {
-    setPaymentModalOpen(!paymentModalOpen);
-  }
-
-  function toggleModal() {
-    setOpenModal(!openModal);
-  }
-
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
   }
@@ -161,7 +142,7 @@ function DashboardAdmin(props) {
       },
       withCredentials: true
     }).then(res => {
-      setGettingData(true);
+      setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
           setEmployeeList([allEmployeeObj, ...res.data.rows]);
@@ -352,7 +333,11 @@ function DashboardAdmin(props) {
           </div>
         </div>
       ) : (
-        ""
+        <div className="h-100 row align-items-center">
+          <div className="text-center col mb-5 pb-5">
+            <BeatLoader color={"#1861B8"} size={20} loading={gettingData} />
+          </div>
+        </div>
       )}
     </Fragment>
   );
