@@ -4,8 +4,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
-  UncontrolledTooltip
+  DropdownItem
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
 import moment from "moment";

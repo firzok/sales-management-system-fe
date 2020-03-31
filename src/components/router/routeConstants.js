@@ -11,7 +11,7 @@ export const ADD_EMPLOYEE = `/add-employee`;
 export const RESET_EMPLOYEE_PASSWORD = `${EMPLOYEES_BASE_URL}/employee-password-reset`;
 
 export const SETTINGS_BASE_URL = "/settings";
-export const CHANGE_PASSWORD = `${SETTINGS_BASE_URL}/change-password`;
+export const CHANGE_PASSWORD = `/change-password`;
 
 export const HOME = "";
 export const BASE_ROUTE = "/";
