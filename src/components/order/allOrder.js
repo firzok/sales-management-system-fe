@@ -256,7 +256,7 @@ function AllOrders(props) {
     {
       id: 0,
       type: "action",
-      align: "text-center",
+      align: "text-left",
       name: "ACTIONS"
     },
     {

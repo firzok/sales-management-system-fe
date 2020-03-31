@@ -1,221 +1,365 @@
-import React, { Component, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom';
-import axios from 'axios';
-import Card from '../common/card';
-// import LeaveCard from './leave_card';
-import { EMPLOYEES_BASE_URL } from '../router/routeConstants';
-import { deepCompare, formatNumber } from '../../assets/js/helper';
-import { Notifications } from '../common/notification';
-import Select from 'react-select';
-import { LeaveStatusWithAll } from '../../config/static_lists';
+import { withRouter } from "react-router-dom";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
+import OfflineTable from "react-offline-table";
+import moment from "moment";
+import axios from "axios";
+import {
+  GET_ALL_EMPLOYEES,
+  EMPLOYEE_TOTALS
+} from "../../config/rest_endpoints";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { stringify } from "querystring";
+import { convertDate } from "../helper";
+import {
+  colors,
+  pages,
+  monthListWithAllMonthOption
+} from "../../config/static_lists";
+import { range } from "../helper";
+import CurrencyInput from "react-currency-input";
+import { ORDER } from "../router/routeConstants";
 
-class DashboardAdmin extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: null,
-            leaves: null,
-            totalLeaves: "...",
-            totalStrength: "...",
-            totalEmployees: "...",
-            totalApproved: "...",
-            totalNotApproved: "...",
-            totalPending: "...",
-            updateCalendarData: false,
-            loadEmployees: true,
-            leaveStatus: { value: "pending", label: "Pending", render: true },
+function DashboardAdmin(props) {
+  useEffect(() => {
+    if (isAdmin) {
+      getAllEmployees();
+    }
+  }, []);
+
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  const isAdmin = user.role === "admin";
+
+  const currentDate = new Date();
+
+  const allEmployeeObj = { id: 0, first_name: "All", last_name: "Employees" };
+
+  // State
+  const [jobOrderList, setJobOrderList] = useState([]);
+  const [employeeList, setEmployeeList] = useState([]);
+  const [gettingData, setGettingData] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [orderDate, setOrderDate] = useState("");
+  const [dateUpdated, setDateUpdated] = useState(false);
+  const [orderId, setOrderId] = useState("");
+  const [dropDownEmployeeOpen, setDropDownEmployeeOpen] = useState(false);
+  const [dropDownMonthOpen, setDropDownMonthOpen] = useState(false);
+  const [dropDownYearOpen, setDropDownYearOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(allEmployeeObj);
+  const [selectedMonth, setSelectedMonth] = useState(
+    monthListWithAllMonthOption[currentDate.getMonth() + 1]
+  );
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [responseModalOpen, setResponseModalOpen] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+
+  // Function
+
+  function showResponseModal(message) {
+    setResponseMessage(message);
+    setResponseModalOpen(true);
+  }
+
+  function getFilteredData() {
+    const filterData = {
+      employee_id: selectedEmployee.id,
+      month: selectedMonth.id,
+      year: selectedYear
+    };
+
+    getAllJobOrder(filterData);
+  }
+
+  function getFullName(employee) {
+    return employee.first_name + " " + employee.last_name;
+  }
+
+  function selectYear(year) {
+    setSelectedYear(year);
+  }
+
+  function selectMonth(month) {
+    setSelectedMonth(month);
+  }
+
+  function selectEmployee(employee) {
+    setSelectedEmployee(employee);
+  }
+
+  const toggleEmployeeDropdown = () =>
+    setDropDownEmployeeOpen(prevState => !prevState);
+
+  const toggleMonthDropdown = () =>
+    setDropDownMonthOpen(prevState => !prevState);
+
+  const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
+
+  function getAllJobOrder(filterData) {
+    setJobOrderList([]);
+    setGettingData(true);
+    axios({
+      method: "post",
+      url: EMPLOYEE_TOTALS,
+      data: stringify(filterData),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      setGettingData(false);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          if (res.data.rows.length > 0) {
+            setJobOrderList(res.data.rows);
+          } else {
+            showResponseModal(res.data.message);
+          }
+        } else {
+          showResponseModal(res.data.message);
         }
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
 
-    }
+  function togglePaymentModal() {
+    setPaymentModalOpen(!paymentModalOpen);
+  }
 
-    componentDidMount() {
-        this.timeout = setInterval(() => {
-            this.setState({ loadEmployees: false });
-        }, 5000);
-    }
+  function toggleModal() {
+    setOpenModal(!openModal);
+  }
 
-    componentWillUnmount() {
-        clearInterval(this.timeout);
-    }
+  function toggleResponseModal() {
+    setResponseModalOpen(!responseModalOpen);
+  }
 
-
-    makeRedirectionToEmployee() {
-        this.props.history.push({
-            pathname: EMPLOYEES_BASE_URL,
-        });
-    }
-
-    toggleCalendarUpdate() {
-        this.setState({ updateCalendarData: !this.state.updateCalendarData });
-    }
-
-    checkNoData(data, status) {
-        var noData = true;
-        for (var key in data) {
-            for (var i = 0; i < data[key].length; i++) {
-                if (data[key][i]["leaveRecord"].status === status) {
-                    noData = false;
-                    return noData;
-                }
-            }
+  function getAllEmployees() {
+    setGettingData(true);
+    axios({
+      method: "get",
+      url: GET_ALL_EMPLOYEES,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      setGettingData(true);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          setEmployeeList([allEmployeeObj, ...res.data.rows]);
+        } else {
+          showResponseModal(res.data.message);
         }
-        return noData;
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
+
+  // Data
+  const headerFields = [
+    {
+      id: 0,
+      type: "text",
+      align: "text-left",
+      sort: "sorting_asc",
+      name: "EMPLOYEE NAME"
+    },
+    {
+      id: 1,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL BILLED"
+    },
+    {
+      id: 2,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL RECEIVED"
+    },
+    {
+      id: 3,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "TOTAL REMAINING"
     }
+  ];
 
-    getLeaveRecordsSections() {
-        var data = this.state.data;
-        var leaves = this.state.leaves;
+  const yearList = range(2015, currentDate.getFullYear());
 
-        const keys = Object.keys(data);
-        if (keys.length > 0) {
-            const status = this.state.leaveStatus.value;
-            var noData = false;
-            if (status !== "all") {
-                noData = this.checkNoData(data, status);
-            }
+  var _data = [];
 
-            if (!noData) {
-                return Object.keys(data).map((key, idx) => {
-                    if (status === "all") {
-                        return (
-                            <Fragment key={ idx }>
-                                <legend className="text-uppercase font-size-sm font-weight-bold">{ leaves[Number(key)]["name"] }</legend>
-                                <div className="row">
-                                    { this.getLeaveRecords(data[key]) }
-                                </div>
-                            </Fragment>
-                        )
-                    }
-                    else if (!(this.checkNoData({ key: data[key] }, status))) {
-                        return (
-                            <Fragment key={ idx }>
-                                <legend className="text-uppercase font-size-sm font-weight-bold">{ leaves[Number(key)]["name"] }</legend>
-                                <div className="row">
-                                    { this.getLeaveRecords(data[key]) }
-                                </div>
-                            </Fragment>
-                        )
-                    }
-                })
-            }
-            else {
-                return (
-                    <div className="alert alert-info alert-styled-left alert-arrow-left">
-                        No records found.
-                    </div>
-                )
-            }
-        }
-        else {
-            return (
-                <div className="alert alert-info alert-styled-left alert-arrow-left">
-                    No records found.
-                </div>
-            )
-        }
-    }
+  for (var i = 0; i < jobOrderList.length; i++) {
+    var row = [];
 
-    onSelect(name, selected) {
-        this.setState({ [name]: selected });
-    }
+    const currentJobOrder = jobOrderList[i];
+    // Column 1 Employee
 
-    render() {
-        return (
-            <Fragment>
-                {/* <div className="col-md-6 col-xl-4">
-                <div className="row">
-                        <div className="card card-body">
-                            <div className="media">
-                                <div className="mr-3 align-self-center">
-                                    <i className="fas fa-users font-s-48 text-primary"></i>
-                                </div>
+    row.push(currentJobOrder.employee_name);
 
-                                <div className="media-body text-right">
-                                    <h3 className="font-weight-semibold mb-0">{ formatNumber(this.state.totalEmployees) }</h3>
-                                    <span className="text-uppercase font-size-sm text-muted">Total Active Employees</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-xl-4 cursor-pointer" onClick={ this.makeRedirectionToEmployee.bind(this) }>
-                        <div className="card card-body">
-                            <div className="media">
-                                <div className="mr-3 align-self-center">
-                                    <i className="fas fa-user-friends font-s-48 text-pink-400"></i>
-                                </div>
+    // Column 2 Total Billed
+    var formatter = new Intl.NumberFormat("en-US");
 
-                                <div className="media-body text-right">
-                                    <h3 className="font-weight-semibold mb-0">{ this.state.totalStrength }</h3>
-                                    <span className="text-uppercase font-size-sm text-muted">Your Team</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-xl-4 cursor-pointer" onClick={ this.makeRedirection.bind(this, null, null) }>
-                        <div className="card card-body cursor-pointer">
-                            <div className="media">
-                                <div className="mr-3 align-self-center">
-                                    <i className="fas fa-running fa-flip-horizontal font-s-48 text-orange"></i>
-                                </div>
-                                <div className="media-body text-right">
-                                    <h3 className="font-weight-semibold mb-0">{ this.state.totalLeaves }</h3>
-                                    <span className="text-uppercase font-size-sm text-muted">Leaves Applied Today</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-xl-4 cursor-pointer" onClick={ this.makeRedirection.bind(this, "Approved", "approved") }>
-                        <div className="card card-body bg-success-400 has-bg-image">
-                            <div className="media">
-                                <div className="media-body">
-                                    <h3 className="mb-0">{ this.state.totalApproved }</h3>
-                                    <span className="text-uppercase font-size-xs">Approved Leaves</span>
-                                </div>
+    row.push(
+      String(formatter.format(currentJobOrder.total_billed_amount)) + " AED"
+    );
 
-                                <div className="ml-3 align-self-center">
-                                    <i className="fas fa-check font-s-48 opacity-75"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-xl-4 cursor-pointer" onClick={ this.makeRedirection.bind(this, "Pending", "pending") }>
-                        <div className="card card-body bg-indigo-400 has-bg-image">
-                            <div className="media">
-                                <div className="media-body">
-                                    <h3 className="mb-0">{ formatNumber(this.state.totalPending) }</h3>
-                                    <span className="text-uppercase font-size-xs">Today's Pending Leaves</span>
-                                </div>
+    // Column 3 Total Received
+    row.push(
+      String(formatter.format(currentJobOrder.total_received_amount)) + " AED"
+    );
 
-                                <div className="ml-3 align-self-center">
-                                    <i className="fas fa-spinner font-s-48 opacity-75"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-xl-4 cursor-pointer" onClick={ this.makeRedirection.bind(this, "Rejected", "notapproved") }>
-                        <div className="card card-body bg-danger-400 has-bg-image">
-                            <div className="media">
-                                <div className="media-body">
-                                    <h3 className="mb-0">{ this.state.totalNotApproved }</h3>
-                                    <span className="text-uppercase font-size-xs">Today's Rejected Leaves</span>
-                                </div>
+    // Column 4 Total Remaining
+    row.push(
+      String(formatter.format(currentJobOrder.total_due_amount)) + " AED"
+    );
 
-                                <div className="ml-3 align-self-center">
-                                    <i className="fas fa-times font-s-48 opacity-75"></i>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                    </div> */}
-            </Fragment>
-        );
-    }
+    _data.push(row);
+  }
 
+  var responseModalHtml = (
+    <Modal isOpen={responseModalOpen} toggle={toggleResponseModal}>
+      <ModalHeader toggle={toggleResponseModal}>Response</ModalHeader>
+      <ModalBody>{responseMessage}</ModalBody>
+    </Modal>
+  );
+
+  return (
+    <Fragment>
+      {responseModalHtml}
+      <div className="card">
+        <div className="card-body">
+          <div className="row justify-content-between">
+            {isAdmin ? (
+              <div className="col-md-3">
+                <Dropdown
+                  isOpen={dropDownEmployeeOpen}
+                  toggle={toggleEmployeeDropdown}
+                >
+                  <DropdownToggle
+                    caret
+                    className="btn btn-theme btn-labeled w-100 text-right"
+                  >
+                    {getFullName(selectedEmployee)}
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    {employeeList.map(employee => (
+                      <DropdownItem
+                        key={employee.id}
+                        onClick={() => {
+                          selectEmployee(employee);
+                        }}
+                      >
+                        {getFullName(employee)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            ) : (
+              ""
+            )}
+
+            <div className="col-md-3">
+              <Dropdown isOpen={dropDownMonthOpen} toggle={toggleMonthDropdown}>
+                <DropdownToggle
+                  caret
+                  className="btn btn-theme btn-labeled w-100 text-right"
+                >
+                  {selectedMonth.name}
+                </DropdownToggle>
+                <DropdownMenu right>
+                  {monthListWithAllMonthOption.map(month => (
+                    <DropdownItem
+                      key={month.id}
+                      onClick={() => {
+                        selectMonth(month);
+                      }}
+                    >
+                      {month.name}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div className="col-md-3">
+              <Dropdown isOpen={dropDownYearOpen} toggle={toggleYearDropdown}>
+                <DropdownToggle
+                  caret
+                  className="btn btn-theme btn-labeled w-100 text-right"
+                >
+                  {selectedYear}
+                </DropdownToggle>
+                <DropdownMenu right>
+                  {yearList.map(year => (
+                    <DropdownItem
+                      key={year}
+                      onClick={() => {
+                        selectYear(year);
+                      }}
+                    >
+                      {year}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div className="col-md-2">
+              <Button
+                title="Filter Data"
+                className="btn btn-theme btn-labeled"
+                onClick={() => getFilteredData()}
+              >
+                Filter Data
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {_data.length > 0 ? (
+        <div className="card">
+          <div className="card-body">
+            <OfflineTable
+              headerFields={headerFields}
+              data={_data}
+              showSno={false}
+              enableFilter={true}
+              pages={pages}
+              colors={colors}
+            />
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+    </Fragment>
+  );
 }
 
 function mapStateToProps({ activeUser }) {
-    return { activeUser }
+  return { activeUser };
 }
 
 export default withRouter(connect(mapStateToProps)(DashboardAdmin));
