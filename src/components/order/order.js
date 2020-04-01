@@ -3,13 +3,10 @@ import Container from "../common/application_container";
 import axios from "axios";
 import { GET_ORDER_DETAIL } from "../../config/rest_endpoints";
 import { withRouter } from "react-router-dom";
-import { CANCEL_ORDER } from "../../config/rest_endpoints";
+import { CANCEL_ORDER, GENERATE_RECEIPT } from "../../config/rest_endpoints";
 import {
   Card,
   Table,
-  CardText,
-  CardColumns,
-  Input,
   CardBody,
   Button,
   Modal,
@@ -18,6 +15,8 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 import moment from "moment";
+import { saveAs } from "file-saver";
+import { stringify } from "querystring";
 
 function Order(props) {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -29,8 +28,15 @@ function Order(props) {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [orderProducts, setOrderProducts] = useState([]);
   const [confirmModalShow, setConfirmModalShow] = useState(false);
-  const [responseMessage, setResponseMessage] = useState("");
   const [responseModalOpen, setResponseModalOpen] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  // Function
+
+  function showResponseModal(message) {
+    setResponseMessage(message);
+    setResponseModalOpen(true);
+  }
 
   useEffect(() => {
     setOrderId(props.location.state.orderId);
@@ -44,7 +50,22 @@ function Order(props) {
     setResponseModalOpen(!responseModalOpen);
   }
 
-  function printOrder() {}
+  function printOrder() {
+    axios(`${GENERATE_RECEIPT}`, {
+      method: "POST",
+      responseType: "blob", //Force to receive data in a Blob Format
+      data: stringify({
+        order_id: orderId
+      })
+    })
+      .then(response => {
+        const file = new Blob([response.data], { type: "application/pdf" });
+        saveAs(file, `Invoice for Job Order ${orderId}.pdf`);
+      })
+      .catch(error => {
+        showResponseModal(error);
+      });
+  }
 
   function getOrderDetails() {
     axios({
