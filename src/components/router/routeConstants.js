@@ -16,6 +16,7 @@ export const CHANGE_PASSWORD = `/change-password`;
 export const HOME = "";
 export const BASE_ROUTE = "/";
 export const LOAD_APP = "/";
+export const SETTINGS = "/settings";
 
 export const DASHBOARD_EMPLOYEE = "/dashboard-employee";
 export const DASHBOARD_ADMIN = "/dashboard-admin";

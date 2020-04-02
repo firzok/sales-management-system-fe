@@ -1,10 +1,9 @@
 import {
   LOAD_APP,
-  EMPLOYEES_BASE_URL,
   ADD_EMPLOYEE,
-  RESET_EMPLOYEE_PASSWORD,
   NEW_ORDER,
-  ALL_ORDERS
+  ALL_ORDERS,
+  SETTINGS
 } from "../router/routeConstants";
 
 export var naver = {
@@ -40,29 +39,17 @@ export var naver = {
       id: "M_ADD_EMPLOYEE",
       name: "Add Employee",
       url: ADD_EMPLOYEE,
-      fa_icon: ["fas", "cart-plus"]
+      fa_icon: ["fas", "user-plus"]
     },
-    fa_icon: ["fas", "search"]
+    fa_icon: ["fas", "user-plus"]
   },
-  [EMPLOYEES_BASE_URL]: {
+  [SETTINGS]: {
     "/": {
-      id: "M_EMPLOYEES_BASE_URL",
-      name: "View Employees",
-      url: EMPLOYEES_BASE_URL,
-      fa_icon: ["fas", "cart-plus"]
+      id: "M_SETTINGS",
+      name: "Settings",
+      url: SETTINGS,
+      fa_icon: ["fas", "cogs"]
     },
-    "/add-employee": {
-      id: "M_ADD_EMPLOYEE",
-      name: "Add Employee",
-      url: ADD_EMPLOYEE,
-      fa_icon: ["fas", "cart-plus"]
-    },
-    "/employee-password-reset": {
-      id: "M_RESET_EMPLOYEE_PASSWORD",
-      name: "Reset Employee Password",
-      url: RESET_EMPLOYEE_PASSWORD,
-      fa_icon: ["fas", "cart-plus"]
-    },
-    fa_icon: ["fas", "cart-plus"]
+    fa_icon: ["fas", "cogs"]
   }
 };

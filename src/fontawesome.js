@@ -6,7 +6,9 @@ import {
   faCartPlus,
   faSearch,
   faHandHoldingUsd,
-  faInfoCircle
+  faInfoCircle,
+  faCogs,
+  faUserPlus
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faEdit, faWindowClose } from "@fortawesome/free-regular-svg-icons";
@@ -18,5 +20,7 @@ library.add(
   faEdit,
   faHandHoldingUsd,
   faInfoCircle,
-  faWindowClose
+  faWindowClose,
+  faCogs,
+  faUserPlus
 );

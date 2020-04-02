@@ -348,13 +348,9 @@ export const localPermissions = [
   "/employees/edit-employee",
   "/add-employee",
 
-  "/administrative-rights",
-  "/administrative-rights/add-administrative-right",
-  "/administrative-rights/edit-administrative-right",
-
   "/configurations",
 
-  "/settings/change-password",
+  "/settings",
   "/error404"
 ];
 // TODO: Remove /add-employee
