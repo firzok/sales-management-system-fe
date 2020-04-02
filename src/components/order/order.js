@@ -23,8 +23,22 @@ function Order(props) {
   const [orderId, setOrderId] = useState(props.location.state.orderId);
 
   // ===========================Order Details==========================
-  const [totaAmount, setTotalAmount] = useState(0);
-  const [orderDetails, setOrderDetails] = useState("");
+  const [orderDetails, setOrderDetails] = useState({
+    id: 1,
+    employee_id: 1,
+    customer_name: "Test",
+    customer_phone_number: "+11 22 32323232",
+    customer_trn: "3333232",
+    advance_payment: "500",
+    placement_date: "2020-04-01T19:00:00.000Z",
+    order_status: "Incomplete",
+    delivery_date: "2020-04-06T19:00:00.000Z",
+    due_amount: "1234",
+    remarks: "This is a sample order.",
+    billed_amount: "1701",
+    first_name: "John",
+    last_name: "Legend"
+  });
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [orderProducts, setOrderProducts] = useState([]);
   const [confirmModalShow, setConfirmModalShow] = useState(false);
@@ -81,7 +95,6 @@ function Order(props) {
       if (res.status === 200) {
         if (res.data.success === true) {
           const data = res.data;
-          setTotalAmount(data.totaAmount);
           setOrderDetails(data.order);
           setPaymentDetails(data.payments);
           setOrderProducts(data.products);
@@ -217,7 +230,7 @@ function Order(props) {
             </div>
           </div>
 
-          <div className="row justify-content-around">
+          <div className="row justify-content-around pb-3">
             <div className="col-md-3">
               <label className="font-weight-semibold">Placement Date: </label>
               <input
@@ -256,6 +269,19 @@ function Order(props) {
                 className="form-control"
                 disabled={true}
                 value={orderDetails.due_amount + " AED"}
+              />
+            </div>
+          </div>
+
+          <div className="row justify-content-around">
+            <div className="col-md-3">
+              <label className="font-weight-semibold">Remarks: </label>
+              <textarea
+                name="Remarks"
+                type="text"
+                className="form-control"
+                disabled={true}
+                value={orderDetails.remarks}
               />
             </div>
           </div>

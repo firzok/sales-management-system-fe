@@ -59,6 +59,7 @@ function NewOrder(props) {
   const [responseModalOpen, setResponseModalOpen] = useState(false);
 
   const [vat, setVAT] = useState(2);
+  const [remarks, setRemarks] = useState("");
 
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
@@ -278,7 +279,8 @@ function NewOrder(props) {
         delivery_date: convertDate(deliveryDate),
         advance_payment: advancePayment,
         products: JSON.stringify(orderProducts),
-        customer_trn: customerTRN
+        customer_trn: customerTRN,
+        remarks: remarks
       };
       var user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.withCredentials = true;
@@ -578,9 +580,7 @@ function NewOrder(props) {
                 style={{ marginBottom: "10px" }}
               >
                 <div className="col-md-4">
-                  <label className="font-weight-semibold">
-                    Balance Amount:{" "}
-                  </label>
+                  <label className="font-weight-semibold">Amount: </label>
                 </div>
                 <div className="col-md-4 text-right">
                   <label className="font-weight-semibold">
@@ -622,6 +622,21 @@ function NewOrder(props) {
                   <label className="font-weight-black font-s-18">
                     {formatter.format(balanceAmount + tax - advancePayment)} AED
                   </label>
+                </div>
+              </div>
+
+              <div className="row justify-content-between">
+                <div className="col-md-12 text-right">
+                  <textarea
+                    name="Remarks"
+                    type="text"
+                    className="form-control"
+                    placeholder="Remarks"
+                    value={remarks}
+                    onChange={event => setRemarks(event.target.value)}
+                    maxlength={250}
+                    rows="5"
+                  />
                 </div>
               </div>
 
