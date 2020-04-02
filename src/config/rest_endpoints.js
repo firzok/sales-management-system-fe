@@ -24,10 +24,12 @@ export const GET_ORDER_DETAIL = `${ROOT_URL}/order-detail`;
 export const GENERATE_RECEIPT = `${ROOT_URL}/generate-pdf`;
 export const CANCEL_ORDER = `${ROOT_URL}/cancel-order`;
 export const EMPLOYEE_TOTALS = `${ROOT_URL}/employee-totals`;
-
 export const USER_BASE_URL = `${ROOT_URL}/accounts/user`;
-
 export const CHANGE_PASSWORD = `${ROOT_URL}/change-password`;
+export const SET_VAT = `${ROOT_URL}/set-vat`;
+export const GET_VAT = `${ROOT_URL}/get-vat`;
+export const SET_STARTING_ORDER_NUMBER = `${ROOT_URL}/set-starting-order-number`;
+export const GET_STARTING_ORDER_NUMBER = `${ROOT_URL}/get-starting-order-number`;
 
 export const AUTH_BASE_URL = `${SERVER_PATH}/auth`;
 export const USER_AUTHENITCATION = `${AUTH_BASE_URL}/signin`;

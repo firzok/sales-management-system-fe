@@ -12,7 +12,8 @@ import CurrencyInput from "react-currency-input";
 import {
   PRODUCT_TYPES,
   PRODUCTS_WITH_TYPE_ID,
-  NEW_ORDER
+  NEW_ORDER,
+  GET_VAT
 } from "../../config/rest_endpoints";
 import { stringify } from "querystring";
 import DatePicker from "react-datepicker";
@@ -57,6 +58,8 @@ function NewOrder(props) {
   const [responseMessage, setResponseMessage] = useState("");
   const [responseModalOpen, setResponseModalOpen] = useState(false);
 
+  const [vat, setVAT] = useState(2);
+
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
   }
@@ -67,7 +70,33 @@ function NewOrder(props) {
 
   useEffect(() => {
     getProductTypes();
+    getVAT();
   }, []);
+
+  function getVAT() {
+    var user = JSON.parse(sessionStorage.getItem("user"));
+
+    axios({
+      method: "get",
+      url: GET_VAT,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`
+      },
+      withCredentials: true
+    }).then(res => {
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          setVAT(res.data.vat);
+        } else {
+          showResponseModal(res.data.message);
+        }
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
 
   function getProductTypes() {
     if (productTypeList.length === 0) {
@@ -193,7 +222,7 @@ function NewOrder(props) {
     balanceAmount = orderProducts.reduce(costReducer, 0);
   }
 
-  var tax = (7 * balanceAmount) / 100;
+  var tax = (vat * balanceAmount) / 100;
 
   function onAdvancePaymentChange(event, value, maskedValue) {
     if (maskedValue > tax + balanceAmount) {
@@ -565,7 +594,9 @@ function NewOrder(props) {
                 style={{ marginBottom: "10px" }}
               >
                 <div className="col-md-4">
-                  <label className="font-weight-semibold">Tax: </label>
+                  <label className="font-weight-semibold">
+                    Tax ({vat} %):{" "}
+                  </label>
                 </div>
                 <div className="col-md-4 text-right">
                   <label className="font-weight-semibold">
