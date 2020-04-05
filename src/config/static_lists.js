@@ -365,3 +365,5 @@ export const expenseTypes = [
   "Salary",
   "Other",
 ];
+
+export const byType = ["By Day", "By Month", "By Year"];

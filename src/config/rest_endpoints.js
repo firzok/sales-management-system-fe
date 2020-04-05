@@ -20,6 +20,7 @@ export const ADD_ORDER_PAYMENT = `${ROOT_URL}/add-order-payment`;
 export const UPDATE_DELIVERY_DATE = `${ROOT_URL}/update-date`;
 export const ADD_NEW_EMPLOYEE = `${ROOT_URL}/add-employee`;
 export const GET_ALL_EMPLOYEES = `${ROOT_URL}/all-employees`;
+export const GET_EXPENSES = `${ROOT_URL}/get_expenses`;
 export const GET_ORDER_DETAIL = `${ROOT_URL}/order-detail`;
 export const GENERATE_RECEIPT = `${ROOT_URL}/generate-pdf`;
 export const CANCEL_ORDER = `${ROOT_URL}/cancel-order`;

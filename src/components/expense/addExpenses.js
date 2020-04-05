@@ -134,7 +134,7 @@ function AddExpenses(props) {
                 >
                   {getFullName(employeeSelected)}
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu className="w-100">
                   {employeeList.map((employee, index) => (
                     <DropdownItem
                       key={index}
@@ -157,7 +157,7 @@ function AddExpenses(props) {
                 >
                   {expenseTypeSelected}
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu className="w-100">
                   {expenseTypes.map((type, index) => (
                     <DropdownItem
                       key={index}
@@ -200,7 +200,7 @@ function AddExpenses(props) {
                 onClick={() => addExpense()}
                 disabled={expenseAmount === 0}
               >
-                Update
+                Add Expense
               </Button>
             </div>
           </div>
