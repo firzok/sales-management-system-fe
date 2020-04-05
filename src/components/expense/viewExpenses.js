@@ -186,6 +186,8 @@ function ViewExpenses(props) {
               </Button>
             </div>
           </div>
+
+          <div className="row"></div>
         </CardBody>
       </Card>
     </div>

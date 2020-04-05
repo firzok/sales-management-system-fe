@@ -22,9 +22,9 @@ export var naver = {
       id: "M_LOAD_APP",
       name: "Expenses",
       url: EXPENSES,
-      fa_icon: ["fas", "home"],
+      fa_icon: ["fas", "money-bill-wave"],
     },
-    fa_icon: ["fas", "home"],
+    fa_icon: ["fas", "money-bill-wave"],
   },
   [NEW_ORDER]: {
     "/": {

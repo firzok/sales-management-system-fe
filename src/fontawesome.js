@@ -8,7 +8,8 @@ import {
   faHandHoldingUsd,
   faInfoCircle,
   faCogs,
-  faUserPlus
+  faUserPlus,
+  faMoneyBillWave,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faEdit, faWindowClose } from "@fortawesome/free-regular-svg-icons";
@@ -22,5 +23,6 @@ library.add(
   faInfoCircle,
   faWindowClose,
   faCogs,
-  faUserPlus
+  faUserPlus,
+  faMoneyBillWave
 );
