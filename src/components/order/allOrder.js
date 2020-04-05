@@ -396,7 +396,6 @@ function AllOrders(props) {
     row.push(String(formatter.format(orderList[i].due_amount) + " AED"));
 
     // Column 8 TOTAL PAYMENT
-    var formatter = new Intl.NumberFormat("en-US");
     row.push(String(formatter.format(orderList[i].billed_amount) + " AED"));
 
     //   Column 9 STATUS BADGE

@@ -16,13 +16,17 @@ import { convertDate, getFullName } from "../helper";
 import axios from "axios";
 import { GET_ALL_EMPLOYEES, GET_EXPENSES } from "../../config/rest_endpoints";
 import DatePicker from "react-datepicker";
-import { byType } from "../../config/static_lists";
+import { byType, pages, colors } from "../../config/static_lists";
 import { stringify } from "querystring";
+import BeatLoader from "react-spinners/BeatLoader";
+import OfflineTable from "react-offline-table";
+import moment from "moment";
 
 function ViewExpenses(props) {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const allEmployeeObj = { id: 0, first_name: "All", last_name: "Employees" };
 
+  const [gettingData, setGettingData] = useState(false);
   const [dropDownEmployee, setDropDownEmployee] = useState(false);
   const [dropDownByType, setDropDownByType] = useState(false);
 
@@ -38,6 +42,11 @@ function ViewExpenses(props) {
   useEffect(() => {
     getAllEmployees();
   }, []);
+
+  useEffect(() => {
+    getAllEmployees();
+    getExpenses();
+  }, [props]);
 
   function getAllEmployees() {
     axios({
@@ -63,6 +72,7 @@ function ViewExpenses(props) {
   }
 
   function getExpenses() {
+    setGettingData(true);
     const data = {
       employee_id: employeeSelected.id,
       date: convertDate(expenseDate),
@@ -79,17 +89,22 @@ function ViewExpenses(props) {
         Authorization: `Bearer ${user.jwt_token}`,
       },
       withCredentials: true,
-    }).then((res) => {
-      if (res.status === 200) {
-        if (res.data.success === true) {
-          setExpensesList(res.data.rows);
+    })
+      .then((res) => {
+        setGettingData(false);
+        if (res.status === 200) {
+          if (res.data.success === true) {
+            setExpensesList(res.data.rows);
+          } else {
+            showResponseModal(res.data.message);
+          }
         } else {
-          showResponseModal(res.data.message);
+          console.log("Network Error");
         }
-      } else {
-        console.log("Network Error");
-      }
-    });
+      })
+      .catch(() => {
+        setGettingData(false);
+      });
   }
 
   function showResponseModal(message) {
@@ -113,6 +128,67 @@ function ViewExpenses(props) {
       <ModalBody>{responseMessage}</ModalBody>
     </Modal>
   );
+
+  // Table Data
+  const headerFields = [
+    {
+      id: 0,
+      type: "text",
+      align: "text-left",
+      name: "DATE ADDED",
+    },
+    {
+      id: 1,
+      type: "text",
+      sort: "sorting_asc",
+      align: "text-left",
+      name: "EXPENSE TYPE",
+    },
+    {
+      id: 2,
+      type: "text",
+      sort: "sorting",
+      align: "text-left",
+      name: "EXPENSE AMOUNT",
+    },
+    {
+      id: 3,
+      type: "media",
+      sort: "sorting",
+      align: "text-left",
+      name: "EMPLOYEE NAME",
+    },
+  ];
+
+  let expensesData = [];
+
+  for (var i = 0; i < expensesList.length; i++) {
+    var row = [];
+
+    // Date
+    row.push(
+      expensesList[i].date === "" || expensesList[i].date === null
+        ? "N/A"
+        : moment(expensesList[i].date).format("DD-MM-YYYY")
+    );
+
+    // Type
+    row.push(expensesList[i].type);
+
+    // Amount
+    var formatter = new Intl.NumberFormat("en-US");
+    row.push(String(formatter.format(expensesList[i].amount) + " AED"));
+
+    // Employee
+    const employeeAvatar = {
+      topText: String(expensesList[i].employee_name),
+      bottomText: String(expensesList[i].employee_id),
+      picture: null,
+    };
+    row.push(employeeAvatar);
+
+    expensesData.push(row);
+  }
 
   return (
     <div>
@@ -187,7 +263,26 @@ function ViewExpenses(props) {
             </div>
           </div>
 
-          <div className="row"></div>
+          <div className="row">
+            {expensesData.length > 0 ? (
+              <div className="card">
+                <div className="card-body">
+                  <OfflineTable
+                    headerFields={headerFields}
+                    data={expensesData}
+                    showSno={true}
+                    enableFilter={true}
+                    pages={pages}
+                    colors={colors}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="text-center col mt-5">
+                <BeatLoader color={"#1861B8"} size={20} loading={gettingData} />
+              </div>
+            )}
+          </div>
         </CardBody>
       </Card>
     </div>
