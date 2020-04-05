@@ -5,13 +5,13 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
 import axios from "axios";
 import {
   GET_ALL_EMPLOYEES,
-  EMPLOYEE_TOTALS
+  EMPLOYEE_TOTALS,
 } from "../../config/rest_endpoints";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,9 +19,9 @@ import { stringify } from "querystring";
 import {
   colors,
   pages,
-  monthListWithAllMonthOption
+  monthListWithAllMonthOption,
 } from "../../config/static_lists";
-import { range } from "../helper";
+import { range, getFullName } from "../helper";
 import BeatLoader from "react-spinners/BeatLoader";
 
 function DashboardAdmin(props) {
@@ -65,14 +65,10 @@ function DashboardAdmin(props) {
     const filterData = {
       employee_id: selectedEmployee.id,
       month: selectedMonth.id,
-      year: selectedYear
+      year: selectedYear,
     };
 
     getAllJobOrder(filterData);
-  }
-
-  function getFullName(employee) {
-    return employee.first_name + " " + employee.last_name;
   }
 
   function selectYear(year) {
@@ -88,12 +84,13 @@ function DashboardAdmin(props) {
   }
 
   const toggleEmployeeDropdown = () =>
-    setDropDownEmployeeOpen(prevState => !prevState);
+    setDropDownEmployeeOpen((prevState) => !prevState);
 
   const toggleMonthDropdown = () =>
-    setDropDownMonthOpen(prevState => !prevState);
+    setDropDownMonthOpen((prevState) => !prevState);
 
-  const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
+  const toggleYearDropdown = () =>
+    setDropDownYearOpen((prevState) => !prevState);
 
   function getAllJobOrder(filterData) {
     setJobOrderList([]);
@@ -105,10 +102,10 @@ function DashboardAdmin(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -138,10 +135,10 @@ function DashboardAdmin(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -162,29 +159,29 @@ function DashboardAdmin(props) {
       type: "text",
       align: "text-left",
       sort: "sorting_asc",
-      name: "EMPLOYEE NAME"
+      name: "EMPLOYEE NAME",
     },
     {
       id: 1,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL BILLED"
+      name: "TOTAL BILLED",
     },
     {
       id: 2,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL RECEIVED"
+      name: "TOTAL RECEIVED",
     },
     {
       id: 3,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL REMAINING"
-    }
+      name: "TOTAL REMAINING",
+    },
   ];
 
   const yearList = range(2015, currentDate.getFullYear());
@@ -245,7 +242,7 @@ function DashboardAdmin(props) {
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
                   <DropdownMenu right>
-                    {employeeList.map(employee => (
+                    {employeeList.map((employee) => (
                       <DropdownItem
                         key={employee.id}
                         onClick={() => {
@@ -271,7 +268,7 @@ function DashboardAdmin(props) {
                   {selectedMonth.name}
                 </DropdownToggle>
                 <DropdownMenu right>
-                  {monthListWithAllMonthOption.map(month => (
+                  {monthListWithAllMonthOption.map((month) => (
                     <DropdownItem
                       key={month.id}
                       onClick={() => {
@@ -293,7 +290,7 @@ function DashboardAdmin(props) {
                   {selectedYear}
                 </DropdownToggle>
                 <DropdownMenu right>
-                  {yearList.map(year => (
+                  {yearList.map((year) => (
                     <DropdownItem
                       key={year}
                       onClick={() => {

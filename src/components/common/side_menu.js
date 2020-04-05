@@ -17,7 +17,7 @@ class SideMenu extends Component {
     this.state = {
       nav_items: [],
       render_key: "__render__",
-      fa_icon: "fa_icon"
+      fa_icon: "fa_icon",
     };
 
     // for getting the current path
@@ -52,13 +52,13 @@ class SideMenu extends Component {
       navSlidingSpeed = 250;
 
     // Configure collapsible functionality
-    $("." + navClass).each(function() {
+    $("." + navClass).each(function () {
       $(this)
         .find("." + navItemClass)
         .has("." + navSubmenuClass)
         .children("." + navItemClass + " > ." + navLinkClass)
         .not(".disabled")
-        .on("click", function(e) {
+        .on("click", function (e) {
           e.preventDefault();
 
           // Simplify stuff
@@ -101,7 +101,7 @@ class SideMenu extends Component {
     });
 
     // Disable click in disabled navigation items
-    $(document).on("click", "." + navClass + " .disabled", function(e) {
+    $(document).on("click", "." + navClass + " .disabled", function (e) {
       e.preventDefault();
     });
 
@@ -113,21 +113,21 @@ class SideMenu extends Component {
       .off("click");
 
     // Prevent dropdown from closing on click
-    $(document).on("click", ".dropdown-content", function(e) {
+    $(document).on("click", ".dropdown-content", function (e) {
       e.stopPropagation();
     });
 
     // Disabled links
     $(".navbar-nav .disabled a, .nav-item-levels .disabled").on(
       "click",
-      function(e) {
+      function (e) {
         e.preventDefault();
         e.stopPropagation();
       }
     );
 
     // Show tabs inside dropdowns
-    $('.dropdown-content a[data-toggle="tab"]').on("click", function(e) {
+    $('.dropdown-content a[data-toggle="tab"]').on("click", function (e) {
       $(this).tab("show");
     });
   }
@@ -184,13 +184,13 @@ class SideMenu extends Component {
       for (var key in naver) {
         final_renderer[key] = {
           [render_key]: false,
-          [this.state.fa_icon]: naver[key]["fa_icon"]
+          [this.state.fa_icon]: naver[key]["fa_icon"],
         };
       }
       var serverPermissions = this.props.activeUser.user.permissions;
       var permission = this.getPermissions(serverPermissions);
 
-      if (permission.length != 0) {
+      if (permission.length !== 0) {
         for (var i = 0; i < permission.length; i++) {
           var elem = permission[i].split("/");
           var parent = "/" + elem[1];
@@ -201,9 +201,9 @@ class SideMenu extends Component {
             var getChildren = Object.keys(getDetails);
             var count = getChildren.length;
 
-            if (count == 2) {
+            if (count === 2) {
               var temp = Object.keys(naver[parent]);
-              if (temp[0] != "fa_icon") {
+              if (temp[0] !== "fa_icon") {
                 final_renderer[parent][temp[0]] = naver[parent][temp[0]];
               } else {
                 final_renderer[parent][temp[1]] = naver[parent][temp[1]];
@@ -240,9 +240,9 @@ class SideMenu extends Component {
   __render(object, _key, whoIsOpen, whoIsActive, isGroup = false) {
     var active = whoIsActive;
 
-    if (whoIsOpen && "/" + whoIsOpen != whoIsActive) {
+    if (whoIsOpen && "/" + whoIsOpen !== whoIsActive) {
       active = "/" + whoIsOpen + whoIsActive;
-      if (active.slice(-1) == "/") {
+      if (active.slice(-1) === "/") {
         active = active.slice(0, -1);
       }
     }
@@ -262,8 +262,8 @@ class SideMenu extends Component {
       ItemText = <span className="ml-2">{object["name"]}</span>;
     }
 
-    var isActive = active == object["url"];
-    if (object["url"] == "/" && active == "/dashboard") {
+    var isActive = active === object["url"];
+    if (object["url"] === "/" && active === "/dashboard") {
       isActive = true;
     }
 
@@ -322,13 +322,12 @@ class SideMenu extends Component {
 
     let openClass = "";
     let activeClass = "";
-    if (Name == whoIsOpen) {
+    if (Name === whoIsOpen) {
       openClass = "nav-item-open nav-item-expanded";
       activeClass = "active";
     }
 
     // contains multiples childs
-    var keys = Object.keys(dictionary);
     var textCapitalize = true;
 
     if (Name === "users") {

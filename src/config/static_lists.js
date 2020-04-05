@@ -6,7 +6,7 @@ export const bloodGroup = [
   { value: "O-", label: "O-" },
   { value: "A-", label: "A-" },
   { value: "B-", label: "B-" },
-  { value: "AB-", label: "AB-" }
+  { value: "AB-", label: "AB-" },
 ];
 
 export const dateFormat = "YYYY-MMM-DD";
@@ -14,7 +14,7 @@ export const RenderDateForm = "DD MMM, YYYY";
 
 export const Gender = [
   { value: "Male", label: "Male" },
-  { value: "Female", label: "Female" }
+  { value: "Female", label: "Female" },
 ];
 
 export const LeaveStatusWithAll = [
@@ -23,7 +23,7 @@ export const LeaveStatusWithAll = [
   { value: "notapproved", label: "Rejected", render: true },
   { value: "pending", label: "Pending", render: true },
   { value: "withdrawn", label: "Withdrawn", render: true },
-  { value: "deleted", label: "Deleted", render: true }
+  { value: "deleted", label: "Deleted", render: true },
 ];
 
 export const LeaveStatus = [
@@ -31,13 +31,13 @@ export const LeaveStatus = [
   { value: "notapproved", label: "Rejected", render: true },
   { value: "pending", label: "Pending", render: true },
   { value: "withdrawn", label: "Withdrawn", render: true },
-  { value: "deleted", label: "Deleted", render: true }
+  { value: "deleted", label: "Deleted", render: true },
 ];
 
 export const LeaveStatusPending = [
   { value: "approved", label: "Approved", render: true },
   { value: "notapproved", label: "Rejected", render: true },
-  { value: "pending", label: "Pending", render: true }
+  { value: "pending", label: "Pending", render: true },
 ];
 
 export const EmployeeStatus = [
@@ -45,7 +45,7 @@ export const EmployeeStatus = [
   { value: "current", label: "Permanent" },
   { value: "resign", label: "Resign" },
   { value: "layoff", label: "LayOff" },
-  { value: "internee", label: "Intern" }
+  { value: "internee", label: "Intern" },
 ];
 
 export const maritalStatus = [
@@ -53,13 +53,13 @@ export const maritalStatus = [
   { value: "married", label: "Married" },
   { value: "divorced", label: "Divorced" },
   { value: "widowed", label: "Widowed" },
-  { value: "separated", label: "Separated" }
+  { value: "separated", label: "Separated" },
 ];
 
 export const actionOptions = [
   { value: "Add", label: "Add" },
   { value: "Update", label: "Update" },
-  { value: "Delete", label: "Delete" }
+  { value: "Delete", label: "Delete" },
 ];
 export const religions = [
   { value: "Christianity", label: "Christianity" },
@@ -83,12 +83,12 @@ export const religions = [
   { value: "Primal-Indigenous", label: "Primal-Indigenous" },
   { value: "Bahai", label: "Bahai" },
   { value: "Islam", label: "Islam" },
-  { value: "Other", label: "Other" }
+  { value: "Other", label: "Other" },
 ];
 
 export const Nationality = [
   { value: "Pakistani", label: "Pakistani" },
-  { value: "German", label: "German" }
+  { value: "German", label: "German" },
 ];
 
 export const nok = [
@@ -103,17 +103,17 @@ export const nok = [
   { value: "uncle", label: "Uncle" },
   { value: "aunt", label: "Aunt" },
   { value: "cousin", label: "Cousin" },
-  { value: "Guardian", label: "Guardian" }
+  { value: "Guardian", label: "Guardian" },
 ];
 
 export const boolean = [
   { value: "1", label: "Yes" },
-  { value: "0", label: "No" }
+  { value: "0", label: "No" },
 ];
 
 export const halfFullDay = [
   { value: "1", label: "Half Day" },
-  { value: "0", label: "Full Day" }
+  { value: "0", label: "Full Day" },
 ];
 
 export const months = [
@@ -128,7 +128,7 @@ export const months = [
   { value: 9, label: "Sep" },
   { value: 10, label: "Oct" },
   { value: 11, label: "Nov" },
-  { value: 12, label: "Dec" }
+  { value: 12, label: "Dec" },
 ];
 
 export const monthsObject = {
@@ -143,7 +143,7 @@ export const monthsObject = {
   9: "Sep",
   10: "Oct",
   11: "Nov",
-  12: "Dec"
+  12: "Dec",
 };
 
 export const monthsObjectMap = {
@@ -158,113 +158,113 @@ export const monthsObjectMap = {
   september: "Sep",
   october: "Oct",
   november: "Nov",
-  december: "Dec"
+  december: "Dec",
 };
 
 export const monthListWithAllMonthOption = [
   {
     id: 0,
-    name: "All Months"
+    name: "All Months",
   },
   {
     id: 1,
-    name: "January"
+    name: "January",
   },
   {
     id: 2,
-    name: "February"
+    name: "February",
   },
   {
     id: 3,
-    name: "March"
+    name: "March",
   },
   {
     id: 4,
-    name: "April"
+    name: "April",
   },
   {
     id: 5,
-    name: "May"
+    name: "May",
   },
   {
     id: 6,
-    name: "June"
+    name: "June",
   },
   {
     id: 7,
-    name: "July"
+    name: "July",
   },
   {
     id: 8,
-    name: "August"
+    name: "August",
   },
   {
     id: 9,
-    name: "September"
+    name: "September",
   },
   {
     id: 10,
-    name: "October"
+    name: "October",
   },
   {
     id: 11,
-    name: "November"
+    name: "November",
   },
   {
     id: 12,
-    name: "December"
-  }
+    name: "December",
+  },
 ];
 
 export const monthList = [
   {
     id: 1,
-    name: "January"
+    name: "January",
   },
   {
     id: 2,
-    name: "February"
+    name: "February",
   },
   {
     id: 3,
-    name: "March"
+    name: "March",
   },
   {
     id: 4,
-    name: "April"
+    name: "April",
   },
   {
     id: 5,
-    name: "May"
+    name: "May",
   },
   {
     id: 6,
-    name: "June"
+    name: "June",
   },
   {
     id: 7,
-    name: "July"
+    name: "July",
   },
   {
     id: 8,
-    name: "August"
+    name: "August",
   },
   {
     id: 9,
-    name: "September"
+    name: "September",
   },
   {
     id: 10,
-    name: "October"
+    name: "October",
   },
   {
     id: 11,
-    name: "November"
+    name: "November",
   },
   {
     id: 12,
-    name: "December"
-  }
+    name: "December",
+  },
 ];
 
 export const pages = [
@@ -272,7 +272,7 @@ export const pages = [
   { value: 10, label: "10" },
   { value: 20, label: "20" },
   { value: 50, label: "50" },
-  { value: 100, label: "100" }
+  { value: 100, label: "100" },
 ];
 
 export const positions = [
@@ -280,14 +280,14 @@ export const positions = [
   { value: "company_head", label: "Company Head" },
   { value: "team_lead", label: "Team Lead" },
   { value: "human_resource", label: "Human Resource" },
-  { value: "employee", label: "Employee" }
+  { value: "employee", label: "Employee" },
 ];
 
 export const positionsWithoutEmployee = [
   { value: "domain_head", label: "People Coordinator" },
   { value: "company_head", label: "Company Head" },
   { value: "team_lead", label: "Team Lead" },
-  { value: "human_resource", label: "Human Resource" }
+  { value: "human_resource", label: "Human Resource" },
 ];
 
 export const heatmapColors = {
@@ -295,7 +295,7 @@ export const heatmapColors = {
   1: "#fcbba1",
   2: "#fc6b4b",
   3: "#f13c37",
-  4: "#cc1821"
+  4: "#cc1821",
 };
 
 export const colors = {
@@ -324,7 +324,7 @@ export const colors = {
   w: "#263238",
   x: "#009688",
   y: "#00bcd4",
-  z: "#8BC34A"
+  z: "#8BC34A",
 };
 
 export const company = "iai";
@@ -342,6 +342,7 @@ export const localPermissions = [
 
   "/new-order",
   "/all-orders",
+  "/expense",
 
   "/employees",
   "/employees/add-employee",
@@ -351,8 +352,16 @@ export const localPermissions = [
   "/configurations",
 
   "/settings",
-  "/error404"
+  "/error404",
 ];
+export default localPermissions;
 // TODO: Remove /add-employee
 
-export default localPermissions;
+export const expenseTypes = [
+  "Vehicle",
+  "Petrol",
+  "Food",
+  "Cash",
+  "Salary",
+  "Other",
+];

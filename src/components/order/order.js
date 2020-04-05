@@ -12,7 +12,7 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-  UncontrolledTooltip
+  UncontrolledTooltip,
 } from "reactstrap";
 import moment from "moment";
 import { saveAs } from "file-saver";
@@ -37,7 +37,7 @@ function Order(props) {
     remarks: "This is a sample order.",
     billed_amount: "1701",
     first_name: "John",
-    last_name: "Legend"
+    last_name: "Legend",
   });
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [orderProducts, setOrderProducts] = useState([]);
@@ -69,14 +69,14 @@ function Order(props) {
       method: "POST",
       responseType: "blob", //Force to receive data in a Blob Format
       data: stringify({
-        order_id: orderId
-      })
+        order_id: orderId,
+      }),
     })
-      .then(response => {
+      .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
         saveAs(file, `Invoice for Job Order ${orderId}.pdf`);
       })
-      .catch(error => {
+      .catch((error) => {
         showResponseModal(error);
       });
   }
@@ -88,10 +88,10 @@ function Order(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           const data = res.data;
@@ -116,10 +116,10 @@ function Order(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           showResponseModal(res.data.message);
@@ -262,7 +262,7 @@ function Order(props) {
               />
             </div>
             <div className="col-md-3">
-              <label className="font-weight-semibold">Due Amount: </label>
+              <label className="font-weight-semibold">Remaining Amount: </label>
               <input
                 name="CustomerName"
                 type="text"
@@ -328,7 +328,7 @@ function Order(props) {
                     <th>#</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Due Amount</th>
+                    <th>Remaining Amount</th>
                     <th>Type</th>
                   </tr>
                 </thead>

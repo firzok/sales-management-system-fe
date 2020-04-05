@@ -12,7 +12,8 @@ import {
   ALL_ORDERS,
   ADD_EMPLOYEE,
   ORDER,
-  SETTINGS
+  SETTINGS,
+  EXPENSES,
 } from "./routeConstants";
 
 import Login from "../authentication/login";
@@ -24,6 +25,7 @@ import AllOrders from "../order/allOrder";
 import AddEmployee from "../employees/add_employee";
 import Order from "../order/order";
 import Settings from "../settings/settings";
+import Expenses from "../expense/expenses";
 
 class AllRoutes extends Component {
   render() {
@@ -39,7 +41,7 @@ class AllRoutes extends Component {
           />
           <ProtectedRoute exact path={LOAD_APP} component={App} />
           <ProtectedRoute exact path={SETTINGS} component={Settings} />
-
+          <ProtectedRoute exact path={EXPENSES} component={Expenses} />
           <ProtectedRoute exact path={NEW_ORDER} component={NewOrder} />
           <ProtectedRoute exact path={ALL_ORDERS} component={AllOrders} />
           <ProtectedRoute exact path={ORDER} component={Order} />

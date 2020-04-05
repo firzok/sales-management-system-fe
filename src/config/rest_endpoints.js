@@ -30,6 +30,7 @@ export const SET_VAT = `${ROOT_URL}/set-vat`;
 export const GET_VAT = `${ROOT_URL}/get-vat`;
 export const SET_STARTING_ORDER_NUMBER = `${ROOT_URL}/set-starting-order-number`;
 export const GET_STARTING_ORDER_NUMBER = `${ROOT_URL}/get-starting-order-number`;
+export const ADD_EXPENSE = `${ROOT_URL}/add-expense`;
 
 export const AUTH_BASE_URL = `${SERVER_PATH}/auth`;
 export const USER_AUTHENITCATION = `${AUTH_BASE_URL}/signin`;
