@@ -6,14 +6,14 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Card
+  Card,
 } from "reactstrap";
 import CurrencyInput from "react-currency-input";
 import {
   PRODUCT_TYPES,
   PRODUCTS_WITH_TYPE_ID,
   NEW_ORDER,
-  GET_VAT
+  GET_VAT,
 } from "../../config/rest_endpoints";
 import { stringify } from "querystring";
 import DatePicker from "react-datepicker";
@@ -22,16 +22,17 @@ import { OrderProductHeader, OrderProduct } from "./orderProduct";
 import PhoneInput from "react-phone-input-2";
 import { convertDate } from "../helper";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import { cashDisposalTypes } from "../../config/static_lists";
 
 function NewOrder(props) {
   var formatter = new Intl.NumberFormat("en-US");
 
   const defaultProduct = {
-    name: "Select Product"
+    name: "Select Product",
   };
 
   const defaultProductType = {
-    name: "Select Product Type"
+    name: "Select Product Type",
   };
 
   const [advancePayment, setAdvancePayment] = useState(0);
@@ -40,6 +41,8 @@ function NewOrder(props) {
   const [deliveryDate, setDeliveryDate] = useState(addDays(new Date(), 5));
   const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
   const [dropdownProductTypeOpen, setDropdownProductTypeOpen] = useState(false);
+  const [dropdownCashDisposal, setDropdownCashDisposal] = useState(false);
+
   const [orderDate, setOrderDate] = useState(new Date());
   const [orderProducts, setOrderProducts] = useState([]);
   const [productDisabled, setProductDisabled] = useState(true);
@@ -50,6 +53,7 @@ function NewOrder(props) {
   const [selectedProductType, setSelectedProductType] = useState(
     defaultProductType
   );
+  const [selectedCashDisposal, setSelectedCashDisposal] = useState("Disposal");
   const [unitPrice, setUnitPrice] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -83,10 +87,10 @@ function NewOrder(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setVAT(res.data.vat);
@@ -105,11 +109,11 @@ function NewOrder(props) {
       axios.defaults.withCredentials = true;
       var yourConfig = {
         headers: {
-          Authorization: "Bearer " + user.jwt_token
-        }
+          Authorization: "Bearer " + user.jwt_token,
+        },
       };
 
-      axios.get(PRODUCT_TYPES, yourConfig).then(res => {
+      axios.get(PRODUCT_TYPES, yourConfig).then((res) => {
         if (res.status === 200) {
           if (res.data.success === true) {
             setProductTypeList(res.data.rows);
@@ -147,10 +151,10 @@ function NewOrder(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setProductList(res.data.rows);
@@ -183,7 +187,7 @@ function NewOrder(props) {
         product_name_id: selectedProduct.id,
         product_name: selectedProduct.name,
         quantity: parseInt(quantity),
-        unit_price: unitPrice
+        unit_price: unitPrice,
       };
       var products = orderProducts;
       if (products.length > 0) {
@@ -201,8 +205,12 @@ function NewOrder(props) {
   }
 
   const toggleProductType = () =>
-    setDropdownProductTypeOpen(prevState => !prevState);
-  const toggleProduct = () => setDropdownProductOpen(prevState => !prevState);
+    setDropdownProductTypeOpen((prevState) => !prevState);
+
+  const toggleCashDisposal = () =>
+    setDropdownCashDisposal((prevState) => !prevState);
+
+  const toggleProduct = () => setDropdownProductOpen((prevState) => !prevState);
 
   var orderProductsHTML = (
     <div className="card">
@@ -280,7 +288,8 @@ function NewOrder(props) {
         advance_payment: advancePayment,
         products: JSON.stringify(orderProducts),
         customer_trn: customerTRN,
-        remarks: remarks
+        remarks: remarks,
+        advance_cash_disposal: selectedCashDisposal,
       };
       var user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.withCredentials = true;
@@ -292,9 +301,9 @@ function NewOrder(props) {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Accept: "application/json",
-          Authorization: "Bearer " + user.jwt_token
-        }
-      }).then(res => {
+          Authorization: "Bearer " + user.jwt_token,
+        },
+      }).then((res) => {
         if (res.status === 200) {
           if (res.data.success === true) {
             setOrderSuccess(true);
@@ -334,7 +343,7 @@ function NewOrder(props) {
                       className="form-control"
                       placeholder="Enter Customer Name"
                       value={customerName}
-                      onChange={event => setCustomerName(event.target.value)}
+                      onChange={(event) => setCustomerName(event.target.value)}
                     />
                   </div>
                 </div>
@@ -351,7 +360,7 @@ function NewOrder(props) {
                       name="CustomerPhoneNumber"
                       placeholder="971 00 000 0000"
                       value={customerNumber}
-                      onChange={phone => setCustomerNumber(phone)}
+                      onChange={(phone) => setCustomerNumber(phone)}
                     />
                   </div>
                 </div>
@@ -369,7 +378,7 @@ function NewOrder(props) {
                     className="form-control"
                     dateFormat="MMMM d, yyyy"
                     selected={orderDate}
-                    onChange={date => setOrderDate(date)}
+                    onChange={(date) => setOrderDate(date)}
                     todayButton="Today"
                   />
                 </div>
@@ -385,7 +394,7 @@ function NewOrder(props) {
                       className="form-control"
                       dateFormat="MMMM d, yyyy"
                       selected={deliveryDate}
-                      onChange={date => setDeliveryDate(date)}
+                      onChange={(date) => setDeliveryDate(date)}
                       todayButton="Today"
                       minDate={orderDate}
                     />
@@ -408,7 +417,7 @@ function NewOrder(props) {
                       className="form-control"
                       placeholder="Enter Customer TRN"
                       value={customerTRN}
-                      onChange={event => setCustomerTRN(event.target.value)}
+                      onChange={(event) => setCustomerTRN(event.target.value)}
                     />
                   </div>
                 </div>
@@ -437,7 +446,7 @@ function NewOrder(props) {
                         {selectedProductType.name}
                       </DropdownToggle>
                       <DropdownMenu>
-                        {productTypeList.map(type => (
+                        {productTypeList.map((type) => (
                           <DropdownItem
                             key={type.id}
                             onClick={() => selectProductType(type)}
@@ -471,7 +480,7 @@ function NewOrder(props) {
                         {selectedProduct.name}
                       </DropdownToggle>
                       <DropdownMenu>
-                        {productList.map(product => (
+                        {productList.map((product) => (
                           <DropdownItem
                             key={product.id}
                             onClick={() => setSelectedProduct(product)}
@@ -499,7 +508,7 @@ function NewOrder(props) {
                       className="form-control"
                       min={1}
                       value={quantity}
-                      onChange={event => setQuantity(event.target.value)}
+                      onChange={(event) => setQuantity(event.target.value)}
                     />
                   </div>
                 </div>
@@ -553,16 +562,14 @@ function NewOrder(props) {
                 Order Summary
               </h4>
 
-              <div
-                className="row justify-content-between align-items-center"
-                style={{ marginBottom: "20px" }}
-              >
+              <div className="row justify-content-between align-items-center">
                 <div className="col-md-4">
                   <label className="font-weight-semibold">
                     Advance Payment:{" "}
                   </label>
                 </div>
-                <div className="col-md-4 text-right">
+
+                <div className="col-md-3 text-right">
                   <CurrencyInput
                     className="form-control"
                     suffix=" AED"
@@ -572,6 +579,28 @@ function NewOrder(props) {
                       onAdvancePaymentChange(event, value, maskedValue)
                     }
                   />
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-md-4">
+                  <Dropdown
+                    isOpen={dropdownCashDisposal}
+                    toggle={toggleCashDisposal}
+                  >
+                    <DropdownToggle caret className="btn btn-theme btn-labeled">
+                      {selectedCashDisposal}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {cashDisposalTypes.map((type, index) => (
+                        <DropdownItem
+                          key={index}
+                          onClick={() => setSelectedCashDisposal(type)}
+                        >
+                          {type}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
                 </div>
               </div>
 
@@ -610,7 +639,7 @@ function NewOrder(props) {
                   marginTop: "20px",
                   marginBottom: "20px",
                   marginLeft: "10px",
-                  marginRight: "10px"
+                  marginRight: "10px",
                 }}
               />
 
@@ -633,7 +662,7 @@ function NewOrder(props) {
                     className="form-control"
                     placeholder="Remarks"
                     value={remarks}
-                    onChange={event => setRemarks(event.target.value)}
+                    onChange={(event) => setRemarks(event.target.value)}
                     maxlength={250}
                     rows="5"
                   />

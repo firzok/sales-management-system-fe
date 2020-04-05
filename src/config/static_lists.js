@@ -367,3 +367,5 @@ export const expenseTypes = [
 ];
 
 export const byType = ["By Day", "By Month", "By Year"];
+
+export const cashDisposalTypes = ["Bank", "Self"];

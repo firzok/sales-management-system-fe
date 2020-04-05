@@ -29,6 +29,8 @@ import { range } from "../helper";
 import CurrencyInput from "react-currency-input";
 import { ORDER } from "../router/routeConstants";
 import BeatLoader from "react-spinners/BeatLoader";
+import { getFullName } from "../helper";
+import { cashDisposalTypes } from "../../config/static_lists";
 
 function AllOrders(props) {
   useEffect(() => {
@@ -66,13 +68,18 @@ function AllOrders(props) {
   const [responseMessage, setResponseMessage] = useState("");
   const [receivedPaymentAmount, setReceivedPaymentAmount] = useState(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [dropdownCashDisposal, setDropdownCashDisposal] = useState(false);
+  const [selectedCashDisposal, setSelectedCashDisposal] = useState("Disposal");
 
   // Function
+  const toggleCashDisposal = () =>
+    setDropdownCashDisposal((prevState) => !prevState);
 
   function receivePayment() {
     const data = {
       order_id: orderId,
       paid_amount: receivedPaymentAmount,
+      disposal: selectedCashDisposal,
     };
 
     axios({
@@ -111,10 +118,6 @@ function AllOrders(props) {
     };
 
     getAllOrder(filterData);
-  }
-
-  function getFullName(employee) {
-    return employee.first_name + " " + employee.last_name;
   }
 
   function selectYear(year) {
@@ -471,23 +474,51 @@ function AllOrders(props) {
         Receive payment for order
       </ModalHeader>
       <ModalBody>
-        <div className="form-group">
-          <label className="font-weight-semibold">
-            New Payment{" "}
-            <span className="c-failed" title="Required">
-              *
-            </span>
-          </label>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="form-group">
+              <label className="font-weight-semibold">
+                New Payment{" "}
+                <span className="c-failed" title="Required">
+                  *
+                </span>
+              </label>
 
-          <CurrencyInput
-            className="form-control"
-            suffix=" AED"
-            precision="0"
-            value={receivedPaymentAmount}
-            onChangeEvent={(event, value, maskedValue) =>
-              setReceivedPaymentAmount(maskedValue)
-            }
-          />
+              <CurrencyInput
+                className="form-control"
+                suffix=" AED"
+                precision="0"
+                value={receivedPaymentAmount}
+                onChangeEvent={(event, value, maskedValue) =>
+                  setReceivedPaymentAmount(maskedValue)
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="form-group">
+              <Dropdown
+                isOpen={dropdownCashDisposal}
+                toggle={toggleCashDisposal}
+              >
+                <DropdownToggle caret className="btn btn-theme btn-labeled">
+                  {selectedCashDisposal}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {cashDisposalTypes.map((type, index) => (
+                    <DropdownItem
+                      key={index}
+                      onClick={() => setSelectedCashDisposal(type)}
+                    >
+                      {type}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </div>
         </div>
       </ModalBody>
       <ModalFooter>
