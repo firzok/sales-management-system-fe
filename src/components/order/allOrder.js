@@ -261,57 +261,57 @@ function AllOrders(props) {
     {
       id: 0,
       type: "action",
+      sort: "sorting_asc",
       align: "text-left",
       name: "ACTIONS",
     },
     {
-      id: 1,
+      id: 2,
       type: "text",
-      sort: "sorting_asc",
+      sort: "sorting",
       align: "text-left",
       name: "ORDER#",
     },
     {
-      id: 2,
-      type: "media",
-      sort: "sorting",
+      id: 1,
+      type: "text",
       align: "text-left",
-      name: "EMPLOYEE",
+      name: "TOTAL AMOUNT",
     },
     {
       id: 3,
       type: "media",
       sort: "sorting",
       align: "text-left",
-      name: "CUSTOMER",
+      name: "EMPLOYEE",
     },
     {
       id: 4,
-      type: "text",
+      type: "media",
       sort: "sorting",
       align: "text-left",
-      name: "ORDER DATE",
+      name: "CUSTOMER",
     },
     {
       id: 5,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "DELIVERY DATE",
+      name: "ORDER DATE",
     },
     {
       id: 6,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "REMAINING AMOUNT",
+      name: "DELIVERY DATE",
     },
     {
       id: 7,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL AMOUNT",
+      name: "REMAINING AMOUNT",
     },
     {
       id: 8,
@@ -330,7 +330,9 @@ function AllOrders(props) {
     var row = [];
 
     const currentOrder = orderList[i];
-    // Column 1 ACTIONS
+    var formatter = new Intl.NumberFormat("en-US");
+
+    // Column ACTIONS
     const actions = [];
 
     if (orderList[i].order_status !== "Cancelled") {
@@ -361,10 +363,13 @@ function AllOrders(props) {
     });
     row.push(actions);
 
-    // Column 2 ORDER#
+    // Column ORDER#
     row.push(orderList[i].id ? orderList[i].id : "N/A");
 
-    // Column 3 EMPLOYEE
+    // Column TOTAL PAYMENT
+    row.push(String(formatter.format(currentOrder.billed_amount) + " AED"));
+
+    // Column EMPLOYEE
     const employeeAvatar = {
       topText: String(orderList[i].first_name + " " + orderList[i].last_name),
       bottomText: String(orderList[i].employee_id),
@@ -372,7 +377,7 @@ function AllOrders(props) {
     };
     row.push(employeeAvatar);
 
-    // Column 4 CUSTOMER
+    // Column CUSTOMER
     const customerAvatar = {
       topText: String(orderList[i].customer_name),
       bottomText: String(orderList[i].customer_phone_number),
@@ -380,29 +385,24 @@ function AllOrders(props) {
     };
     row.push(customerAvatar);
 
-    // Column 5 ORDER DATE
+    // Column ORDER DATE
     row.push(
       orderList[i].placement_date === "" || orderList[i].placement_date === null
         ? "N/A"
         : moment(orderList[i].placement_date).format("DD-MM-YYYY")
     );
 
-    // Column 6 DELIVERY DATE
+    // Column DELIVERY DATE
     row.push(
       orderList[i].delivery_date === "" || orderList[i].delivery_date === null
         ? "N/A"
         : moment(orderList[i].delivery_date).format("DD-MM-YYYY")
     );
 
-    // Column 7 DUE PAYMENT
-    var formatter = new Intl.NumberFormat("en-US");
+    // Column DUE PAYMENT
     row.push(String(formatter.format(orderList[i].due_amount) + " AED"));
 
-    // Column 8 TOTAL PAYMENT
-    row.push(String(formatter.format(orderList[i].billed_amount) + " AED"));
-
-    //   Column 9 STATUS BADGE
-
+    // Column STATUS BADGE
     if (orderList[i].order_status === "Incomplete") {
       row.push({
         class: "badge badge-info text-capitalize",
