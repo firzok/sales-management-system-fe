@@ -42,7 +42,9 @@ function AddExpenses(props) {
   });
 
   useEffect(() => {
-    getAllEmployees();
+    if (user.role === "admin") {
+      getAllEmployees();
+    }
   }, []);
 
   function getAllEmployees() {
@@ -84,7 +86,7 @@ function AddExpenses(props) {
 
   function addExpense() {
     const data = {
-      employee_id: employeeSelected.id,
+      employee_id: user.role === "admin" ? employeeSelected.id : user.empID,
       date_added: convertDate(expenseDate),
       amount_spent: expenseAmount,
       expenditure_type: expenseTypeSelected,
@@ -122,30 +124,35 @@ function AddExpenses(props) {
       <Card>
         <CardBody>
           <h4 className="card-title">Add Expense</h4>
-          <div className="row">
-            <div className="col-md-3">
-              <Dropdown
-                isOpen={dropDownEmployee}
-                toggle={toggleDropDownEmployee}
-              >
-                <DropdownToggle
-                  caret
-                  className="btn btn-theme btn-labeled text-right w-100"
+          <div className="row justify-content-center">
+            {user.role === "admin" ? (
+              <div className="col-md-3">
+                <Dropdown
+                  isOpen={dropDownEmployee}
+                  toggle={toggleDropDownEmployee}
                 >
-                  {getFullName(employeeSelected)}
-                </DropdownToggle>
-                <DropdownMenu className="w-100">
-                  {employeeList.map((employee, index) => (
-                    <DropdownItem
-                      key={index}
-                      onClick={() => setEmployeeSelected(employee)}
-                    >
-                      {getFullName(employee)}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            </div>
+                  <DropdownToggle
+                    caret
+                    className="btn btn-theme btn-labeled text-right w-100"
+                  >
+                    {getFullName(employeeSelected)}
+                  </DropdownToggle>
+                  <DropdownMenu className="w-100">
+                    {employeeList.map((employee, index) => (
+                      <DropdownItem
+                        key={index}
+                        onClick={() => setEmployeeSelected(employee)}
+                      >
+                        {getFullName(employee)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            ) : (
+              ""
+            )}
+
             <div className="col-md-3">
               <Dropdown
                 isOpen={dropDownExpenseType}

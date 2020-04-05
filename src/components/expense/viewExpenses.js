@@ -40,11 +40,12 @@ function ViewExpenses(props) {
   const [expensesList, setExpensesList] = useState([]);
 
   useEffect(() => {
-    getAllEmployees();
+    if (user.role === "admin") {
+      getAllEmployees();
+    }
   }, []);
 
   useEffect(() => {
-    getAllEmployees();
     getExpenses();
   }, [props]);
 
@@ -74,9 +75,9 @@ function ViewExpenses(props) {
   function getExpenses() {
     setGettingData(true);
     const data = {
-      employee_id: employeeSelected.id,
+      employee_id: user.role === "admin" ? employeeSelected.id : user.empID,
       date: convertDate(expenseDate),
-      expenditure_type: byTypeSelected,
+      sort_by: byTypeSelected,
     };
 
     axios({
@@ -197,30 +198,35 @@ function ViewExpenses(props) {
         <CardBody>
           <h4 className="card-title">View Expenses</h4>
 
-          <div className="row">
-            <div className="col-md-3">
-              <Dropdown
-                isOpen={dropDownEmployee}
-                toggle={toggleDropDownEmployee}
-              >
-                <DropdownToggle
-                  caret
-                  className="btn btn-theme btn-labeled text-right w-100"
+          <div className="row justify-content-center">
+            {user.role === "admin" ? (
+              <div className="col-md-3">
+                <Dropdown
+                  isOpen={dropDownEmployee}
+                  toggle={toggleDropDownEmployee}
                 >
-                  {getFullName(employeeSelected)}
-                </DropdownToggle>
-                <DropdownMenu className="w-100">
-                  {employeeList.map((employee, index) => (
-                    <DropdownItem
-                      key={index}
-                      onClick={() => setEmployeeSelected(employee)}
-                    >
-                      {getFullName(employee)}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            </div>
+                  <DropdownToggle
+                    caret
+                    className="btn btn-theme btn-labeled text-right w-100"
+                  >
+                    {getFullName(employeeSelected)}
+                  </DropdownToggle>
+                  <DropdownMenu className="w-100">
+                    {employeeList.map((employee, index) => (
+                      <DropdownItem
+                        key={index}
+                        onClick={() => setEmployeeSelected(employee)}
+                      >
+                        {getFullName(employee)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            ) : (
+              ""
+            )}
+
             <div className="col-md-3">
               <DatePicker
                 className="form-control"
