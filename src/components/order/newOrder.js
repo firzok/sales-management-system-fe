@@ -257,6 +257,7 @@ function NewOrder(props) {
     setSelectedProductType(defaultProductType);
     setUnitPrice(0);
     setCustomerTRN("");
+    setRemarks("");
   }
 
   var modalHtml = (
@@ -556,53 +557,11 @@ function NewOrder(props) {
         </div>
 
         <div className="col-md-4">
-          <Card>
+          <Card style={{ height: "100vh" }}>
             <div className="card-body order-total-padding">
               <h4 className="card-title" style={{ marginBottom: "40px" }}>
                 Order Summary
               </h4>
-
-              <div className="row justify-content-between align-items-center">
-                <div className="col-md-4">
-                  <label className="font-weight-semibold">
-                    Advance Payment:{" "}
-                  </label>
-                </div>
-
-                <div className="col-md-3 text-right">
-                  <CurrencyInput
-                    className="form-control"
-                    suffix=" AED"
-                    precision="0"
-                    value={advancePayment}
-                    onChangeEvent={(event, value, maskedValue) =>
-                      onAdvancePaymentChange(event, value, maskedValue)
-                    }
-                  />
-                </div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-md-4">
-                  <Dropdown
-                    isOpen={dropdownCashDisposal}
-                    toggle={toggleCashDisposal}
-                  >
-                    <DropdownToggle caret className="btn btn-theme btn-labeled">
-                      {selectedCashDisposal}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {cashDisposalTypes.map((type, index) => (
-                        <DropdownItem
-                          key={index}
-                          onClick={() => setSelectedCashDisposal(type)}
-                        >
-                          {type}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              </div>
 
               <div
                 className="row justify-content-between"
@@ -634,6 +593,60 @@ function NewOrder(props) {
                 </div>
               </div>
 
+              <div className="row justify-content-between">
+                <div className="col-md-4">
+                  <label className="font-weight-semibold">Total Bill: </label>
+                </div>
+                <div className="col-md-4 text-right">
+                  <label className="font-weight-semibold">
+                    {formatter.format(balanceAmount + tax)} AED
+                  </label>
+                </div>
+              </div>
+
+              <div className="row justify-content-between align-items-center">
+                <div className="col-md-4">
+                  <label className="font-weight-semibold">
+                    Advance Payment:{" "}
+                  </label>
+                </div>
+
+                <div className="col-md-3 text-right">
+                  <CurrencyInput
+                    className="form-control"
+                    suffix=" AED"
+                    precision="0"
+                    value={advancePayment}
+                    onChangeEvent={(event, value, maskedValue) =>
+                      onAdvancePaymentChange(event, value, maskedValue)
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="row mb-3">
+                <div className="col-md-4">
+                  <Dropdown
+                    isOpen={dropdownCashDisposal}
+                    toggle={toggleCashDisposal}
+                  >
+                    <DropdownToggle caret className="btn btn-theme btn-labeled">
+                      {selectedCashDisposal}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {cashDisposalTypes.map((type, index) => (
+                        <DropdownItem
+                          key={index}
+                          onClick={() => setSelectedCashDisposal(type)}
+                        >
+                          {type}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </div>
+
               <hr
                 style={{
                   marginTop: "20px",
@@ -645,10 +658,12 @@ function NewOrder(props) {
 
               <div className="row justify-content-between">
                 <div className="col-md-4">
-                  <label className="font-weight-black font-s-18">Total: </label>
+                  <label className="font-weight-black font-s-15">
+                    Remaining Bill:{" "}
+                  </label>
                 </div>
                 <div className="col-md-4 text-right">
-                  <label className="font-weight-black font-s-18">
+                  <label className="font-weight-black font-s-15">
                     {formatter.format(balanceAmount + tax - advancePayment)} AED
                   </label>
                 </div>
