@@ -290,7 +290,7 @@ function NewOrder(props) {
         products: JSON.stringify(orderProducts),
         customer_trn: customerTRN,
         remarks: remarks,
-        advance_cash_disposal: selectedCashDisposal,
+        cash_disposal: selectedCashDisposal,
       };
       var user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.withCredentials = true;
