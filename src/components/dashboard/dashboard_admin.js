@@ -23,6 +23,7 @@ import {
 } from "../../config/static_lists";
 import { range, getFullName } from "../helper";
 import BeatLoader from "react-spinners/BeatLoader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function DashboardAdmin(props) {
   useEffect(() => {
@@ -228,7 +229,7 @@ function DashboardAdmin(props) {
       {responseModalHtml}
       <div className="card">
         <div className="card-body">
-          <div className="row justify-content-between">
+          <div className="row justify-content-around">
             {isAdmin ? (
               <div className="col-md-3">
                 <Dropdown
@@ -241,7 +242,7 @@ function DashboardAdmin(props) {
                   >
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
-                  <DropdownMenu right>
+                  <DropdownMenu right className="w-100">
                     {employeeList.map((employee) => (
                       <DropdownItem
                         key={employee.id}
@@ -267,7 +268,7 @@ function DashboardAdmin(props) {
                 >
                   {selectedMonth.name}
                 </DropdownToggle>
-                <DropdownMenu right>
+                <DropdownMenu right className="w-100">
                   {monthListWithAllMonthOption.map((month) => (
                     <DropdownItem
                       key={month.id}
@@ -289,7 +290,7 @@ function DashboardAdmin(props) {
                 >
                   {selectedYear}
                 </DropdownToggle>
-                <DropdownMenu right>
+                <DropdownMenu right className="w-100">
                   {yearList.map((year) => (
                     <DropdownItem
                       key={year}
@@ -303,12 +304,13 @@ function DashboardAdmin(props) {
                 </DropdownMenu>
               </Dropdown>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3">
               <Button
                 title="Filter Data"
-                className="btn btn-theme btn-labeled"
+                className="btn btn-theme btn-labeled w-100"
                 onClick={() => getFilteredData()}
               >
+                <FontAwesomeIcon icon={["fas", "filter"]} className="mr-2" />
                 Filter Data
               </Button>
             </div>

@@ -31,6 +31,7 @@ import { ORDER } from "../router/routeConstants";
 import BeatLoader from "react-spinners/BeatLoader";
 import { getFullName } from "../helper";
 import { cashDisposalTypes } from "../../config/static_lists";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function AllOrders(props) {
   useEffect(() => {
@@ -616,12 +617,13 @@ function AllOrders(props) {
                 </DropdownMenu>
               </Dropdown>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3">
               <Button
                 title="Filter Data"
-                className="btn btn-theme btn-labeled"
+                className="btn btn-theme btn-labeled w-100"
                 onClick={() => getFilteredData()}
               >
+                <FontAwesomeIcon icon={["fas", "filter"]} className="mr-2" />
                 Filter Data
               </Button>
             </div>

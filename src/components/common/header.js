@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import {
-  LOAD_LOGIN,
-  CHANGE_PASSWORD,
-  VIEW_EMPLOYEE_PROFILE
-} from "../router/routeConstants";
+import { LOAD_LOGIN, CHANGE_PASSWORD } from "../router/routeConstants";
 import { colors, company } from "../../config/static_lists";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 var $ = window.$;
 
@@ -17,20 +14,18 @@ class Header extends Component {
     this.state = {
       notifications: [],
       loadingNotifications: false,
-      quote: null
+      quote: null,
     };
   }
 
   componentDidMount() {
     // Toggle min sidebar class
-    $(".sidebar-main-toggle").on("click", function(e) {
+    $(".sidebar-main-toggle").on("click", function (e) {
       e.preventDefault();
 
-      $("body")
-        .toggleClass("sidebar-xs")
-        .removeClass("sidebar-mobile-main");
+      $("body").toggleClass("sidebar-xs").removeClass("sidebar-mobile-main");
     });
-    $(".sidebar-mobile-main-toggle").on("click", function(e) {
+    $(".sidebar-mobile-main-toggle").on("click", function (e) {
       e.preventDefault();
       $("body")
         .toggleClass("sidebar-mobile-main")
@@ -40,7 +35,7 @@ class Header extends Component {
         $(".sidebar-main").removeClass("sidebar-fullscreen");
       }
     });
-    $(".sidebar-mobile-expand").on("click", function(e) {
+    $(".sidebar-mobile-expand").on("click", function (e) {
       e.preventDefault();
       var $sidebar = $(this).parents(".sidebar"),
         sidebarFullscreenClass = "sidebar-fullscreen";
@@ -110,7 +105,7 @@ class Header extends Component {
           ? "---"
           : user.first_name.charAt(0).toLowerCase();
       const style = {
-        backgroundColor: colors[initials]
+        backgroundColor: colors[initials],
       };
 
       picture = (
@@ -131,7 +126,7 @@ class Header extends Component {
     var navbar_theme = {
       backgroundPosition: "left top",
       backgroundRepeatX: "repeat",
-      backgroundImage: `url(${pathHeaderBackground})`
+      backgroundImage: `url(${pathHeaderBackground})`,
     };
 
     return (
@@ -194,8 +189,8 @@ class Header extends Component {
                   className="dropdown-item"
                   onClick={this.changePassword.bind(this)}
                 >
-                  <i className="fas fa-user-shield side-menu_icon"></i> Change
-                  Password
+                  <FontAwesomeIcon icon={["fas", "unlock"]} className="mr-2" />
+                  Change Password
                 </a>
                 <div className="dropdown-divider"></div>
                 {/* <a className="dropdown-item" onClick={this.customization.bind(this)}><i className="icon-cog"></i> Customization</a> */}

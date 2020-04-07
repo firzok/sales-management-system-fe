@@ -211,12 +211,13 @@ function ViewExpenses(props) {
           <div className="row">
             {expensesList.length > 0 ? (
               <div className="card-body">
-                <Table responsive hover>
+                <Table responsive hover bordered>
                   <thead>
                     <tr>
                       <th>#</th>
                       <th>DATE ADDED</th>
                       <th>EXPENSE TYPE</th>
+                      <th>EXPENSE DETAIL</th>
                       <th>EXPENSE AMOUNT</th>
                       <th>EMPLOYEE NAME</th>
                     </tr>
@@ -229,6 +230,11 @@ function ViewExpenses(props) {
                           {moment(expense.date_added).format("DD-MM-YYYY")}
                         </td>
                         <td>{expense.expenditure_type}</td>
+                        <td>
+                          {expense.expenditure_detail
+                            ? expense.expenditure_detail
+                            : "None"}
+                        </td>
                         <td>{expense.amount_spent + " AED"}</td>
                         <td>{expense.employee}</td>
                       </tr>

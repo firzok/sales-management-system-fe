@@ -23,6 +23,7 @@ import PhoneInput from "react-phone-input-2";
 import { convertDate } from "../helper";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { cashDisposalTypes } from "../../config/static_lists";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function NewOrder(props) {
   var formatter = new Intl.NumberFormat("en-US");
@@ -329,7 +330,7 @@ function NewOrder(props) {
             <div className="card-body">
               <h4 className="card-title">Customer</h4>
 
-              <div className="row">
+              <div className="row justify-content-around">
                 <div className="col-md-4">
                   <div className="form-group">
                     <label className="font-weight-semibold">
@@ -367,7 +368,7 @@ function NewOrder(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row justify-content-around">
                 <div className="col-md-4">
                   <label className="font-weight-semibold">
                     Order Date{" "}
@@ -403,7 +404,7 @@ function NewOrder(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row justify-content-around">
                 <div className="col-md-4">
                   <div className="form-group">
                     <label className="font-weight-semibold">
@@ -426,7 +427,7 @@ function NewOrder(props) {
 
               <h4 className="card-title">Order Details</h4>
 
-              <div className="row">
+              <div className="row justify-content-around">
                 <div className="col-md-4">
                   <div className="form-group">
                     <label className="font-weight-semibold">
@@ -494,7 +495,7 @@ function NewOrder(props) {
                   </div>
                 </div>
               </div>
-              <div className="row">
+              <div className="row justify-content-around">
                 <div className="col-md-4">
                   <div className="form-group">
                     <label className="font-weight-semibold">
@@ -535,7 +536,7 @@ function NewOrder(props) {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row justify-content-end">
                 <div className="col-md-2">
                   <Button
                     title="Add Product"
@@ -700,6 +701,10 @@ function NewOrder(props) {
                       customerTRN === ""
                     }
                   >
+                    <FontAwesomeIcon
+                      icon={["far", "check-circle"]}
+                      className="mr-2"
+                    />
                     Confirm Order
                   </Button>
                 </div>

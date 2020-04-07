@@ -362,7 +362,7 @@ function Order(props) {
                 size="lg"
                 block
                 onClick={() => printOrder()}
-                id={"receiptOrderBtn"}
+                id="receiptOrderBtn"
               >
                 Order Receipt
               </Button>

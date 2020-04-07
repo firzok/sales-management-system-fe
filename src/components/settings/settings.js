@@ -5,9 +5,8 @@ import {
   SET_VAT,
   GET_VAT,
   SET_STARTING_ORDER_NUMBER,
-  GET_STARTING_ORDER_NUMBER
+  GET_STARTING_ORDER_NUMBER,
 } from "../../config/rest_endpoints";
-import { byteCode } from "../../assets/js/helper";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { stringify } from "querystring";
 
@@ -31,10 +30,10 @@ function Settings(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setVAT(res.data.vat);
@@ -54,15 +53,15 @@ function Settings(props) {
       method: "post",
       url: SET_VAT,
       data: stringify({
-        vat: vat
+        vat: vat,
       }),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           getVAT();
@@ -83,10 +82,10 @@ function Settings(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setStartingOrderNumber(res.data.order_number);
@@ -106,15 +105,15 @@ function Settings(props) {
       method: "post",
       url: SET_STARTING_ORDER_NUMBER,
       data: stringify({
-        order_number: startingOrderNumber
+        order_number: startingOrderNumber,
       }),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
+        Authorization: `Bearer ${user.jwt_token}`,
       },
-      withCredentials: true
-    }).then(res => {
+      withCredentials: true,
+    }).then((res) => {
       if (res.status === 200) {
         if (res.data.success === true) {
           getStartingOrderNumber();
@@ -165,7 +164,7 @@ function Settings(props) {
                   className="form-control"
                   placeholder="Tax %"
                   value={vat}
-                  onChange={event => setVAT(event.target.value)}
+                  onChange={(event) => setVAT(event.target.value)}
                 />
               </div>
             </div>
@@ -201,7 +200,9 @@ function Settings(props) {
                   className="form-control"
                   placeholder="Starting Order Number"
                   value={startingOrderNumber}
-                  onChange={event => setStartingOrderNumber(event.target.value)}
+                  onChange={(event) =>
+                    setStartingOrderNumber(event.target.value)
+                  }
                 />
               </div>
             </div>

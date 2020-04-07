@@ -10,9 +10,15 @@ import {
   faCogs,
   faUserPlus,
   faMoneyBillWave,
+  faFilter,
+  faUnlock,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faEdit, faWindowClose } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEdit,
+  faWindowClose,
+  faCheckCircle,
+} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faHome,
@@ -24,5 +30,8 @@ library.add(
   faWindowClose,
   faCogs,
   faUserPlus,
-  faMoneyBillWave
+  faMoneyBillWave,
+  faFilter,
+  faCheckCircle,
+  faUnlock
 );

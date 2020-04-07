@@ -10,6 +10,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Input,
+  UncontrolledTooltip,
 } from "reactstrap";
 
 import { expenseTypes } from "../../config/static_lists";
@@ -31,6 +33,7 @@ function AddExpenses(props) {
   const [expenseDate, setExpenseDate] = useState(new Date());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [expenseDetail, setExpenseDetail] = useState("");
 
   const [expenseTypeSelected, setExpenseTypeSelected] = useState(
     "Select Expense Type"
@@ -90,6 +93,7 @@ function AddExpenses(props) {
       date_added: convertDate(expenseDate),
       amount_spent: expenseAmount,
       expenditure_type: expenseTypeSelected,
+      expense_detail: expenseDetail,
     };
 
     axios({
@@ -124,9 +128,9 @@ function AddExpenses(props) {
       <Card>
         <CardBody>
           <h4 className="card-title">Add Expense</h4>
-          <div className="row justify-content-center">
+          <div className="row justify-content-around">
             {user.role === "admin" ? (
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <Dropdown
                   isOpen={dropDownEmployee}
                   toggle={toggleDropDownEmployee}
@@ -153,7 +157,7 @@ function AddExpenses(props) {
               ""
             )}
 
-            <div className="col-md-3">
+            <div className="col-md-2">
               <Dropdown
                 isOpen={dropDownExpenseType}
                 toggle={toggleDropDownExpenseType}
@@ -176,7 +180,20 @@ function AddExpenses(props) {
                 </DropdownMenu>
               </Dropdown>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
+              <Input
+                placeholder="Expense detail e.g Vehicle #"
+                className="form-control"
+                type="text"
+                value={expenseDetail}
+                onChange={(event) => setExpenseDetail(event.target.value)}
+                id={"expenseDetail"}
+              />
+              <UncontrolledTooltip placement="bottom" target="expenseDetail">
+                Add expense detail here e.g Vehicle Number.
+              </UncontrolledTooltip>
+            </div>
+            <div className="col-md-2">
               <CurrencyInput
                 className="form-control"
                 suffix=" AED"
@@ -187,7 +204,7 @@ function AddExpenses(props) {
                 }
               />
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
               <DatePicker
                 className="form-control"
                 dateFormat="MMMM d, yyyy"
@@ -205,7 +222,11 @@ function AddExpenses(props) {
                 title="Add"
                 className="btn btn-theme btn-labeled w-100"
                 onClick={() => addExpense()}
-                disabled={expenseAmount === 0}
+                disabled={
+                  expenseAmount === 0 ||
+                  expenseTypeSelected === "Select Expense Type" ||
+                  employeeSelected.first_name === "Select"
+                }
               >
                 Add Expense
               </Button>
