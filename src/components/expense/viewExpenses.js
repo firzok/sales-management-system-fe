@@ -11,6 +11,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Table,
 } from "reactstrap";
 import { convertDate, getFullName } from "../helper";
 import axios from "axios";
@@ -19,7 +20,6 @@ import DatePicker from "react-datepicker";
 import { byType, pages, colors } from "../../config/static_lists";
 import { stringify } from "querystring";
 import BeatLoader from "react-spinners/BeatLoader";
-import OfflineTable from "react-offline-table";
 import moment from "moment";
 
 function ViewExpenses(props) {
@@ -130,67 +130,6 @@ function ViewExpenses(props) {
     </Modal>
   );
 
-  // Table Data
-  const headerFields = [
-    {
-      id: 0,
-      type: "text",
-      align: "text-left",
-      name: "DATE ADDED",
-    },
-    {
-      id: 1,
-      type: "text",
-      sort: "sorting_asc",
-      align: "text-left",
-      name: "EXPENSE TYPE",
-    },
-    {
-      id: 2,
-      type: "text",
-      sort: "sorting",
-      align: "text-left",
-      name: "EXPENSE AMOUNT",
-    },
-    {
-      id: 3,
-      type: "media",
-      sort: "sorting",
-      align: "text-left",
-      name: "EMPLOYEE NAME",
-    },
-  ];
-
-  let expensesData = [];
-
-  for (var i = 0; i < expensesList.length; i++) {
-    var row = [];
-
-    // Date
-    row.push(
-      expensesList[i].date === "" || expensesList[i].date === null
-        ? "N/A"
-        : moment(expensesList[i].date).format("DD-MM-YYYY")
-    );
-
-    // Type
-    row.push(expensesList[i].type);
-
-    // Amount
-    var formatter = new Intl.NumberFormat("en-US");
-    row.push(String(formatter.format(expensesList[i].amount) + " AED"));
-
-    // Employee
-    const employeeAvatar = {
-      topText: String(expensesList[i].employee_name),
-      bottomText: String(expensesList[i].employee_id),
-      picture: null,
-    };
-    row.push(employeeAvatar);
-
-    expensesData.push(row);
-  }
-
   return (
     <div>
       {responseModalHtml}
@@ -270,18 +209,32 @@ function ViewExpenses(props) {
           </div>
 
           <div className="row">
-            {expensesData.length > 0 ? (
-              <div className="card">
-                <div className="card-body">
-                  <OfflineTable
-                    headerFields={headerFields}
-                    data={expensesData}
-                    showSno={true}
-                    enableFilter={true}
-                    pages={pages}
-                    colors={colors}
-                  />
-                </div>
+            {expensesList.length > 0 ? (
+              <div className="card-body">
+                <Table responsive hover>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>DATE ADDED</th>
+                      <th>EXPENSE TYPE</th>
+                      <th>EXPENSE AMOUNT</th>
+                      <th>EMPLOYEE NAME</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expensesList.map((expense, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>
+                          {moment(expense.date_added).format("DD-MM-YYYY")}
+                        </td>
+                        <td>{expense.expenditure_type}</td>
+                        <td>{expense.amount_spent + " AED"}</td>
+                        <td>{expense.employee}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </div>
             ) : (
               <div className="text-center col mt-5">
