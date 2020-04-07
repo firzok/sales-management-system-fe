@@ -328,6 +328,7 @@ function Order(props) {
                     <th>#</th>
                     <th>Date</th>
                     <th>Amount</th>
+                    <th>Disposal</th>
                     <th>Remaining Amount</th>
                     <th>Type</th>
                   </tr>
@@ -340,6 +341,7 @@ function Order(props) {
                         {moment(payment.date_of_payment).format("DD-MM-YYYY")}
                       </td>
                       <td>{payment.paid_amount + " AED"}</td>
+                      <td>{payment.cash_disposal}</td>
                       <td>{payment.due_amount + " AED"}</td>
                       <td>{payment.payment_type}</td>
                     </tr>
