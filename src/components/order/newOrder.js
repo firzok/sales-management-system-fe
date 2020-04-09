@@ -631,7 +631,11 @@ function NewOrder(props) {
                     isOpen={dropdownCashDisposal}
                     toggle={toggleCashDisposal}
                   >
-                    <DropdownToggle caret className="btn btn-theme btn-labeled">
+                    <DropdownToggle
+                      caret
+                      className="btn btn-theme btn-labeled"
+                      disabled={advancePayment === 0}
+                    >
                       {selectedCashDisposal}
                     </DropdownToggle>
                     <DropdownMenu>
@@ -698,7 +702,8 @@ function NewOrder(props) {
                       orderProducts.length === 0 ||
                       customerName === "" ||
                       customerNumber === "" ||
-                      customerTRN === ""
+                      customerTRN === "" ||
+                      selectedCashDisposal === "Disposal"
                     }
                   >
                     <FontAwesomeIcon
