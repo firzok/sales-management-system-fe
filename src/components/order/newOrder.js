@@ -14,19 +14,21 @@ import {
   PRODUCTS_WITH_TYPE_ID,
   NEW_ORDER,
   GET_VAT,
+  GET_ALL_EMPLOYEES,
 } from "../../config/rest_endpoints";
 import { stringify } from "querystring";
 import DatePicker from "react-datepicker";
 import { addDays } from "date-fns";
 import { OrderProductHeader, OrderProduct } from "./orderProduct";
 import PhoneInput from "react-phone-input-2";
-import { convertDate } from "../helper";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { cashDisposalTypes } from "../../config/static_lists";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { convertDate, getFullName } from "../helper";
 
 function NewOrder(props) {
   var formatter = new Intl.NumberFormat("en-US");
+  var user = JSON.parse(sessionStorage.getItem("user"));
 
   const defaultProduct = {
     name: "Select Product",
@@ -36,6 +38,7 @@ function NewOrder(props) {
     name: "Select Product Type",
   };
 
+  const [employeeList, setEmployeeList] = useState([]);
   const [advancePayment, setAdvancePayment] = useState(0);
   const [customerName, setCustomerName] = useState("");
   const [customerNumber, setCustomerNumber] = useState("");
@@ -43,7 +46,7 @@ function NewOrder(props) {
   const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
   const [dropdownProductTypeOpen, setDropdownProductTypeOpen] = useState(false);
   const [dropdownCashDisposal, setDropdownCashDisposal] = useState(false);
-
+  const [dropDownEmployee, setDropDownEmployee] = useState(false);
   const [orderDate, setOrderDate] = useState(new Date());
   const [orderProducts, setOrderProducts] = useState([]);
   const [productDisabled, setProductDisabled] = useState(true);
@@ -62,7 +65,10 @@ function NewOrder(props) {
   const [customerTRN, setCustomerTRN] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const [responseModalOpen, setResponseModalOpen] = useState(false);
-
+  const [employeeSelected, setEmployeeSelected] = useState({
+    first_name: "Select",
+    last_name: "Employee",
+  });
   const [vat, setVAT] = useState(2);
   const [remarks, setRemarks] = useState("");
 
@@ -74,14 +80,36 @@ function NewOrder(props) {
     setOpenModal(!openModal);
   }
 
+  function getAllEmployees() {
+    axios({
+      method: "get",
+      url: GET_ALL_EMPLOYEES,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+        Authorization: `Bearer ${user.jwt_token}`,
+      },
+      withCredentials: true,
+    }).then((res) => {
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          setEmployeeList(res.data.rows);
+        } else {
+          showResponseModal(res.data.message);
+        }
+      } else {
+        console.log("Network Error");
+      }
+    });
+  }
+
   useEffect(() => {
     getProductTypes();
     getVAT();
+    getAllEmployees();
   }, []);
 
   function getVAT() {
-    var user = JSON.parse(sessionStorage.getItem("user"));
-
     axios({
       method: "get",
       url: GET_VAT,
@@ -213,6 +241,9 @@ function NewOrder(props) {
 
   const toggleProduct = () => setDropdownProductOpen((prevState) => !prevState);
 
+  const toggleDropDownEmployee = () =>
+    setDropDownEmployee((prevState) => !prevState);
+
   var orderProductsHTML = (
     <div className="card">
       <div className="card-body">
@@ -292,6 +323,7 @@ function NewOrder(props) {
         customer_trn: customerTRN,
         remarks: remarks,
         cash_disposal: selectedCashDisposal,
+        employee_id: employeeSelected.id,
       };
       var user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.withCredentials = true;
@@ -328,6 +360,40 @@ function NewOrder(props) {
         <div className="col-md-8">
           <div className="card">
             <div className="card-body">
+              <div className="row justify-content-start">
+                <div className="col-md-2">
+                  <label className="font-weight-semibold">
+                    Order By{" "}
+                    <span className="c-failed" title="Required">
+                      *
+                    </span>
+                  </label>
+                </div>
+                <div className="col-md-3">
+                  <Dropdown
+                    isOpen={dropDownEmployee}
+                    toggle={toggleDropDownEmployee}
+                  >
+                    <DropdownToggle
+                      caret
+                      className="btn btn-theme btn-labeled text-right w-100"
+                    >
+                      {getFullName(employeeSelected)}
+                    </DropdownToggle>
+                    <DropdownMenu className="w-100">
+                      {employeeList.map((employee, index) => (
+                        <DropdownItem
+                          key={index}
+                          onClick={() => setEmployeeSelected(employee)}
+                        >
+                          {getFullName(employee)}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </div>
+
               <h4 className="card-title">Customer</h4>
 
               <div className="row justify-content-around">
