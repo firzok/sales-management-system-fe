@@ -17,15 +17,6 @@ export var naver = {
     },
     fa_icon: ["fas", "home"],
   },
-  [EXPENSES]: {
-    "/": {
-      id: "M_LOAD_APP",
-      name: "Expenses",
-      url: EXPENSES,
-      fa_icon: ["fas", "money-bill-wave"],
-    },
-    fa_icon: ["fas", "money-bill-wave"],
-  },
   [NEW_ORDER]: {
     "/": {
       id: "NEW_ORDER",
@@ -34,6 +25,15 @@ export var naver = {
       fa_icon: ["fas", "cart-plus"],
     },
     fa_icon: ["fas", "cart-plus"],
+  },
+  [EXPENSES]: {
+    "/": {
+      id: "M_LOAD_APP",
+      name: "Expenses",
+      url: EXPENSES,
+      fa_icon: ["fas", "money-bill-wave"],
+    },
+    fa_icon: ["fas", "money-bill-wave"],
   },
   [ALL_ORDERS]: {
     "/": {
