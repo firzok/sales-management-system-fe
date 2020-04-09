@@ -45,10 +45,6 @@ function ViewExpenses(props) {
     }
   }, []);
 
-  useEffect(() => {
-    getExpenses();
-  }, [props]);
-
   function getAllEmployees() {
     axios({
       method: "get",
@@ -217,7 +213,8 @@ function ViewExpenses(props) {
                       <th>#</th>
                       <th>DATE ADDED</th>
                       <th>EXPENSE TYPE</th>
-                      <th>EXPENSE DETAIL</th>
+                      <th>VEHICLE NUMBER</th>
+                      <th>CASH ON HAND</th>
                       <th>EXPENSE AMOUNT</th>
                       <th>EMPLOYEE NAME</th>
                     </tr>
@@ -231,10 +228,11 @@ function ViewExpenses(props) {
                         </td>
                         <td>{expense.expenditure_type}</td>
                         <td>
-                          {expense.expenditure_detail
-                            ? expense.expenditure_detail
-                            : "None"}
+                          {expense.vehicle_number
+                            ? expense.vehicle_number
+                            : "N/A"}
                         </td>
+                        <td>{expense.cash_on_hand + " AED"}</td>
                         <td>{expense.amount_spent + " AED"}</td>
                         <td>{expense.employee}</td>
                       </tr>
