@@ -106,7 +106,9 @@ function NewOrder(props) {
   useEffect(() => {
     getProductTypes();
     getVAT();
-    getAllEmployees();
+    if (user.role === "admin") {
+      getAllEmployees();
+    }
   }, []);
 
   function getVAT() {
@@ -360,39 +362,43 @@ function NewOrder(props) {
         <div className="col-md-8">
           <div className="card">
             <div className="card-body">
-              <div className="row justify-content-start">
-                <div className="col-md-2">
-                  <label className="font-weight-semibold">
-                    Order By{" "}
-                    <span className="c-failed" title="Required">
-                      *
-                    </span>
-                  </label>
-                </div>
-                <div className="col-md-3">
-                  <Dropdown
-                    isOpen={dropDownEmployee}
-                    toggle={toggleDropDownEmployee}
-                  >
-                    <DropdownToggle
-                      caret
-                      className="btn btn-theme btn-labeled text-right w-100"
+              {user.role === "admin" ? (
+                <div className="row justify-content-start">
+                  <div className="col-md-2">
+                    <label className="font-weight-semibold">
+                      Order By{" "}
+                      <span className="c-failed" title="Required">
+                        *
+                      </span>
+                    </label>
+                  </div>
+                  <div className="col-md-3">
+                    <Dropdown
+                      isOpen={dropDownEmployee}
+                      toggle={toggleDropDownEmployee}
                     >
-                      {getFullName(employeeSelected)}
-                    </DropdownToggle>
-                    <DropdownMenu className="w-100">
-                      {employeeList.map((employee, index) => (
-                        <DropdownItem
-                          key={index}
-                          onClick={() => setEmployeeSelected(employee)}
-                        >
-                          {getFullName(employee)}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </Dropdown>
+                      <DropdownToggle
+                        caret
+                        className="btn btn-theme btn-labeled text-right w-100"
+                      >
+                        {getFullName(employeeSelected)}
+                      </DropdownToggle>
+                      <DropdownMenu className="w-100">
+                        {employeeList.map((employee, index) => (
+                          <DropdownItem
+                            key={index}
+                            onClick={() => setEmployeeSelected(employee)}
+                          >
+                            {getFullName(employee)}
+                          </DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
 
               <h4 className="card-title">Customer</h4>
 
