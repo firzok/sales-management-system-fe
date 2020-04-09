@@ -361,7 +361,7 @@ export const expenseTypes = [
   "Vehicle",
   "Petrol",
   "Food",
-  "Cash",
+  "Cash Purchase",
   "Salary",
   "Other",
 ];
