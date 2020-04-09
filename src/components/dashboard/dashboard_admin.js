@@ -265,96 +265,101 @@ function DashboardAdmin(props) {
   return (
     <Fragment>
       {responseModalHtml}
-      <div className="card">
-        <div className="card-body">
-          <h4 className="card-title">Print Reports</h4>
-          <div className="row justify-content-around">
-            <div className="col-md-3">
-              <div
-                id="reportType"
-                className="m-1 w-100"
-                onChange={(event) => setReportType(event.target.value)}
-              >
-                Report type:
-                <input
-                  className="ml-3 m-1"
-                  type="radio"
-                  value="Daily"
-                  name="reportType"
-                  id="reportTypeDaily"
-                />{" "}
-                Daily
-                <UncontrolledTooltip
-                  placement="bottom"
-                  target="reportTypeDaily"
+
+      {user.role === "admin" ? (
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title">Print Reports</h4>
+            <div className="row justify-content-around">
+              <div className="col-md-3">
+                <div
+                  id="reportType"
+                  className="m-1 w-100"
+                  onChange={(event) => setReportType(event.target.value)}
                 >
-                  Daily Report
+                  Report type:
+                  <input
+                    className="ml-3 m-1"
+                    type="radio"
+                    value="Daily"
+                    name="reportType"
+                    id="reportTypeDaily"
+                  />{" "}
+                  Daily
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target="reportTypeDaily"
+                  >
+                    Daily Report
+                  </UncontrolledTooltip>
+                  <input
+                    className="ml-3 m-1"
+                    type="radio"
+                    value="Monthly"
+                    name="reportType"
+                    id="reportTypeMonthly"
+                  />{" "}
+                  Monthly
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target="reportTypeMonthly"
+                  >
+                    Monthly Report
+                  </UncontrolledTooltip>
+                  <input
+                    className="ml-3 m-1"
+                    type="radio"
+                    value="Yearly"
+                    name="reportType"
+                    id="reportTypeYearly"
+                  />{" "}
+                  Yearly
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target="reportTypeYearly"
+                  >
+                    Yearly Report
+                  </UncontrolledTooltip>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <DatePicker
+                  className="form-control"
+                  id="reportDate"
+                  dateFormat="MMMM d, yyyy"
+                  selected={reportDate}
+                  onChange={(date) => {
+                    setReportDate(date);
+                  }}
+                  todayButton="Today"
+                />
+                <UncontrolledTooltip placement="bottom" target="reportDate">
+                  Select report date.
                 </UncontrolledTooltip>
-                <input
-                  className="ml-3 m-1"
-                  type="radio"
-                  value="Monthly"
-                  name="reportType"
-                  id="reportTypeMonthly"
-                />{" "}
-                Monthly
+              </div>
+              <div className="col-md-3">
+                <Button
+                  id="printReportButton"
+                  className="btn btn-theme btn-labeled w-100"
+                  onClick={() => getPrintReport()}
+                  disabled={reportType === ""}
+                >
+                  <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
+                  Print Report
+                </Button>
                 <UncontrolledTooltip
                   placement="bottom"
-                  target="reportTypeMonthly"
+                  target="printReportButton"
                 >
-                  Monthly Report
-                </UncontrolledTooltip>
-                <input
-                  className="ml-3 m-1"
-                  type="radio"
-                  value="Yearly"
-                  name="reportType"
-                  id="reportTypeYearly"
-                />{" "}
-                Yearly
-                <UncontrolledTooltip
-                  placement="bottom"
-                  target="reportTypeYearly"
-                >
-                  Yearly Report
+                  Print selected report.
                 </UncontrolledTooltip>
               </div>
             </div>
-            <div className="col-md-3">
-              <DatePicker
-                className="form-control"
-                id="reportDate"
-                dateFormat="MMMM d, yyyy"
-                selected={reportDate}
-                onChange={(date) => {
-                  setReportDate(date);
-                }}
-                todayButton="Today"
-              />
-              <UncontrolledTooltip placement="bottom" target="reportDate">
-                Select report date.
-              </UncontrolledTooltip>
-            </div>
-            <div className="col-md-3">
-              <Button
-                id="printReportButton"
-                className="btn btn-theme btn-labeled w-100"
-                onClick={() => getPrintReport()}
-                disabled={reportType === ""}
-              >
-                <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
-                Print Report
-              </Button>
-              <UncontrolledTooltip
-                placement="bottom"
-                target="printReportButton"
-              >
-                Print selected report.
-              </UncontrolledTooltip>
-            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
 
       <div className="card">
         <div className="card-body">
