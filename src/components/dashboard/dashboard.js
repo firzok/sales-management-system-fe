@@ -15,7 +15,7 @@ function Dashboard(props) {
     Dashboard = <DashboardEmployee activeUser={props.activeUser.user} />;
   }
 
-  return <Container header="Employee Total">{Dashboard}</Container>;
+  return <Container header="Dashboard">{Dashboard}</Container>;
 }
 
 function mapStateToProps({ activeUser }) {

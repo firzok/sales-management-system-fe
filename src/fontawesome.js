@@ -12,6 +12,7 @@ import {
   faMoneyBillWave,
   faFilter,
   faUnlock,
+  faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -33,5 +34,6 @@ library.add(
   faMoneyBillWave,
   faFilter,
   faCheckCircle,
-  faUnlock
+  faUnlock,
+  faPrint
 );
