@@ -1,6 +1,6 @@
 const PROTOCOL = "http";
 
-const SERVER_IP = "192.168.100.14";
+const SERVER_IP = "18.188.236.142";
 const PORT = "4000";
 
 // const SERVER_IP = "localhost";
