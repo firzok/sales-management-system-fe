@@ -72,6 +72,7 @@ function NewOrder(props) {
   });
   const [vat, setVAT] = useState(2);
   const [remarks, setRemarks] = useState("");
+  const [productDescription, setProductDescription] = useState("");
 
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
@@ -173,31 +174,34 @@ function NewOrder(props) {
 
   function getProducts(type) {
     setProductDisabled(true);
-    var user = JSON.parse(sessionStorage.getItem("user"));
-    axios.defaults.withCredentials = true;
 
-    axios({
-      method: "post",
-      url: PRODUCTS_WITH_TYPE_ID,
-      data: stringify({ id: type.id }),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`
-      },
-      withCredentials: true
-    }).then(res => {
-      if (res.status === 200) {
-        if (res.data.success === true) {
-          setProductList(res.data.rows);
-          setProductDisabled(false);
+    if (type.name !== "Other") {
+      var user = JSON.parse(sessionStorage.getItem("user"));
+      axios.defaults.withCredentials = true;
+
+      axios({
+        method: "post",
+        url: PRODUCTS_WITH_TYPE_ID,
+        data: stringify({ id: type.id }),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          Authorization: `Bearer ${user.jwt_token}`
+        },
+        withCredentials: true
+      }).then(res => {
+        if (res.status === 200) {
+          if (res.data.success === true) {
+            setProductList(res.data.rows);
+            setProductDisabled(false);
+          } else {
+            showResponseModal(res.data.message);
+          }
         } else {
-          showResponseModal(res.data.message);
+          console.log("Network Error");
         }
-      } else {
-        console.log("Network Error");
-      }
-    });
+      });
+    }
   }
 
   function selectProductType(selectedProductType) {
@@ -219,7 +223,8 @@ function NewOrder(props) {
         product_name_id: selectedProduct.id,
         product_name: selectedProduct.name,
         quantity: parseInt(quantity),
-        unit_price: unitPrice
+        unit_price: unitPrice,
+        description: productDescription
       };
       var products = orderProducts;
       if (products.length > 0) {
@@ -233,6 +238,7 @@ function NewOrder(props) {
       setSelectedProductType(defaultProductType);
       setQuantity(1);
       setUnitPrice(0);
+      setProductDescription("");
     }
   }
 
@@ -298,6 +304,7 @@ function NewOrder(props) {
     setCustomerTRN("");
     setRemarks("");
     setDiscount(0);
+    setProductDescription("");
   }
 
   var modalHtml = (
@@ -572,6 +579,22 @@ function NewOrder(props) {
                       </DropdownMenu>
                     </Dropdown>
                   </div>
+                </div>
+              </div>
+              <div className="row justify-content-around">
+                <div className="col-md-4">
+                  <textarea
+                    name="Product Description"
+                    type="text"
+                    className="form-control"
+                    placeholder="Product Description"
+                    value={productDescription}
+                    onChange={event =>
+                      setProductDescription(event.target.value)
+                    }
+                    maxlength={250}
+                    rows="2"
+                  />
                 </div>
               </div>
               <div className="row justify-content-around">
