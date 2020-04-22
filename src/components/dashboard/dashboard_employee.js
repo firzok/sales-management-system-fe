@@ -244,7 +244,7 @@ function DashboardEmployee(props) {
                   >
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
-                  <DropdownMenu right>
+                  <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }}>
                     {employeeList.map(employee => (
                       <DropdownItem
                         key={employee.id}
@@ -270,7 +270,7 @@ function DashboardEmployee(props) {
                 >
                   {selectedMonth.name}
                 </DropdownToggle>
-                <DropdownMenu right>
+                <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }}>
                   {monthListWithAllMonthOption.map(month => (
                     <DropdownItem
                       key={month.id}
@@ -292,7 +292,7 @@ function DashboardEmployee(props) {
                 >
                   {selectedYear}
                 </DropdownToggle>
-                <DropdownMenu right>
+                <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }}>
                   {yearList.map(year => (
                     <DropdownItem
                       key={year}

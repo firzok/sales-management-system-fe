@@ -5,7 +5,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
+  DropdownItem
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
 import axios from "axios";
@@ -13,6 +13,7 @@ import {
   GET_ALL_EMPLOYEES,
   EMPLOYEE_TOTALS,
   GENERATE_CASH_REPORT,
+  GENERATE_LEDGER_REPORT
 } from "../../config/rest_endpoints";
 import { saveAs } from "file-saver";
 import {
@@ -20,14 +21,14 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from "reactstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import { stringify } from "querystring";
 import {
   colors,
   pages,
-  monthListWithAllMonthOption,
+  monthListWithAllMonthOption
 } from "../../config/static_lists";
 import { range, getFullName, convertDate } from "../helper";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -77,7 +78,7 @@ function DashboardAdmin(props) {
     const filterData = {
       employee_id: selectedEmployee.id,
       month: selectedMonth.id,
-      year: selectedYear,
+      year: selectedYear
     };
 
     getAllJobOrder(filterData);
@@ -96,13 +97,12 @@ function DashboardAdmin(props) {
   }
 
   const toggleEmployeeDropdown = () =>
-    setDropDownEmployeeOpen((prevState) => !prevState);
+    setDropDownEmployeeOpen(prevState => !prevState);
 
   const toggleMonthDropdown = () =>
-    setDropDownMonthOpen((prevState) => !prevState);
+    setDropDownMonthOpen(prevState => !prevState);
 
-  const toggleYearDropdown = () =>
-    setDropDownYearOpen((prevState) => !prevState);
+  const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
 
   function getAllJobOrder(filterData) {
     setJobOrderList([]);
@@ -114,10 +114,10 @@ function DashboardAdmin(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -147,10 +147,10 @@ function DashboardAdmin(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -171,29 +171,29 @@ function DashboardAdmin(props) {
       type: "text",
       align: "text-left",
       sort: "sorting_asc",
-      name: "EMPLOYEE NAME",
+      name: "EMPLOYEE NAME"
     },
     {
       id: 1,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL BILLED",
+      name: "TOTAL BILLED"
     },
     {
       id: 2,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL RECEIVED",
+      name: "TOTAL RECEIVED"
     },
     {
       id: 3,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "TOTAL REMAINING",
-    },
+      name: "TOTAL REMAINING"
+    }
   ];
 
   const yearList = range(2015, currentDate.getFullYear());
@@ -243,10 +243,10 @@ function DashboardAdmin(props) {
       responseType: "blob", //Force to receive data in a Blob Format
       data: stringify({
         date: convertedDate,
-        type: reportType,
-      }),
+        type: reportType
+      })
     })
-      .then((response) => {
+      .then(response => {
         if (response.success !== false) {
           const file = new Blob([response.data], { type: "application/pdf" });
           saveAs(
@@ -257,7 +257,34 @@ function DashboardAdmin(props) {
           showResponseModal(response.message);
         }
       })
-      .catch((error) => {
+      .catch(error => {
+        showResponseModal(error);
+      });
+  }
+
+  function getPrintLedgerReport() {
+    let convertedDate = convertDate(reportDate);
+
+    axios(`${GENERATE_LEDGER_REPORT}`, {
+      method: "POST",
+      responseType: "blob", //Force to receive data in a Blob Format
+      data: stringify({
+        date: convertedDate,
+        type: reportType
+      })
+    })
+      .then(response => {
+        if (response.success !== false) {
+          const file = new Blob([response.data], { type: "application/pdf" });
+          saveAs(
+            file,
+            `${reportType} Report generated on ${convertedDate}.pdf`
+          );
+        } else {
+          showResponseModal(response.message);
+        }
+      })
+      .catch(error => {
         showResponseModal(error);
       });
   }
@@ -275,7 +302,7 @@ function DashboardAdmin(props) {
                 <div
                   id="reportType"
                   className="m-1 w-100"
-                  onChange={(event) => setReportType(event.target.value)}
+                  onChange={event => setReportType(event.target.value)}
                 >
                   Report type:
                   <input
@@ -328,7 +355,7 @@ function DashboardAdmin(props) {
                   id="reportDate"
                   dateFormat="MMMM d, yyyy"
                   selected={reportDate}
-                  onChange={(date) => {
+                  onChange={date => {
                     setReportDate(date);
                   }}
                   todayButton="Today"
@@ -339,13 +366,27 @@ function DashboardAdmin(props) {
               </div>
               <div className="col-md-3">
                 <Button
+                  id="printLedger"
+                  className="btn btn-theme btn-labeled w-100"
+                  onClick={() => getPrintReport()}
+                  disabled={reportType === ""}
+                >
+                  <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
+                  Print Ledger
+                </Button>
+                <UncontrolledTooltip placement="bottom" target="printLedger">
+                  Print Ledger
+                </UncontrolledTooltip>
+              </div>
+              <div className="col-md-3">
+                <Button
                   id="printReportButton"
                   className="btn btn-theme btn-labeled w-100"
                   onClick={() => getPrintReport()}
                   disabled={reportType === ""}
                 >
                   <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
-                  Print Report
+                  Print Cash Report
                 </Button>
                 <UncontrolledTooltip
                   placement="bottom"
@@ -377,8 +418,11 @@ function DashboardAdmin(props) {
                   >
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
-                  <DropdownMenu right className="w-100">
-                    {employeeList.map((employee) => (
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
+                    {employeeList.map(employee => (
                       <DropdownItem
                         key={employee.id}
                         onClick={() => {
@@ -403,8 +447,11 @@ function DashboardAdmin(props) {
                 >
                   {selectedMonth.name}
                 </DropdownToggle>
-                <DropdownMenu right className="w-100">
-                  {monthListWithAllMonthOption.map((month) => (
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
+                  {monthListWithAllMonthOption.map(month => (
                     <DropdownItem
                       key={month.id}
                       onClick={() => {
@@ -425,8 +472,11 @@ function DashboardAdmin(props) {
                 >
                   {selectedYear}
                 </DropdownToggle>
-                <DropdownMenu right className="w-100">
-                  {yearList.map((year) => (
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
+                  {yearList.map(year => (
                     <DropdownItem
                       key={year}
                       onClick={() => {

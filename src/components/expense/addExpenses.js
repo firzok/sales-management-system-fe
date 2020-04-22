@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalBody,
   Input,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from "reactstrap";
 
 import { expenseTypes } from "../../config/static_lists";
@@ -21,7 +21,7 @@ import axios from "axios";
 import {
   ADD_EXPENSE,
   GET_ALL_EMPLOYEES,
-  GET_ALL_VEHICLE_NUMBERS,
+  GET_ALL_VEHICLE_NUMBERS
 } from "../../config/rest_endpoints";
 import { stringify } from "querystring";
 import { convertDate, getFullName } from "../helper";
@@ -42,6 +42,8 @@ function AddExpenses(props) {
   const [expenseDate, setExpenseDate] = useState(new Date());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [description, setDescription] = useState("");
+  const [billNumber, setBillNumber] = useState("");
   const [vehicleNumberSelected, setVehicleNumberSelected] = useState(
     "Select Vehicle Number"
   );
@@ -52,7 +54,7 @@ function AddExpenses(props) {
 
   const [employeeSelected, setEmployeeSelected] = useState({
     first_name: "Select",
-    last_name: "Employee",
+    last_name: "Employee"
   });
 
   useEffect(() => {
@@ -69,10 +71,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setVehicleNumberArray(res.data.rows);
@@ -92,10 +94,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setEmployeeList(res.data.rows);
@@ -117,13 +119,13 @@ function AddExpenses(props) {
   }
 
   const toggleDropDownExpenseType = () =>
-    setDropDownExpenseType((prevState) => !prevState);
+    setDropDownExpenseType(prevState => !prevState);
 
   const toggleDropDownVehicleNumber = () =>
-    setDropDownVehicleNumber((prevState) => !prevState);
+    setDropDownVehicleNumber(prevState => !prevState);
 
   const toggleDropDownEmployee = () =>
-    setDropDownEmployee((prevState) => !prevState);
+    setDropDownEmployee(prevState => !prevState);
 
   function reset() {}
 
@@ -134,9 +136,13 @@ function AddExpenses(props) {
       amount_spent: expenseAmount,
       cash_on_hand: cashOnHand,
       expense_type: expenseTypeSelected,
+      bill_number: billNumber
     };
     if (expenseTypeSelected === "Vehicle" || expenseTypeSelected === "Petrol") {
       data["vehicle_id"] = vehicleNumberSelected;
+    }
+    if (expenseTypeSelected === "Other") {
+      data["description"] = description;
     }
 
     axios({
@@ -146,10 +152,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         showResponseModal(res.data.message);
         reset();
@@ -185,7 +191,10 @@ function AddExpenses(props) {
                   >
                     {getFullName(employeeSelected)}
                   </DropdownToggle>
-                  <DropdownMenu className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {employeeList.map((employee, index) => (
                       <DropdownItem
                         key={index}
@@ -212,7 +221,10 @@ function AddExpenses(props) {
                 >
                   {expenseTypeSelected}
                 </DropdownToggle>
-                <DropdownMenu className="w-100">
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
                   {expenseTypes.map((type, index) => (
                     <DropdownItem
                       key={index}
@@ -238,7 +250,10 @@ function AddExpenses(props) {
                   >
                     {vehicleNumberSelected}
                   </DropdownToggle>
-                  <DropdownMenu className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {vehicleNumberArray.map((vehicle, index) => (
                       <DropdownItem
                         key={index}
@@ -249,6 +264,26 @@ function AddExpenses(props) {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {expenseTypeSelected === "Other" ? (
+              <div className="col-md-2">
+                <input
+                  disabled={expenseTypeSelected !== "Other"}
+                  name="Description"
+                  id="Description"
+                  type="text"
+                  className="form-control"
+                  placeholder="Description"
+                  value={description}
+                  onChange={event => setDescription(event.target.value)}
+                />
+                <UncontrolledTooltip placement="bottom" target="Description">
+                  Description
+                </UncontrolledTooltip>
               </div>
             ) : (
               ""
@@ -290,7 +325,7 @@ function AddExpenses(props) {
                 id="expenseDate"
                 dateFormat="MMMM d, yyyy"
                 selected={expenseDate}
-                onChange={(date) => {
+                onChange={date => {
                   setExpenseDate(date);
                 }}
                 todayButton="Today"
@@ -301,6 +336,20 @@ function AddExpenses(props) {
             </div>
           </div>
           <div className="row pt-4 justify-content-end">
+            <div className="col-md-2">
+              <input
+                name="Bill number"
+                id="Bill"
+                type="text"
+                className="form-control"
+                placeholder="Bill number"
+                value={billNumber}
+                onChange={event => setBillNumber(event.target.value)}
+              />
+              <UncontrolledTooltip placement="bottom" target="Bill">
+                Bill number
+              </UncontrolledTooltip>
+            </div>
             <div className="col-md-3">
               <Button
                 title="Add"

@@ -11,7 +11,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  Table,
+  Table
 } from "reactstrap";
 import { convertDate, getFullName } from "../helper";
 import axios from "axios";
@@ -52,10 +52,10 @@ function ViewExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setEmployeeList([allEmployeeObj, ...res.data.rows]);
@@ -73,7 +73,7 @@ function ViewExpenses(props) {
     const data = {
       employee_id: user.role === "admin" ? employeeSelected.id : user.empID,
       date: convertDate(expenseDate),
-      sort_by: byTypeSelected,
+      sort_by: byTypeSelected
     };
 
     axios({
@@ -83,11 +83,11 @@ function ViewExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
+      withCredentials: true
     })
-      .then((res) => {
+      .then(res => {
         setGettingData(false);
         if (res.status === 200) {
           if (res.data.success === true) {
@@ -114,10 +114,9 @@ function ViewExpenses(props) {
   }
 
   const toggleDropDownEmployee = () =>
-    setDropDownEmployee((prevState) => !prevState);
+    setDropDownEmployee(prevState => !prevState);
 
-  const toggleDropDownByType = () =>
-    setDropDownByType((prevState) => !prevState);
+  const toggleDropDownByType = () => setDropDownByType(prevState => !prevState);
 
   var responseModalHtml = (
     <Modal isOpen={responseModalOpen} toggle={toggleResponseModal}>
@@ -146,7 +145,10 @@ function ViewExpenses(props) {
                   >
                     {getFullName(employeeSelected)}
                   </DropdownToggle>
-                  <DropdownMenu className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {employeeList.map((employee, index) => (
                       <DropdownItem
                         key={index}
@@ -167,7 +169,7 @@ function ViewExpenses(props) {
                 className="form-control"
                 dateFormat="MMMM d, yyyy"
                 selected={expenseDate}
-                onChange={(date) => {
+                onChange={date => {
                   setExpenseDate(date);
                 }}
                 todayButton="Today"
@@ -181,7 +183,10 @@ function ViewExpenses(props) {
                 >
                   {byTypeSelected}
                 </DropdownToggle>
-                <DropdownMenu className="w-100">
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
                   {byType.map((bt, index) => (
                     <DropdownItem
                       key={index}
@@ -211,7 +216,7 @@ function ViewExpenses(props) {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>DATE ADDED</th>
+                      <th>DATE</th>
                       <th>EXPENSE TYPE</th>
                       <th>VEHICLE NUMBER</th>
                       <th>CASH ON HAND</th>
@@ -232,7 +237,7 @@ function ViewExpenses(props) {
                             ? expense.vehicle_number
                             : "N/A"}
                         </td>
-                        <td>{expense.cash_on_hand + " AED"}</td>
+                        <td>{expense.balance + " AED"}</td>
                         <td>{expense.amount_spent + " AED"}</td>
                         <td>{expense.employee}</td>
                       </tr>

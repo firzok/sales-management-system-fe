@@ -1,6 +1,6 @@
 const PROTOCOL = "http";
 
-// const SERVER_IP = '192.168.100.14';
+const SERVER_IP = "18.188.236.142";
 const PORT = "4000";
 
 const SERVER_IP = "15.185.100.17";
@@ -27,6 +27,7 @@ export const GENERATE_RECEIPT = `${ROOT_URL}/generate-pdf`;
 export const CANCEL_ORDER = `${ROOT_URL}/cancel-order`;
 export const EMPLOYEE_TOTALS = `${ROOT_URL}/employee-totals`;
 export const GENERATE_CASH_REPORT = `${ROOT_URL}/generate-cash-report-pdf`;
+export const GENERATE_LEDGER_REPORT = `${ROOT_URL}/generate-ledger-pdf`;
 export const USER_BASE_URL = `${ROOT_URL}/accounts/user`;
 export const CHANGE_PASSWORD = `${ROOT_URL}/change-password`;
 export const SET_VAT = `${ROOT_URL}/set-vat`;
