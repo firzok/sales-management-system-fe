@@ -42,6 +42,8 @@ function AddExpenses(props) {
   const [expenseDate, setExpenseDate] = useState(new Date());
   const [responseModalOpen, setResponseModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [description, setDescription] = useState("");
+  const [billNumber, setBillNumber] = useState("");
   const [vehicleNumberSelected, setVehicleNumberSelected] = useState(
     "Select Vehicle Number"
   );
@@ -133,10 +135,14 @@ function AddExpenses(props) {
       date_added: convertDate(expenseDate),
       amount_spent: expenseAmount,
       cash_on_hand: cashOnHand,
-      expense_type: expenseTypeSelected
+      expense_type: expenseTypeSelected,
+      bill_number: billNumber
     };
     if (expenseTypeSelected === "Vehicle" || expenseTypeSelected === "Petrol") {
       data["vehicle_id"] = vehicleNumberSelected;
+    }
+    if (expenseTypeSelected === "Other") {
+      data["description"] = description;
     }
 
     axios({
@@ -263,6 +269,26 @@ function AddExpenses(props) {
               ""
             )}
 
+            {expenseTypeSelected === "Other" ? (
+              <div className="col-md-2">
+                <input
+                  disabled={expenseTypeSelected !== "Other"}
+                  name="Description"
+                  id="Description"
+                  type="text"
+                  className="form-control"
+                  placeholder="Description"
+                  value={description}
+                  onChange={event => setDescription(event.target.value)}
+                />
+                <UncontrolledTooltip placement="bottom" target="Description">
+                  Description
+                </UncontrolledTooltip>
+              </div>
+            ) : (
+              ""
+            )}
+
             <div className="col-md-2">
               <CurrencyInput
                 className="form-control"
@@ -310,6 +336,20 @@ function AddExpenses(props) {
             </div>
           </div>
           <div className="row pt-4 justify-content-end">
+            <div className="col-md-2">
+              <input
+                name="Bill number"
+                id="Bill"
+                type="text"
+                className="form-control"
+                placeholder="Bill number"
+                value={billNumber}
+                onChange={event => setBillNumber(event.target.value)}
+              />
+              <UncontrolledTooltip placement="bottom" target="Bill">
+                Bill number
+              </UncontrolledTooltip>
+            </div>
             <div className="col-md-3">
               <Button
                 title="Add"

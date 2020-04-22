@@ -216,7 +216,7 @@ function ViewExpenses(props) {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>DATE ADDED</th>
+                      <th>DATE</th>
                       <th>EXPENSE TYPE</th>
                       <th>VEHICLE NUMBER</th>
                       <th>CASH ON HAND</th>
@@ -237,7 +237,7 @@ function ViewExpenses(props) {
                             ? expense.vehicle_number
                             : "N/A"}
                         </td>
-                        <td>{expense.cash_on_hand + " AED"}</td>
+                        <td>{expense.balance + " AED"}</td>
                         <td>{expense.amount_spent + " AED"}</td>
                         <td>{expense.employee}</td>
                       </tr>

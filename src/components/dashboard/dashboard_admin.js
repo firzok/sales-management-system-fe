@@ -12,7 +12,8 @@ import axios from "axios";
 import {
   GET_ALL_EMPLOYEES,
   EMPLOYEE_TOTALS,
-  GENERATE_CASH_REPORT
+  GENERATE_CASH_REPORT,
+  GENERATE_LEDGER_REPORT
 } from "../../config/rest_endpoints";
 import { saveAs } from "file-saver";
 import {
@@ -261,6 +262,33 @@ function DashboardAdmin(props) {
       });
   }
 
+  function getPrintLedgerReport() {
+    let convertedDate = convertDate(reportDate);
+
+    axios(`${GENERATE_LEDGER_REPORT}`, {
+      method: "POST",
+      responseType: "blob", //Force to receive data in a Blob Format
+      data: stringify({
+        date: convertedDate,
+        type: reportType
+      })
+    })
+      .then(response => {
+        if (response.success !== false) {
+          const file = new Blob([response.data], { type: "application/pdf" });
+          saveAs(
+            file,
+            `${reportType} Report generated on ${convertedDate}.pdf`
+          );
+        } else {
+          showResponseModal(response.message);
+        }
+      })
+      .catch(error => {
+        showResponseModal(error);
+      });
+  }
+
   return (
     <Fragment>
       {responseModalHtml}
@@ -334,6 +362,20 @@ function DashboardAdmin(props) {
                 />
                 <UncontrolledTooltip placement="bottom" target="reportDate">
                   Select report date.
+                </UncontrolledTooltip>
+              </div>
+              <div className="col-md-3">
+                <Button
+                  id="printLedger"
+                  className="btn btn-theme btn-labeled w-100"
+                  onClick={() => getPrintReport()}
+                  disabled={reportType === ""}
+                >
+                  <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
+                  Print Ledger
+                </Button>
+                <UncontrolledTooltip placement="bottom" target="printLedger">
+                  Print Ledger
                 </UncontrolledTooltip>
               </div>
               <div className="col-md-3">
