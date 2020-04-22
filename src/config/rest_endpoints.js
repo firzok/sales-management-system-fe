@@ -3,7 +3,6 @@ const PROTOCOL = "http";
 const SERVER_IP = "18.188.236.142";
 const PORT = "4000";
 
-const SERVER_IP = "15.185.100.17";
 // const PORT = '8080';
 
 export const SERVER_PATH = `${PROTOCOL}://${SERVER_IP}:${PORT}`;
