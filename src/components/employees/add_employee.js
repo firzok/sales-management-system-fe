@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Card,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from "reactstrap";
 import { ADD_NEW_EMPLOYEE } from "../../config/rest_endpoints";
 import axios from "axios";
@@ -66,8 +66,7 @@ function AddEmployee(props) {
     setOpenModalResponse(!openModalResponse);
   }
 
-  const toggleRoleDropDown = () =>
-    setDropDownRoleOpen((prevState) => !prevState);
+  const toggleRoleDropDown = () => setDropDownRoleOpen(prevState => !prevState);
 
   useEffect(() => {
     if (confirmPassword === password && password !== "") {
@@ -99,7 +98,7 @@ function AddEmployee(props) {
           password: byteCode.encode(password),
           role: selectedRole.toLowerCase() === "admin" ? "admin" : "user",
           first_name: firstName,
-          last_name: lastName,
+          last_name: lastName
         };
 
         axios.defaults.withCredentials = true;
@@ -111,9 +110,9 @@ function AddEmployee(props) {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Accept: "application/json",
-            Authorization: "Bearer " + user.jwt_token,
-          },
-        }).then((res) => {
+            Authorization: "Bearer " + user.jwt_token
+          }
+        }).then(res => {
           if (res.status === 200) {
             if (res.data.success === true) {
               resetForm();
@@ -132,12 +131,12 @@ function AddEmployee(props) {
   const roleList = [
     {
       id: 1,
-      name: "Employee",
+      name: "Employee"
     },
     {
       id: 2,
-      name: "Admin",
-    },
+      name: "Admin"
+    }
   ];
 
   return (
@@ -164,7 +163,7 @@ function AddEmployee(props) {
                   className="form-control"
                   placeholder="Enter First Name"
                   value={firstName}
-                  onChange={(event) => setFirstName(event.target.value)}
+                  onChange={event => setFirstName(event.target.value)}
                 />
               </div>
             </div>
@@ -177,7 +176,7 @@ function AddEmployee(props) {
                   className="form-control"
                   placeholder="Enter last Name"
                   value={lastName}
-                  onChange={(event) => setlastName(event.target.value)}
+                  onChange={event => setlastName(event.target.value)}
                 />
               </div>
             </div>
@@ -198,7 +197,7 @@ function AddEmployee(props) {
                   placeholder="Enter User Name"
                   id="username"
                   value={userName}
-                  onChange={(event) => setUserName(event.target.value)}
+                  onChange={event => setUserName(event.target.value)}
                 />
                 <UncontrolledTooltip placement="bottom" target="username">
                   This username will be used for logging in.
@@ -224,8 +223,12 @@ function AddEmployee(props) {
                   >
                     {selectedRole}
                   </DropdownToggle>
-                  <DropdownMenu value={selectedRole} className="w-100">
-                    {roleList.map((role) => (
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    value={selectedRole}
+                    className="w-100"
+                  >
+                    {roleList.map(role => (
                       <DropdownItem
                         key={role.id}
                         onClick={() => setSelectedRole(role.name)}
@@ -261,7 +264,7 @@ function AddEmployee(props) {
                   }
                   placeholder="Enter Password"
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={event => setPassword(event.target.value)}
                 />
                 <UncontrolledTooltip placement="bottom" target="password">
                   Choose a password for employee.
@@ -287,7 +290,7 @@ function AddEmployee(props) {
                   }
                   placeholder="Confirm Password"
                   value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  onChange={event => setConfirmPassword(event.target.value)}
                 />
                 <UncontrolledTooltip
                   placement="bottom"

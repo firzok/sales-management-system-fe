@@ -212,17 +212,17 @@ function NewOrder(props) {
   }
 
   function addProduct() {
-    if (
-      selectedProductType.name !== defaultProductType.name &&
-      selectedProduct.name !== defaultProduct.name
-    ) {
+    if (selectedProductType.name !== defaultProductType.name) {
       setOrderProducts([]);
 
       var newProduct = {
         // product_type_id: selectedProductType.id,
         product_type_name: selectedProductType.name,
         product_name_id: selectedProduct.id,
-        product_name: selectedProduct.name,
+        product_name:
+          selectedProduct.name === defaultProduct.name
+            ? "Other"
+            : selectedProduct.name,
         quantity: parseInt(quantity),
         unit_price: unitPrice,
         description: productDescription
@@ -400,7 +400,10 @@ function NewOrder(props) {
                       >
                         {getFullName(employeeSelected)}
                       </DropdownToggle>
-                      <DropdownMenu className="w-100">
+                      <DropdownMenu
+                        style={{ overflow: "auto", maxHeight: "20vh" }}
+                        className="w-100"
+                      >
                         {employeeList.map((employee, index) => (
                           <DropdownItem
                             key={index}
@@ -536,7 +539,9 @@ function NewOrder(props) {
                       >
                         {selectedProductType.name}
                       </DropdownToggle>
-                      <DropdownMenu>
+                      <DropdownMenu
+                        style={{ overflow: "auto", maxHeight: "20vh" }}
+                      >
                         {productTypeList.map(type => (
                           <DropdownItem
                             key={type.id}
@@ -570,7 +575,9 @@ function NewOrder(props) {
                       >
                         {selectedProduct.name}
                       </DropdownToggle>
-                      <DropdownMenu>
+                      <DropdownMenu
+                        style={{ overflow: "auto", maxHeight: "20vh" }}
+                      >
                         {productList.map(product => (
                           <DropdownItem
                             key={product.id}
@@ -647,10 +654,6 @@ function NewOrder(props) {
                     title="Add Product"
                     className="btn btn-theme btn-labeled"
                     onClick={() => addProduct()}
-                    disabled={
-                      selectedProductType.name === defaultProductType.name ||
-                      selectedProduct.name === defaultProduct.name
-                    }
                   >
                     Add Product
                   </Button>
@@ -761,7 +764,9 @@ function NewOrder(props) {
                     >
                       {selectedCashDisposal}
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu
+                      style={{ overflow: "auto", maxHeight: "20vh" }}
+                    >
                       {cashDisposalTypes.map((type, index) => (
                         <DropdownItem
                           key={index}

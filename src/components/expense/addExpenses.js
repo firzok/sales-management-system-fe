@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalBody,
   Input,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from "reactstrap";
 
 import { expenseTypes } from "../../config/static_lists";
@@ -21,7 +21,7 @@ import axios from "axios";
 import {
   ADD_EXPENSE,
   GET_ALL_EMPLOYEES,
-  GET_ALL_VEHICLE_NUMBERS,
+  GET_ALL_VEHICLE_NUMBERS
 } from "../../config/rest_endpoints";
 import { stringify } from "querystring";
 import { convertDate, getFullName } from "../helper";
@@ -52,7 +52,7 @@ function AddExpenses(props) {
 
   const [employeeSelected, setEmployeeSelected] = useState({
     first_name: "Select",
-    last_name: "Employee",
+    last_name: "Employee"
   });
 
   useEffect(() => {
@@ -69,10 +69,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setVehicleNumberArray(res.data.rows);
@@ -92,10 +92,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setEmployeeList(res.data.rows);
@@ -117,13 +117,13 @@ function AddExpenses(props) {
   }
 
   const toggleDropDownExpenseType = () =>
-    setDropDownExpenseType((prevState) => !prevState);
+    setDropDownExpenseType(prevState => !prevState);
 
   const toggleDropDownVehicleNumber = () =>
-    setDropDownVehicleNumber((prevState) => !prevState);
+    setDropDownVehicleNumber(prevState => !prevState);
 
   const toggleDropDownEmployee = () =>
-    setDropDownEmployee((prevState) => !prevState);
+    setDropDownEmployee(prevState => !prevState);
 
   function reset() {}
 
@@ -133,7 +133,7 @@ function AddExpenses(props) {
       date_added: convertDate(expenseDate),
       amount_spent: expenseAmount,
       cash_on_hand: cashOnHand,
-      expense_type: expenseTypeSelected,
+      expense_type: expenseTypeSelected
     };
     if (expenseTypeSelected === "Vehicle" || expenseTypeSelected === "Petrol") {
       data["vehicle_id"] = vehicleNumberSelected;
@@ -146,10 +146,10 @@ function AddExpenses(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         showResponseModal(res.data.message);
         reset();
@@ -185,7 +185,10 @@ function AddExpenses(props) {
                   >
                     {getFullName(employeeSelected)}
                   </DropdownToggle>
-                  <DropdownMenu className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {employeeList.map((employee, index) => (
                       <DropdownItem
                         key={index}
@@ -212,7 +215,10 @@ function AddExpenses(props) {
                 >
                   {expenseTypeSelected}
                 </DropdownToggle>
-                <DropdownMenu className="w-100">
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
                   {expenseTypes.map((type, index) => (
                     <DropdownItem
                       key={index}
@@ -238,7 +244,10 @@ function AddExpenses(props) {
                   >
                     {vehicleNumberSelected}
                   </DropdownToggle>
-                  <DropdownMenu className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {vehicleNumberArray.map((vehicle, index) => (
                       <DropdownItem
                         key={index}
@@ -290,7 +299,7 @@ function AddExpenses(props) {
                 id="expenseDate"
                 dateFormat="MMMM d, yyyy"
                 selected={expenseDate}
-                onChange={(date) => {
+                onChange={date => {
                   setExpenseDate(date);
                 }}
                 todayButton="Today"

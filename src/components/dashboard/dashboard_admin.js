@@ -376,7 +376,10 @@ function DashboardAdmin(props) {
                   >
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
-                  <DropdownMenu right className="w-100">
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    className="w-100"
+                  >
                     {employeeList.map(employee => (
                       <DropdownItem
                         key={employee.id}
@@ -402,7 +405,10 @@ function DashboardAdmin(props) {
                 >
                   {selectedMonth.name}
                 </DropdownToggle>
-                <DropdownMenu right className="w-100">
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
                   {monthListWithAllMonthOption.map(month => (
                     <DropdownItem
                       key={month.id}
@@ -424,7 +430,10 @@ function DashboardAdmin(props) {
                 >
                   {selectedYear}
                 </DropdownToggle>
-                <DropdownMenu right className="w-100">
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  className="w-100"
+                >
                   {yearList.map(year => (
                     <DropdownItem
                       key={year}

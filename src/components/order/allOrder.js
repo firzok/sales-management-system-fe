@@ -4,7 +4,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
+  DropdownItem
 } from "reactstrap";
 import OfflineTable from "react-offline-table";
 import moment from "moment";
@@ -13,7 +13,7 @@ import {
   ALL_ORDERS,
   UPDATE_DELIVERY_DATE,
   GET_ALL_EMPLOYEES,
-  ADD_ORDER_PAYMENT,
+  ADD_ORDER_PAYMENT
 } from "../../config/rest_endpoints";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import DatePicker from "react-datepicker";
@@ -23,7 +23,7 @@ import { convertDate } from "../helper";
 import {
   colors,
   pages,
-  monthListWithAllMonthOption,
+  monthListWithAllMonthOption
 } from "../../config/static_lists";
 import { range } from "../helper";
 import CurrencyInput from "react-currency-input";
@@ -71,16 +71,18 @@ function AllOrders(props) {
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [dropdownCashDisposal, setDropdownCashDisposal] = useState(false);
   const [selectedCashDisposal, setSelectedCashDisposal] = useState("Disposal");
+  const [chequeNumber, setChequeNumber] = useState("");
 
   // Function
   const toggleCashDisposal = () =>
-    setDropdownCashDisposal((prevState) => !prevState);
+    setDropdownCashDisposal(prevState => !prevState);
 
   function receivePayment() {
     const data = {
       order_id: orderId,
       paid_amount: receivedPaymentAmount,
       disposal: selectedCashDisposal,
+      cheque: chequeNumber
     };
 
     axios({
@@ -90,10 +92,10 @@ function AllOrders(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setPaymentModalOpen(false);
@@ -115,7 +117,7 @@ function AllOrders(props) {
     const filterData = {
       employee_id: selectedEmployee.id,
       month: selectedMonth.id,
-      year: selectedYear,
+      year: selectedYear
     };
 
     getAllOrder(filterData);
@@ -134,13 +136,12 @@ function AllOrders(props) {
   }
 
   const toggleEmployeeDropdown = () =>
-    setDropDownEmployeeOpen((prevState) => !prevState);
+    setDropDownEmployeeOpen(prevState => !prevState);
 
   const toggleMonthDropdown = () =>
-    setDropDownMonthOpen((prevState) => !prevState);
+    setDropDownMonthOpen(prevState => !prevState);
 
-  const toggleYearDropdown = () =>
-    setDropDownYearOpen((prevState) => !prevState);
+  const toggleYearDropdown = () => setDropDownYearOpen(prevState => !prevState);
 
   function getAllOrder(filterData) {
     setOrderList([]);
@@ -152,10 +153,10 @@ function AllOrders(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -179,15 +180,15 @@ function AllOrders(props) {
       url: UPDATE_DELIVERY_DATE,
       data: stringify({
         order_id: orderId,
-        newDate: convertDate(deliveryDate),
+        newDate: convertDate(deliveryDate)
       }),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       if (res.status === 200) {
         if (res.data.success === true) {
           setOpenModal(false);
@@ -240,10 +241,10 @@ function AllOrders(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: `Bearer ${user.jwt_token}`,
+        Authorization: `Bearer ${user.jwt_token}`
       },
-      withCredentials: true,
-    }).then((res) => {
+      withCredentials: true
+    }).then(res => {
       setGettingData(false);
       if (res.status === 200) {
         if (res.data.success === true) {
@@ -264,63 +265,63 @@ function AllOrders(props) {
       type: "action",
       sort: "sorting_asc",
       align: "text-left",
-      name: "ACTIONS",
+      name: "ACTIONS"
     },
     {
       id: 2,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "ORDER#",
+      name: "ORDER#"
     },
     {
       id: 1,
       type: "text",
       align: "text-left",
-      name: "TOTAL AMOUNT",
+      name: "TOTAL AMOUNT"
     },
     {
       id: 3,
       type: "media",
       sort: "sorting",
       align: "text-left",
-      name: "EMPLOYEE",
+      name: "EMPLOYEE"
     },
     {
       id: 4,
       type: "media",
       sort: "sorting",
       align: "text-left",
-      name: "CUSTOMER",
+      name: "CUSTOMER"
     },
     {
       id: 5,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "ORDER DATE",
+      name: "ORDER DATE"
     },
     {
       id: 6,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "DELIVERY DATE",
+      name: "DELIVERY DATE"
     },
     {
       id: 7,
       type: "text",
       sort: "sorting",
       align: "text-left",
-      name: "REMAINING AMOUNT",
+      name: "REMAINING AMOUNT"
     },
     {
       id: 8,
       type: "badge",
       sort: "sorting",
       align: "text-left",
-      name: "STATUS",
-    },
+      name: "STATUS"
+    }
   ];
 
   const yearList = range(2015, currentDate.getFullYear());
@@ -340,7 +341,7 @@ function AllOrders(props) {
       actions.push({
         icon: ["far", "edit"],
         className: "text-info-600 cursor-pointer h3",
-        callBack: () => openEditOrderModal(currentOrder),
+        callBack: () => openEditOrderModal(currentOrder)
       });
     }
 
@@ -348,7 +349,7 @@ function AllOrders(props) {
       actions.push({
         icon: ["fas", "hand-holding-usd"],
         className: "text-info-600 cursor-pointer h3 ml-2",
-        callBack: () => openReceivePaymentModal(currentOrder),
+        callBack: () => openReceivePaymentModal(currentOrder)
       });
     }
     actions.push({
@@ -358,9 +359,9 @@ function AllOrders(props) {
         setOrderId(currentOrder.id);
         props.history.push({
           pathname: `${ORDER}`,
-          state: { orderId: currentOrder.id },
+          state: { orderId: currentOrder.id }
         });
-      },
+      }
     });
     row.push(actions);
 
@@ -374,7 +375,7 @@ function AllOrders(props) {
     const employeeAvatar = {
       topText: String(orderList[i].first_name + " " + orderList[i].last_name),
       bottomText: String(orderList[i].employee_id),
-      picture: null,
+      picture: null
     };
     row.push(employeeAvatar);
 
@@ -382,7 +383,7 @@ function AllOrders(props) {
     const customerAvatar = {
       topText: String(orderList[i].customer_name),
       bottomText: String(orderList[i].customer_phone_number),
-      picture: null,
+      picture: null
     };
     row.push(customerAvatar);
 
@@ -407,17 +408,17 @@ function AllOrders(props) {
     if (orderList[i].order_status === "Incomplete") {
       row.push({
         class: "badge badge-info text-capitalize",
-        data: "Incomplete",
+        data: "Incomplete"
       });
     } else if (orderList[i].order_status === "Complete") {
       row.push({
         class: "badge badge-success text-capitalize",
-        data: "Complete",
+        data: "Complete"
       });
     } else if (orderList[i].order_status === "Cancelled") {
       row.push({
         class: "badge badge-danger text-capitalize",
-        data: "Cancelled",
+        data: "Cancelled"
       });
     }
     row.push();
@@ -440,7 +441,7 @@ function AllOrders(props) {
             className="form-control"
             dateFormat="MMMM d, yyyy"
             selected={deliveryDate}
-            onChange={(date) => {
+            onChange={date => {
               setDeliveryDate(date);
               setDateUpdated(true);
             }}
@@ -498,7 +499,7 @@ function AllOrders(props) {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="form-group">
               <Dropdown
                 isOpen={dropdownCashDisposal}
@@ -507,7 +508,7 @@ function AllOrders(props) {
                 <DropdownToggle caret className="btn btn-theme btn-labeled">
                   {selectedCashDisposal}
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }}>
                   {cashDisposalTypes.map((type, index) => (
                     <DropdownItem
                       key={index}
@@ -519,6 +520,17 @@ function AllOrders(props) {
                 </DropdownMenu>
               </Dropdown>
             </div>
+          </div>
+          <div className="col-md-6 text-right">
+            <input
+              disabled={selectedCashDisposal !== "Bank"}
+              name="Cheque"
+              type="text"
+              className="form-control"
+              placeholder="Cheque Number"
+              value={chequeNumber}
+              onChange={event => setChequeNumber(event.target.value)}
+            />
           </div>
         </div>
       </ModalBody>
@@ -555,8 +567,11 @@ function AllOrders(props) {
                   >
                     {getFullName(selectedEmployee)}
                   </DropdownToggle>
-                  <DropdownMenu right>
-                    {employeeList.map((employee) => (
+                  <DropdownMenu
+                    style={{ overflow: "auto", maxHeight: "20vh" }}
+                    right
+                  >
+                    {employeeList.map(employee => (
                       <DropdownItem
                         key={employee.id}
                         onClick={() => {
@@ -581,8 +596,11 @@ function AllOrders(props) {
                 >
                   {selectedMonth.name}
                 </DropdownToggle>
-                <DropdownMenu right>
-                  {monthListWithAllMonthOption.map((month) => (
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  right
+                >
+                  {monthListWithAllMonthOption.map(month => (
                     <DropdownItem
                       key={month.id}
                       onClick={() => {
@@ -603,8 +621,11 @@ function AllOrders(props) {
                 >
                   {selectedYear}
                 </DropdownToggle>
-                <DropdownMenu right>
-                  {yearList.map((year) => (
+                <DropdownMenu
+                  style={{ overflow: "auto", maxHeight: "20vh" }}
+                  right
+                >
+                  {yearList.map(year => (
                     <DropdownItem
                       key={year}
                       onClick={() => {
