@@ -73,6 +73,7 @@ function NewOrder(props) {
   const [vat, setVAT] = useState(2);
   const [remarks, setRemarks] = useState("");
   const [productDescription, setProductDescription] = useState("");
+  const [chequeNumber, setChequeNumber] = useState("");
 
   function toggleResponseModal() {
     setResponseModalOpen(!responseModalOpen);
@@ -305,6 +306,7 @@ function NewOrder(props) {
     setRemarks("");
     setDiscount(0);
     setProductDescription("");
+    setChequeNumber("");
   }
 
   var modalHtml = (
@@ -339,7 +341,8 @@ function NewOrder(props) {
         remarks: remarks,
         cash_disposal: selectedCashDisposal,
         employee_id: employeeSelected.id,
-        discount: discount
+        discount: discount,
+        cheque: chequeNumber
       };
       var user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.withCredentials = true;
@@ -745,7 +748,7 @@ function NewOrder(props) {
                 </div>
               </div>
 
-              <div className="row mb-3">
+              <div className="row justify-content-between align-items-center">
                 <div className="col-md-4">
                   <Dropdown
                     isOpen={dropdownCashDisposal}
@@ -769,6 +772,17 @@ function NewOrder(props) {
                       ))}
                     </DropdownMenu>
                   </Dropdown>
+                </div>
+                <div className="col-md-6 text-right">
+                  <input
+                    disabled={selectedCashDisposal !== "Bank"}
+                    name="Cheque"
+                    type="text"
+                    className="form-control"
+                    placeholder="Cheque Number"
+                    value={chequeNumber}
+                    onChange={event => setChequeNumber(event.target.value)}
+                  />
                 </div>
               </div>
 
