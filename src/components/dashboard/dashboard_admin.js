@@ -368,7 +368,7 @@ function DashboardAdmin(props) {
                 <Button
                   id="printLedger"
                   className="btn btn-theme btn-labeled w-100"
-                  onClick={() => getPrintReport()}
+                  onClick={() => getPrintLedgerReport()}
                   disabled={reportType === ""}
                 >
                   <FontAwesomeIcon icon={["fas", "print"]} className="mr-2" />
