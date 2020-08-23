@@ -638,7 +638,7 @@ function NewOrder(props) {
                     <CurrencyInput
                       className="form-control"
                       suffix=" AED"
-                      precision="0"
+                      precision="2"
                       value={unitPrice}
                       onChangeEvent={(event, value, maskedValue) =>
                         setUnitPrice(maskedValue)
@@ -721,7 +721,7 @@ function NewOrder(props) {
                 <div className="col-md-3 text-right">
                   <CurrencyInput
                     className="form-control"
-                    precision="0"
+                    precision="2"
                     value={discount}
                     onChangeEvent={(event, value, maskedValue) =>
                       onDiscountChange(event, value, maskedValue)
@@ -740,7 +740,7 @@ function NewOrder(props) {
                 <div className="col-md-3 text-right">
                   <CurrencyInput
                     className="form-control"
-                    precision="0"
+                    precision="2"
                     value={advancePayment}
                     onChangeEvent={(event, value, maskedValue) =>
                       onAdvancePaymentChange(event, value, maskedValue)

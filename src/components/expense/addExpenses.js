@@ -294,7 +294,7 @@ function AddExpenses(props) {
                 className="form-control"
                 id="cashOnHand"
                 suffix=" AED"
-                precision="0"
+                precision="2"
                 value={cashOnHand}
                 onChangeEvent={(event, value, maskedValue) =>
                   setCashOnHand(maskedValue)
@@ -309,7 +309,7 @@ function AddExpenses(props) {
                 className="form-control"
                 id="expenseAmount"
                 suffix=" AED"
-                precision="0"
+                precision="2"
                 value={expenseAmount}
                 onChangeEvent={(event, value, maskedValue) =>
                   setExpenseAmount(maskedValue)

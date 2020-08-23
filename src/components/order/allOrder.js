@@ -489,7 +489,7 @@ function AllOrders(props) {
               <CurrencyInput
                 className="form-control"
                 suffix=" AED"
-                precision="0"
+                precision="2"
                 value={receivedPaymentAmount}
                 onChangeEvent={(event, value, maskedValue) =>
                   setReceivedPaymentAmount(maskedValue)
