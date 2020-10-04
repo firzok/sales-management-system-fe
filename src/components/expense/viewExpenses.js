@@ -147,7 +147,9 @@ function ViewExpenses(props) {
         setGettingData(false);
         if (res.status === 200) {
           if (res.data.success === true) {
+            toggleDeleteExpenseModal();
             showResponseModal("Expense deleted.");
+            setExpensesList([]);
             getExpenses();
           } else {
             showResponseModal(res.data.message);
