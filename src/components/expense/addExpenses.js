@@ -44,13 +44,9 @@ function AddExpenses(props) {
   const [responseMessage, setResponseMessage] = useState("");
   const [description, setDescription] = useState("");
   const [billNumber, setBillNumber] = useState("");
-  const [vehicleNumberSelected, setVehicleNumberSelected] = useState(
-    "Select Vehicle Number"
-  );
+  const [vehicleNumberSelected, setVehicleNumberSelected] = useState("Select Vehicle Number");
 
-  const [expenseTypeSelected, setExpenseTypeSelected] = useState(
-    "Select Expense Type"
-  );
+  const [expenseTypeSelected, setExpenseTypeSelected] = useState("Select Expense Type");
 
   const [employeeSelected, setEmployeeSelected] = useState({
     first_name: "Select",
@@ -118,14 +114,11 @@ function AddExpenses(props) {
     setResponseModalOpen(!responseModalOpen);
   }
 
-  const toggleDropDownExpenseType = () =>
-    setDropDownExpenseType(prevState => !prevState);
+  const toggleDropDownExpenseType = () => setDropDownExpenseType(prevState => !prevState);
 
-  const toggleDropDownVehicleNumber = () =>
-    setDropDownVehicleNumber(prevState => !prevState);
+  const toggleDropDownVehicleNumber = () => setDropDownVehicleNumber(prevState => !prevState);
 
-  const toggleDropDownEmployee = () =>
-    setDropDownEmployee(prevState => !prevState);
+  const toggleDropDownEmployee = () => setDropDownEmployee(prevState => !prevState);
 
   function reset() {}
 
@@ -181,25 +174,13 @@ function AddExpenses(props) {
           <div className="row justify-content-around">
             {user.role === "admin" ? (
               <div className="col-md-2">
-                <Dropdown
-                  isOpen={dropDownEmployee}
-                  toggle={toggleDropDownEmployee}
-                >
-                  <DropdownToggle
-                    caret
-                    className="btn btn-theme btn-labeled text-right w-100"
-                  >
+                <Dropdown isOpen={dropDownEmployee} toggle={toggleDropDownEmployee}>
+                  <DropdownToggle caret className="btn btn-theme btn-labeled text-right w-100">
                     {getFullName(employeeSelected)}
                   </DropdownToggle>
-                  <DropdownMenu
-                    style={{ overflow: "auto", maxHeight: "20vh" }}
-                    className="w-100"
-                  >
+                  <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }} className="w-100">
                     {employeeList.map((employee, index) => (
-                      <DropdownItem
-                        key={index}
-                        onClick={() => setEmployeeSelected(employee)}
-                      >
+                      <DropdownItem key={index} onClick={() => setEmployeeSelected(employee)}>
                         {getFullName(employee)}
                       </DropdownItem>
                     ))}
@@ -211,25 +192,13 @@ function AddExpenses(props) {
             )}
 
             <div className="col-md-2">
-              <Dropdown
-                isOpen={dropDownExpenseType}
-                toggle={toggleDropDownExpenseType}
-              >
-                <DropdownToggle
-                  caret
-                  className="btn btn-theme btn-labeled text-right w-100"
-                >
+              <Dropdown isOpen={dropDownExpenseType} toggle={toggleDropDownExpenseType}>
+                <DropdownToggle caret className="btn btn-theme btn-labeled text-right w-100">
                   {expenseTypeSelected}
                 </DropdownToggle>
-                <DropdownMenu
-                  style={{ overflow: "auto", maxHeight: "20vh" }}
-                  className="w-100"
-                >
+                <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }} className="w-100">
                   {expenseTypes.map((type, index) => (
-                    <DropdownItem
-                      key={index}
-                      onClick={() => setExpenseTypeSelected(type)}
-                    >
+                    <DropdownItem key={index} onClick={() => setExpenseTypeSelected(type)}>
                       {type}
                     </DropdownItem>
                   ))}
@@ -237,23 +206,13 @@ function AddExpenses(props) {
               </Dropdown>
             </div>
 
-            {expenseTypeSelected === "Vehicle" ||
-            expenseTypeSelected === "Petrol" ? (
+            {expenseTypeSelected === "Vehicle" || expenseTypeSelected === "Petrol" ? (
               <div className="col-md-2">
-                <Dropdown
-                  isOpen={dropDownVehicleNumber}
-                  toggle={toggleDropDownVehicleNumber}
-                >
-                  <DropdownToggle
-                    caret
-                    className="btn btn-theme btn-labeled text-right w-100"
-                  >
+                <Dropdown isOpen={dropDownVehicleNumber} toggle={toggleDropDownVehicleNumber}>
+                  <DropdownToggle caret className="btn btn-theme btn-labeled text-right w-100">
                     {vehicleNumberSelected}
                   </DropdownToggle>
-                  <DropdownMenu
-                    style={{ overflow: "auto", maxHeight: "20vh" }}
-                    className="w-100"
-                  >
+                  <DropdownMenu style={{ overflow: "auto", maxHeight: "20vh" }} className="w-100">
                     {vehicleNumberArray.map((vehicle, index) => (
                       <DropdownItem
                         key={index}
@@ -296,9 +255,7 @@ function AddExpenses(props) {
                 suffix=" AED"
                 precision="2"
                 value={cashOnHand}
-                onChangeEvent={(event, value, maskedValue) =>
-                  setCashOnHand(maskedValue)
-                }
+                onChangeEvent={(event, value, maskedValue) => setCashOnHand(maskedValue)}
               />
               <UncontrolledTooltip placement="bottom" target="cashOnHand">
                 Cash On Hand
@@ -311,9 +268,7 @@ function AddExpenses(props) {
                 suffix=" AED"
                 precision="2"
                 value={expenseAmount}
-                onChangeEvent={(event, value, maskedValue) =>
-                  setExpenseAmount(maskedValue)
-                }
+                onChangeEvent={(event, value, maskedValue) => setExpenseAmount(maskedValue)}
               />
               <UncontrolledTooltip placement="bottom" target="expenseAmount">
                 Expense Amount
@@ -356,12 +311,9 @@ function AddExpenses(props) {
                 className="btn btn-theme btn-labeled w-100"
                 onClick={() => addExpense()}
                 disabled={
-                  expenseAmount === 0 ||
                   expenseTypeSelected === "Select Expense Type" ||
-                  (user.role === "admin" &&
-                    employeeSelected.first_name === "Select") ||
-                  ((expenseTypeSelected === "Vehicle" ||
-                    expenseTypeSelected === "Petrol") &&
+                  (user.role === "admin" && employeeSelected.first_name === "Select") ||
+                  ((expenseTypeSelected === "Vehicle" || expenseTypeSelected === "Petrol") &&
                     vehicleNumberSelected === "Select Vehicle Number")
                 }
               >

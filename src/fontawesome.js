@@ -13,13 +13,10 @@ import {
   faFilter,
   faUnlock,
   faPrint,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  faEdit,
-  faWindowClose,
-  faCheckCircle,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faWindowClose, faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faHome,
@@ -35,5 +32,6 @@ library.add(
   faFilter,
   faCheckCircle,
   faUnlock,
-  faPrint
+  faPrint,
+  faTrash
 );

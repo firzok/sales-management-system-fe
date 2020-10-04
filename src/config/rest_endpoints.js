@@ -21,6 +21,7 @@ export const ADD_NEW_EMPLOYEE = `${ROOT_URL}/add-employee`;
 export const GET_ALL_EMPLOYEES = `${ROOT_URL}/all-employees`;
 export const GET_ALL_VEHICLE_NUMBERS = `${ROOT_URL}/get-vehicle-list`;
 export const GET_EXPENSES = `${ROOT_URL}/get-expenses`;
+export const DELETE_EXPENSE = `${ROOT_URL}/delete-expense`;
 export const GET_ORDER_DETAIL = `${ROOT_URL}/order-detail`;
 export const GENERATE_RECEIPT = `${ROOT_URL}/generate-pdf`;
 export const CANCEL_ORDER = `${ROOT_URL}/cancel-order`;
